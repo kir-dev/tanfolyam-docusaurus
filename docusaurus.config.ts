@@ -73,19 +73,51 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'Kir-Dev Tanfolyamok',
+      title: 'Tanfolyam web',
       logo: {
         alt: 'My Site Logo',
-        src: 'img/kir-dev-logo.svg',
+        src: 'img/kir-dev-long.svg',
+        srcDark: 'img/kir-dev-long-dark.svg',
+        className: 'navbar__logo',
       },
       items: [
         {
           type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
+          sidebarId: 'getStartedSidebar',
           position: 'left',
-          label: 'Tutorial',
+          label: 'Tudnivalók',
         },
-        { to: '/blog', label: 'Blog', position: 'left' },
+        {
+          type: 'docSidebar',
+          sidebarId: 'webesAlapokSidebar',
+          position: 'left',
+          label: 'Webes alapok',
+        },
+        {
+          type: 'docSidebar',
+          sidebarId: 'gitAlapokSidebar',
+          position: 'left',
+          label: 'Git',
+        },
+        {
+          type: 'docSidebar',
+          sidebarId: 'nodeJsSidebar',
+          position: 'left',
+          label: 'Node.js',
+        },
+        {
+          type: 'docSidebar',
+          sidebarId: 'springBootSidebar',
+          position: 'left',
+          label: 'Spring Boot',
+        },
+        {
+          type: 'docSidebar',
+          sidebarId: 'reactSidebar',
+          position: 'left',
+          label: 'React',
+        },
+        { to: '/blog', label: 'Hírek', position: 'left' },
         {
           href: 'https://github.com/kir-dev/tanfolyam-docusaurus',
           label: 'GitHub',
@@ -97,16 +129,16 @@ const config: Config = {
       style: 'dark',
       links: [
         {
-          title: 'Docs',
+          title: 'Dokumentáció',
           items: [
             {
-              label: 'Tutorial',
+              label: 'Tudnivalók',
               to: '/docs/intro',
             },
           ],
         },
         {
-          title: 'Community',
+          title: 'Közösség',
           items: [
             {
               label: 'Website',
@@ -123,14 +155,14 @@ const config: Config = {
           ],
         },
         {
-          title: 'More',
+          title: 'Továbbiak',
           items: [
             {
-              label: 'Blog',
+              label: 'Hírek',
               to: '/blog',
             },
             {
-              label: 'GitHub',
+              label: 'GitHub org',
               href: 'https://github.com/kir-dev',
             },
           ],

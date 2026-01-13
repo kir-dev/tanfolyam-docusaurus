@@ -30,7 +30,7 @@ This command generates static content into the `build` directory and can be serv
 
 We use our Vercel project for deployment. Push to the `main` branch to trigger a deployment.
 
-### Deploy to GitHub Pages
+### Deploy to GitHub Pages
 
 We left the deployment script for GitHub pages if you want to use it.
 

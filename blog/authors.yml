@@ -1,25 +1,26 @@
-yangshun:
-  name: Yangshun Tay
-  title: Ex-Meta Staff Engineer, Co-founder GreatFrontEnd
-  url: https://linkedin.com/in/yangshun
-  image_url: https://github.com/yangshun.png
+ivandomonkos:
+  name: Iván Domonkos
+  title: tanfolyamfelelős
+  url: https://pek.sch.bme.hu/profiles/ivandomonkos
+  image_url: https://kir-dev.hu/_next/image?url=https%3A%2F%2Fcdn.sanity.io%2Fimages%2Fxxexxe77%2Fproduction%2F473cafa45c80fea7e53b08cb4426f89525c95123-2393x2393.jpg%3Fauto%3Dformat&w=1080&q=75
   page: true
   socials:
-    x: yangshunz
-    linkedin: yangshun
-    github: yangshun
-    newsletter: https://www.greatfrontend.com
+    github: IvnDmnks
 
-slorber:
-  name: Sébastien Lorber
-  title: Docusaurus maintainer
-  url: https://sebastienlorber.com
-  image_url: https://github.com/slorber.png
-  page:
-    # customize the url of the author page at /blog/authors/<permalink>
-    permalink: '/all-sebastien-lorber-articles'
+dankamarcell:
+  name: Danka Marcell
+  title: körvezető
+  url: https://pek.sch.bme.hu/profiles/dankamarcell
+  image_url: https://kir-dev.hu/_next/image?url=https%3A%2F%2Fcdn.sanity.io%2Fimages%2Fxxexxe77%2Fproduction%2F9389eb010da05bcb94c9de37185ea7fe59ed973f-2496x2496.jpg%3Fauto%3Dformat&w=1080&q=75
+  page: true
   socials:
-    x: sebastienlorber
-    linkedin: sebastienlorber
-    github: slorber
-    newsletter: https://thisweekinreact.com
+    github: DankaMarci
+
+liptakpeter:
+  name: Lipták Péter
+  title: körvezető helyettes
+  url: https://pek.sch.bme.hu/profiles/liptakpeter
+  image_url: https://kir-dev.hu/_next/image?url=https%3A%2F%2Fcdn.sanity.io%2Fimages%2Fxxexxe77%2Fproduction%2F872acbe8487210afc5321ef662691fc1d9534162-2486x2486.jpg%3Fauto%3Dformat&w=1080&q=75
+  page: true
+  socials:
+    github: peterlipt
