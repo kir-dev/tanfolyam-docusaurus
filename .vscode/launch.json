@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Start docusaurus server",
+      "runtimeArgs": ["run", "start"],
+      "runtimeExecutable": "pnpm",
+      "request": "launch",
+      "skipFiles": ["<node_internals>/**"],
+      "outputCapture": "std",
+      "type": "node",
+      "restart": true
+    }
+  ]
+}
