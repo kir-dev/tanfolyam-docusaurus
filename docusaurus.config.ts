@@ -133,7 +133,7 @@ const config: Config = {
           items: [
             {
               label: 'Tudnivalók',
-              to: '/docs/intro',
+              to: '/docs/get-started/intro',
             },
           ],
         },
