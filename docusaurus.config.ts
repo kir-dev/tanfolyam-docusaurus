@@ -95,12 +95,6 @@ const config: Config = {
         },
         {
           type: 'docSidebar',
-          sidebarId: 'gitAlapokSidebar',
-          position: 'left',
-          label: 'Git',
-        },
-        {
-          type: 'docSidebar',
           sidebarId: 'nodeJsSidebar',
           position: 'left',
           label: 'Node.js',
