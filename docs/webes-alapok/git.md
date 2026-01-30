@@ -48,7 +48,7 @@ A négy terület amit megkülönböztetünk:
 
 ### Alapvető parancsok, workflow bemutatása demo segítségével
 
-Hogyan is használjuk a Git-et? Milyen lépéseket kell végrehajtanunk ahhoz, hogy el tudjuk kezdeni a munkát? Ezt a [webes alapok](intro.md) előadáson elkészült demo segítségével fogjuk bemutatni. [_GitHub repository [click here]_](!link)**TODO demo elkészítése, link beszúrása**
+Hogyan is használjuk a Git-et? Milyen lépéseket kell végrehajtanunk ahhoz, hogy el tudjuk kezdeni a munkát? Ezt a [webes alapok](intro.md) előadáson elkészült demo segítségével fogjuk bemutatni. _GitHub repository [click here]_ **TODO demo elkészítése, szöveg linkké alakítása**
 
 1. Először is a távoli szerverről le kell klónoznunk egy repository-t amiben dolgozni szeretnénk, hogy a gépünön is meglegyen. Ehhez használjuk a `git clone <repo_url>` parancsot. (_Ekkor a teljes projekt a **working directoryba** kerül._)
 2. Hozzunk magunknak létre egy új ágat (**branchet**) `git checkout -b <branch_name>`. Ezen már elkezdhetünk dolgozni.
