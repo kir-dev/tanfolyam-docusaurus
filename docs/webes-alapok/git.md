@@ -4,10 +4,11 @@ sidebar_position: 2
 
 # Git és GitHub alapok
 
-## Git alapok
+## Git bevezető
 
 Miért is elengedhetetlen a Git a modern szoftverfejlesztésben? A Git nem csupán egy mentési lehetőség, hanem egy professzionális **elosztott verziókezelő rendszer**. Lehetővé teszi a **párhuzamos munkavégzést**: saját ágakon (**branch**) dolgozhatsz új funkciókon anélkül, hogy a társad munkáját megzavarod a saját változatásaiddal vagy elrontanád a már működő kódot.\
-Emellett a Git teljes körű **verziótörténet**et is biztosít. Minden változtatásod (**commit**) visszakövethető, így ha valami váratlan hiba csúszik a rendszerbe, bármikor visszatérhetsz egy korábbi, stabil állapothoz.
+Emellett a Git teljes körű **verziótörténet**et is biztosít. Minden változtatásod (**commit**) visszakövethető, így ha valami váratlan hiba csúszik a rendszerbe, bármikor visszatérhetsz egy korábbi, stabil állapothoz.\
+Kvázi egy időgépként használható. Mintha checkpointokat raknál játék közben egy-egy boss fight előtt/után.
 
 ## Git alapfogalmak
 
@@ -25,14 +26,14 @@ Tároló lehet helyi (**local**) vagy távoli (**remote**):
 
 - **Remote Repository**: Egy távoli szerveren található és onnan érhető el a csapat számára. Itt történik a kódmegosztás és a **Pull Request**ek (_lásd lentebb: [GitHub workflow](#github)_) kezelése és a biztonsági mentés is.
 
-![Local vs remote](https://media.geeksforgeeks.org/wp-content/uploads/20250710172654460719/What-is-Git-repository.webp)
+![Local vs remote](/img/git-basics/local-vs-remote.png)
 
 #### Kommunikáció local és remote között
 
 A kommunikáció két fő parancs segítségével működik:
 
-- `git pull`: Letöltöd és egyesíted a távoli szerveren lévő új módosításokat a helyi kódoddal.
-- `git push`: Elvégzett commit-okat feltöltöd a szerverre, ahol mások is látják a változtatásaidat.
+- `git pull`: Letöltöd és egyesíted a távoli szerveren lévő új módosításokat a helyi kódoddal. **Fontos:** Alapértelmezés szerint azon az ágon (branchen) történik, amin éppen állsz.
+- `git push`: Elvégzett commit-okat feltöltöd a szerverre, ahol mások is látják a változtatásaidat. **Fontos:** Ezzel a saját ágad aktuális állapotát küldöd fel a szerver megfelelő ágára.
 
 ## Git Workflow
 
@@ -44,7 +45,7 @@ A négy terület amit megkülönböztetünk:
 - **Local Repository**: A [fentebb részletezett](#repository) helyi tároló a saját gépeden, ahol a projekt története (commitok) létezik.
 - **Remote Repository**: A [szintén fentebb részletezett](#repository) távoli szerver (pl. GitHub), ahol a projekt központi változata él.
 
-![Git areas](https://stopbyte.com/uploads/default/original/1X/274acda49c194fc1720e87bce210b661760877f7.png)
+![Git areas](/img/git-basics/git-areas.png)
 
 ### Alapvető parancsok, workflow bemutatása demo segítségével
 
@@ -75,7 +76,7 @@ Az Issues segít rendszerezni a munkát és biztosítja, hogy mindenki tisztába
 A Pull Request (sokszor rövidítve PR) a GitHub egyik legtöbbet használt funkciója, célja, hogy megkönnyítse a kódok felülvizsgálatát és integrációját a fő ágba. Amikor végzünk egy funkcióval a saját branch-ünkön `git push` után létrehozunk egy Pull Request-et a GitHub repository-ban. Ez jelzi a csapat többi tagjának, hogy szeretnénk a kódunkat behúzni a fő ágba.\
 Megszokott eljárás ilyenkor, hogy egy másik fejlesztő átnézi a kódunkat (review) és visszajelzést ad az esetleges hibákról vagy elfogadja azt. Emellett a PR lehetőséget ad arra, hogy automatizált teszteket és különböző statikus elemzéseket futtassunk a kódon. Ebben segít az úgynevezett **GitHub Actions**.
 
-![GitHub PR](https://axolo.s3.eu-west-3.amazonaws.com/communication/blog/ultimate-pull-request/Branches+in+GitHub.png)
+![GitHub PR](/img/git-basics/github-pr.png)
 
 #### Actions
 
@@ -83,7 +84,7 @@ A GitHub Actions egy beépített CI/CD (Continuous Integration/Continuous Deploy
 Gyakori felhasználási módja az előző bekezdésben említett PR-ek esetén a statikus analízis futtatása. Ennek lényege, hogy a kódot automatikusan ellenőrizzük különböző szabályok alapján, például kódstílus, biztonsági rések vagy potenciális hibák szempontjából.\
 Ezen kívül a GitHub Actions segítségével automatizálhatjuk a tesztelések futtatását, a build folyamatokat, vagy akár a kód telepítését is egy adott környezetbe.
 
-![GitHub Actions](https://images.ctfassets.net/8aevphvgewt8/5kVxaacutdvGyusbgk64iw/23fa8c76260945d6a8f28327e9910397/actions-river-breakout.webp)
+![GitHub Actions](/img/git-basics/github-actions.png)
 
 ## GitHub alkalmazása demo projektben
 
