@@ -223,3 +223,4 @@ A frontend:
 •	alap komponensek
 •	backendhez csatlakozás
 •	lista megjelenítés
+
