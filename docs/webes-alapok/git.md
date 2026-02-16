@@ -35,6 +35,8 @@ A kommunikáció két fő parancs segítségével működik:
 - `git pull`: Letöltöd és egyesíted a távoli szerveren lévő új módosításokat a helyi kódoddal. **Fontos:** Alapértelmezés szerint azon az ágon (branchen) történik, amin éppen állsz.
 - `git push`: Elvégzett commit-okat feltöltöd a szerverre, ahol mások is látják a változtatásaidat. **Fontos:** Ezzel a saját ágad aktuális állapotát küldöd fel a szerver megfelelő ágára.
 
+![Git pull push](/img/git-basics/git-workflow.png)
+
 ## Git Workflow
 
 Git workflow kapcsán érdemes elsősorban tisztázni a négy nagy területet, ami azt mondja meg, hogy hol "lakik" a kód a gépen belül. Ez segít majd megérteni a `git add` és `git commit` parancsok közötti különbséget a későbbiekben.\
