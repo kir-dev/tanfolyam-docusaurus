@@ -43,25 +43,23 @@ export default function HomePage() {
         </div>
       </header>
 
-      <main className='container' style={{ marginTop: '3rem', marginBottom: '3rem' }}>
+      <main className='container' style={{ marginTop: '6rem', marginBottom: '6rem' }}>
         <div className='row'>
           {CourseList.map((course, idx) => (
             <div key={idx} className='col col--6 margin-bottom--lg'>
               <div className='card shadow--md' style={{ height: '100%', flexDirection: 'column', display: 'flex' }}>
                 <div className='card__body'>
-                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1.5rem' }}>
-                    <div style={{ flexShrink: 0, paddingTop: '0.5rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.8rem' }}>
+                    <div style={{ flexShrink: 0 }}>
                       <img
                         src={useBaseUrl(course.logo)}
                         alt={course.title}
-                        style={{ width: '60px', height: '60px', objectFit: 'contain' }}
+                        style={{ width: '60px', height: '60px' }}
                       ></img>
                     </div>
                     <div style={{ flexGrow: 1 }}>
                       <h3 style={{ fontSize: '2rem' }}>{course.title}</h3>
-                      <p
-                        style={{ whiteSpace: 'pre-line', fontSize: '0.9rem', lineHeight: '1.5', textAlign: 'justify' }}
-                      >
+                      <p style={{ whiteSpace: 'pre-line', fontSize: '1rem', lineHeight: '1.5', textAlign: 'justify' }}>
                         {course.description}
                       </p>
                     </div>
