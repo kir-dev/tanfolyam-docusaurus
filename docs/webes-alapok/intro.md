@@ -50,8 +50,29 @@ Továbbá a tag-ek tartalmazhatnak **attribútumokat** is, melyek további funkc
 `<a href="https://kir-dev.hu">Kir-Dev</a>`, ahol a `href` attribútum határozza meg a hivatkozás címét. Egy tag **egyszerre több attribútumot is tartalmazhat**.
 
 Egyszerű Log In form HTML-ben:
-
-#### **#TODO: előadáson bemutatott form beillesztése**
+```
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Kir-Dev</title>
+    </head>
+    <body>
+        <div>
+            <h1>Log In</h1>
+            <p>Enter your credentials</p>
+            <form>
+                <label for="username">Username</label>
+                <input id="username" name="username" type="text"/>
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password"/>
+                <a href="/forgot-password">Forgot Password?</a>
+                <input id="submit" type="submit" value="Log In">
+            </form>
+        </div>
+    </body>
+</html>
+```
 
 ## CSS - Cascading Style Sheets
 
