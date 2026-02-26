@@ -27,7 +27,7 @@ sidebar_position: 1
 
 - Kérdések
 
-<hr>
+<hr></hr>
 
 - OOP
 
@@ -41,11 +41,11 @@ sidebar_position: 1
 
 - Kérdések
 
-<hr>
+<hr></hr>
 
 - Kotlin alapok
 
-<hr>
+<hr></hr>
 
 - Adatbázis: JPA és H2
 
@@ -55,6 +55,6 @@ sidebar_position: 1
 
 ...
 
-<hr>
+<hr></hr>
 
 - DTO
