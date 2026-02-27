@@ -288,23 +288,22 @@ Módosított HTML
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Kir-Dev</title>
+        <title>Title</title>
+        <!--<link rel="stylesheet" href="style.css">-->
     </head>
     <body>
-        <div>
+        
+        <form>
             <h1>Log In</h1>
-            <p>Enter your credentials</p>
-            <form>
-                <label for="username">Username</label>
-                <input id="username" name="username" type="text"/>
-                <label for="password">Password</label>
-                <input id="password" name="password" type="password"/>
-                <button onclick="togglePwVisibility()" type="button">Show password</button>  <!-- Button inserted -->
-                <a href="/forgot-password">Forgot Password?</a>
-                <input id="submit" type="submit" value="Log In">
-            </form>
-        </div>
-        <script src="app.js"></script>   <!-- Script reference inserted -->
+            <p>Enter credentials</p>
+            <label for="username">Username</label>
+            <input id="username" name="username" type="text" />
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" />
+            
+            <input type="button" value="Submit" onclick="checkLogin()"/>
+            <script src="app.js"></script>
+        </form>
     </body>
 </html>
 
@@ -312,15 +311,18 @@ Módosított HTML
 
 app.js
 ``` js
-function togglePwVisibility(){
-    const pwInput = document.getElementById("password");
-    const toggleBtn = document.getElementById("toggleBtn");
-    if (pwInput.type === "password") {
-        pwInput.type = "text";
-        toggleBtn.textContent = "Hide Password";
+function checkLogin(){
+    const userNameIF = document.getElementById("username");
+    const passwordIF = document.getElementById("password");
+
+    const acceptedUsername = "kir-dev";
+    const acceptedPassword = "asdasd";
+
+    if (userNameIF.value == acceptedUsername && passwordIF.value == acceptedPassword){
+        alert("Sikeres bejelentkezes");
     } else {
-        pwInput.type = "password";
-        toggleBtn.textContent = "Show Password";
+        alert("Sikertelen bejelentkezes");
     }
 }
+
 ```
