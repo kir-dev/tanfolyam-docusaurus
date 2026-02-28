@@ -376,3 +376,322 @@ Ezzel elkészült a modern NestJS API-nk alapja, ami készen áll arra, hogy a k
 :::info
 Ha elakadtál, akkor a chapter-2 branch-en megtalálod az eddigi kódot, amit összehasonlíthatsz a sajátoddal, vagy checkoutolhatod, hogy onnan folytasd.
 :::
+
+Íme a harmadik fejezet (Chapter 3) tananyaga, amely az előzőekhez hasonlóan Docusaurus-kompatibilis Markdown formátumban készült. Részletesen végigvezet a konfigurációkezelés és a Prisma ORM bevezetésének folyamatán.
+
+## Chapter 3: Konfiguráció és a Prisma ORM
+
+Egy komolyabb backend alkalmazásnál kiemelten fontos, hogy az adatbázis-kapcsolatokat, portokat és egyéb környezetfüggő beállításokat egy központosított, típusbiztos módon kezeljük. Mielőtt bekötnénk az adatbázist, létrehozunk egy **konfigurációs interfészt**.
+
+### Miért hasznos a konfigurációs interfész?
+
+Képzeld el, hogy az alkalmazásodban 20 helyen van szükséged az adatbázis URL-jére. Ha mindenhol a `process.env.DATABASE_URL` kódot használod, azzal több probléma is van:
+
+1. **Nincs típusbiztonság (Type Safety):** A TypeScript nem tudja, hogy ez a változó biztosan létezik-e, vagy milyen típusú.
+2. **Nincsenek alapértelmezett értékek:** Ha elfelejted beállítani a `.env` fájlban, az alkalmazás elszállhat.
+3. **Nehéz refaktorálni:** Ha megváltozik a változó neve, 20 helyen kell átírnod.
+
+Ezt oldja meg a NestJS beépített konfigurációs modulja.
+
+#### Függőségek telepítése
+
+Telepítsük a konfiguráció kezeléséhez szükséges hivatalos NestJS csomagot:
+
+```bash
+npm install @nestjs/config
+```
+
+#### A konfigurációs fájl létrehozása
+
+Hozzuk létre a `src/config/` mappát, és abban egy `configuration.ts` fájlt:
+
+```typescript title="src/config/configuration.ts"
+export interface Config {
+  port: number;
+  frontendUrl: string;
+  database: {
+    url: string;
+  };
+}
+
+export default (): Config => ({
+  // Számmá alakítjuk a portot, ha nem sikerül, 3000 lesz az alapértelmezett
+  port: parseInt(process.env.PORT || '3000', 10) || 3000,
+  frontendUrl: process.env.FRONTEND_URL || 'http://localhost:3000',
+  database: {
+    url: process.env.DATABASE_URL || 'file:./dev.db',
+  },
+});
+```
+
+**Magyarázat:** Itt definiáltuk a `Config` interfészt, ami megmondja a TypeScriptnek, hogy pontosan milyen adatok érhetőek el a konfigurációnkban. Az exportált függvény pedig kiolvassa a környezeti változókat (a `.env` fájlból), és alapértelmezett (fallback) értékeket is biztosít.
+
+#### A ConfigModule bekötése az AppModule-ba
+
+Most regisztrálnunk kell ezt a konfigurációt a fő modulunkban (`src/app.module.ts`).
+
+```typescript title="src/app.module.ts"
+import { Module } from '@nestjs/common';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { TicketsModule } from './tickets/tickets.module';
+import { ConfigModule } from '@nestjs/config';
+
+import configuration from './config/configuration';
+
+@Module({
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [configuration],
+    }),
+    TicketsModule,
+  ],
+  controllers: [AppController],
+  providers: [AppService],
+})
+export class AppModule {}
+```
+
+**Magyarázat:**
+
+- `ConfigModule.forRoot(...)`: Inicializálja a modult.
+- `isGlobal: true`: Ez teszi lehetővé, hogy az alkalmazásunk bármelyik részében (bármelyik másik modulban) használhassuk a `ConfigService`-t anélkül, hogy mindenhol újra importálnunk kellene a `ConfigModule`-t.
+- `load: [configuration]`: Betölti az általunk előbb megírt egyedi konfigurációs logikát.
+
+---
+
+### A Prisma ORM bevezetése
+
+A **Prisma** egy modern, típusbiztos ORM (Object-Relational Mapper) Node.js-hez és TypeScript-hez. Segítségével ahelyett, hogy nyers SQL lekérdezéseket írnánk, TypeScript objektumokon és metódusokon keresztül kommunikálhatunk az adatbázissal. SQLite adatbázist fogunk használni.
+
+#### Függőségek letöltése
+
+Telepítsük a működéshez szükséges csomagokat. Futassuk az alábbi parancsokat:
+
+```bash
+npm install @prisma/adapter-better-sqlite3 @prisma/client
+npm install -D prisma @types/better-sqlite3
+```
+
+**Parancs magyarázata:**
+
+- `npm install ...`: A futáshoz (produkciós környezetben is) szükséges csomagok. A `@prisma/client` felel az adatbázis lekérdezésekért, az adapter pedig a gyorsabb SQLite kezelésért.
+- `npm install -D ...`: A `-D` (vagy `--save-dev`) azt jelenti, hogy ezek csak fejlesztői (Development) függőségek. Maga a `prisma` CLI csak a séma generálásához és migrációkhoz kell.
+
+#### Prisma inicializálása
+
+Inicializáljuk a Prismát a projektünkben:
+
+```bash
+npx prisma init
+```
+
+Ez létrehoz egy `prisma/schema.prisma` fájlt. Ez a fájl az alkalmazásunk "szíve", itt definiáljuk az adatbázis tábláit és kapcsolatait.
+
+---
+
+### A Prisma Séma kialakítása
+
+Építsük fel a `schema.prisma` fájlunkat lépésről lépésre, megértve az összefüggéseket!
+
+#### 1. Generátor és Adatforrás
+
+Cseréld ki a `schema.prisma` tetejét a következőre:
+
+```prisma
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+```
+
+**Magyarázat:**
+
+- A `datasource` megmondja, hogy SQLite-ot használunk.
+- A `generator` kliens felelős a TypeScript típusok legenerálásáért. Az `output` paraméterrel **megváltoztattuk az alapértelmezett generálási helyet**. Így a Prisma az `src/generated/prisma` mappába fogja tenni a kész kódokat, amit könnyebb lesz beimportálni és kezelni a projektünkön belül.
+
+#### 2. A Táblák (Modellek) és Egy-a-Többhöz kapcsolat
+
+Adjuk hozzá a Táblák (Boards) és a Hibajegyek (Tickets) modelljét:
+
+```prisma
+model Boards {
+  id        Int      @id @default(autoincrement())
+  title     String
+  tickets   Ticket[]
+  createdAt DateTime @default(now())
+}
+
+model Ticket {
+  id          Int         @id @default(autoincrement())
+  name        String
+  description String?
+  ticketPhase TicketPhase @default(CREATED)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  board    Boards @relation(fields: [boardsId], references: [id])
+  boardsId Int
+}
+```
+
+**Magyarázat:**
+
+- `@id @default(autoincrement())`: Ez jelzi, hogy az `id` mező az elsődleges kulcs (Primary Key), ami automatikusan növekszik.
+- `description String?`: A `?` jelzi, hogy ez a mező opcionális (lehet NULL az adatbázisban).
+- `createdAt` / `updatedAt`: A Prisma automatikusan kitölti az aktuális dátummal létrehozáskor (`now()`), és automatikusan frissíti a dátumot módosításkor (`@updatedAt`).
+- **Kapcsolat (Relation):** Egy táblához (`Boards`) több hibajegy (`Ticket`) tartozhat. A `Ticket` modellben a `boardId` fogja tárolni a kapcsolódó tábla azonosítóját (Foreign Key), amit a `@relation` annotáció köt össze.
+
+#### 3. Enumok és Több-a-Többhöz kapcsolat
+
+Végül adjuk hozzá a státuszokat és a címkéket:
+
+```prisma
+enum TicketPhase {
+  CREATED
+  IN_PROGRESS
+  UNDER_REVIEW
+}
+
+model Label {
+  id    Int    @id @default(autoincrement())
+  name  String
+  color String
+
+  tickets Ticket[]
+}
+```
+
+És persze ne felejtsük el a `Ticket` modell végére hozzáadni a címkéket:
+
+```prisma
+model Ticket {
+  id          Int         @id @default(autoincrement())
+  name        String
+  description String?
+  ticketPhase TicketPhase @default(CREATED)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  board    Boards @relation(fields: [boardsId], references: [id])
+  boardsId Int
+
+  labels Label[]
+}
+```
+
+Prismában a kapcsolatokat mindkét modellben definiálni kell, de a módja persze függ a kapcsolat típusától.
+
+**Magyarázat:**
+
+- `enum`: Egy előre definiált értékhalmaz. A ticket csak ezeket az állapotokat veheti fel.
+- **Több-a-többhöz (M-N) kapcsolat:** Egy címke (Label) több hibajegyen is rajta lehet, és egy hibajegynek több címkéje is lehet. A Prisma nagyon okos: ha mindkét modellnél tömbként (`Ticket[]` és `Label[]`) hivatkozol a másikra, automatikusan létrehoz a háttérben egy kapcsolótáblát az SQLite-ban.
+
+#### Migráció és a kliens generálása
+
+Most, hogy kész a séma, hozzuk létre a fizikai adatbázist és generáljuk le a TypeScript típusokat:
+
+```bash
+npx prisma migrate dev --name init
+```
+
+**Mit csinál ez a parancs?**
+
+1. Létrehoz egy SQL migrációs fájlt (ami leírja, hogyan jönnek létre a táblák).
+2. Lefuttatja ezt a fájlt, így létrejön a `dev.db` SQLite adatbázis fájl.
+3. Automatikusan lefuttatja az `npx prisma generate` parancsot, ami legenerálja a `PrismaClient`-et a mi egyedi `src/generated/prisma` mappánkba!
+
+---
+
+### Prisma modul és Service létrehozása
+
+Hogy használni tudjuk a Prismát a NestJS-ben, létre kell hoznunk számára egy Modult és egy Service-t. Generáljuk le a CLI-vel:
+
+```bash
+nest g mo prisma
+nest g s prisma
+```
+
+#### A Prisma modul
+
+Módosítsd az `src/prisma/prisma.module.ts` fájlt a következőre:
+
+```typescript title="src/prisma/prisma.module.ts"
+import { DynamicModule, Module } from '@nestjs/common';
+import { PrismaService } from './prisma.service';
+
+@Module({
+  providers: [PrismaService],
+  exports: [PrismaService],
+})
+export class PrismaModule {
+  static forRoot({ isGlobal }: { isGlobal: boolean }): DynamicModule {
+    return {
+      global: isGlobal,
+      module: PrismaModule,
+      providers: [PrismaService],
+      exports: [PrismaService],
+    };
+  }
+}
+```
+
+:::info Mi az a DynamicModule?
+A Dinamikus Modulok lehetővé teszik, hogy a modul betöltésekor paramétereket adjunk át neki (például konfigurációkat). Itt egy `forRoot` statikus metódust hoztunk létre. Amikor az `AppModule`-ban meghívtuk a `PrismaModule.forRoot({ isGlobal: true })` kódot, ez a metódus futott le. Ezzel elérjük, hogy a `PrismaService` globális legyen, azaz bármelyik másik modulban (pl. a `TicketsModule`-ban) használható legyen anélkül, hogy újra be kellene importálni.
+:::
+
+#### A Prisma Service (Adatbázis kapcsolat)
+
+Módosítsd az `src/prisma/prisma.service.ts` fájlt a következőre:
+
+```typescript title="src/prisma/prisma.service.ts"
+import { Injectable, OnModuleInit } from '@nestjs/common';
+// Figyeld meg az importot: A saját generált mappánkból húzzuk be a klienst!
+import { PrismaClient } from '../generated/prisma/client';
+import { ConfigService } from '@nestjs/config';
+import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
+import { Config } from '../config/configuration';
+
+@Injectable()
+export class PrismaService extends PrismaClient implements OnModuleInit {
+  constructor(private readonly config: ConfigService<Config, true>) {
+    // Kiolvassuk a db url-t a korábban létrehozott ConfigService-ből
+    const connectionString = config.get('database.url', { infer: true });
+
+    if (!connectionString) {
+      throw new Error('DATABASE_URL environment variable is not set');
+    }
+
+    // Inicializáljuk a gyorsabb SQLite adaptert
+    const adapter = new PrismaBetterSqlite3({ url: connectionString });
+
+    // Átadjuk az adaptert a szülő osztálynak (PrismaClient)
+    super({ adapter });
+  }
+
+  // Ez a metódus automatikusan lefut, amikor a modul inicializálódik
+  async onModuleInit(): Promise<void> {
+    await this.$connect();
+  }
+}
+```
+
+**Magyarázat a Service-hez:**
+
+1. A `PrismaService` kibővíti (`extends`) a legenerált `PrismaClient` osztályt. Ezért van az, hogy a `PrismaService`-en keresztül elérjük majd az összes adatbázis metódust (pl. `this.prisma.ticket.findMany()`).
+2. Kiemelten fontos a beimportált útvonal: `../generated/prisma/client`. Ezt azért tudjuk így használni, mert a `schema.prisma` fájlban módosítottuk az `output` célmappáját.
+3. Itt használjuk fel a fejezet elején létrehozott **ConfigModule**-t! A `ConfigService` segítségével biztonságosan, típusosan (`Config` interfésszel) olvassuk ki a `database.url` értékét.
+4. Az `OnModuleInit` interfész implementálásával biztosítjuk, hogy amint elindul a NestJS szerverünk, a Prisma azonnal felépítse az adatbázis-kapcsolatot (`this.$connect()`).
+
+Mostmár a `PrismaService`-t bármelyik másik modulban használhatjuk Dependency Injection segítségével.
+
+Ezzel sikeresen összekötöttük a NestJS alkalmazásunkat a konfiguráció-kezeléssel és a Prisma ORM-mel! A következő részben ezt felhasználva befejezzük a `Tickets` végpontjaink megírását, hogy valódi adatbázisba mentsük a hibajegyeket.
+
+:::info
+Ha elakadtál, akkor a chapter-3 branch-en megtalálod az eddigi kódot, amit összehasonlíthatsz a sajátoddal, vagy checkoutolhatod, hogy onnan folytasd.
+:::
