@@ -695,3 +695,292 @@ Ezzel sikeresen összekötöttük a NestJS alkalmazásunkat a konfiguráció-kez
 :::info
 Ha elakadtál, akkor a chapter-3 branch-en megtalálod az eddigi kódot, amit összehasonlíthatsz a sajátoddal, vagy checkoutolhatod, hogy onnan folytasd.
 :::
+
+---
+
+## Chapter 4: A Boards modul, validáció és a Prisma felhasználása
+
+Ebben a fejezetben létrehozzuk a táblákat (Boards) kezelő modult. Egy `Board` képviselhet például egy projektet, amelyhez majd a hibajegyek (Tickets) tartoznak. Most először fogjuk összekötni a végpontjainkat a valós adatbázissal a Prisma segítségével, és megismerkedünk a bejövő adatok validálásával is.
+
+### A Boards modul generálása
+
+Először generáljuk le az új erőforrást a NestJS CLI segítségével:
+
+```bash
+nest g res boards
+```
+
+_(Válaszd a REST API-t, és kérd a CRUD végpontok generálását!)_
+
+### Függőségek telepítése a validációhoz
+
+Ahhoz, hogy a felhasználók által beküldött adatokat ellenőrizni tudjuk (pl. a cím ne legyen üres, az ID szám legyen), két könyvtárra lesz szükségünk. Futtasd a következő parancsot:
+
+```bash
+npm install class-validator class-transformer
+```
+
+**Mik ezek?**
+
+- `class-validator`: Dekorátorokat biztosít (pl. `@IsString()`, `@IsNotEmpty()`), amelyekkel szabályokat definiálhatunk az osztályaink tulajdonságaira.
+- `class-transformer`: Segít a sima JSON objektumokat (amelyek a hálózaton érkeznek) valódi TypeScript osztálypéldányokká alakítani.
+
+---
+
+### Entitások létrehozása
+
+A generált `boards/entities/board.entity.ts` fájlban most már valós osztályt definiálunk, és fel is díszítjük a validációs szabályokkal.
+
+```typescript title="src/boards/entities/board.entity.ts"
+import { IsDate, IsNotEmpty, IsNumber, IsString, Min } from 'class-validator';
+
+export class Board {
+  @IsNumber()
+  @Min(1)
+  id: number = 0;
+
+  @IsString()
+  @IsNotEmpty()
+  title: string = '';
+
+  @IsDate()
+  createdAt: Date = new Date();
+}
+```
+
+Mivel később szükségünk lesz arra is, hogy lekérjünk egy táblát az összes hozzá tartozó hibajeggyel, készítünk egy kiterjesztett entitást is. Hozd létre a `board-with-tickets.entity.ts` fájlt:
+
+```typescript title="src/boards/entities/board-with-tickets.entity.ts"
+import { Ticket } from '../../tickets/entities/ticket.entity';
+import { Board } from './board.entity';
+
+export class BoardWithTickets extends Board {
+  tickets: Ticket[] = [];
+}
+```
+
+---
+
+### A DTO-k és az OmitType
+
+A bejövő adatokat DTO-kkal (Data Transfer Object) kezeljük. Módosítsuk a létrehozáshoz használt DTO-t:
+
+```typescript title="src/boards/dto/create-board.dto.ts"
+import { OmitType } from '@nestjs/mapped-types';
+import { Board } from '../entities/board.entity';
+
+export class CreateBoardDto extends OmitType(Board, ['id', 'createdAt']) {}
+```
+
+:::info Mi az az OmitType?
+Képzeljük el, mi történik, amikor egy felhasználó új táblát akar létrehozni (POST kérés). Meg kell adnia a tábla címét (`title`), de **nem adhatja meg** az `id`-t és a `createdAt` dátumot, hiszen azokat az adatbázis (Prisma) automatikusan generálja!
+
+Az `OmitType` lemásolja a `Board` entitásunkat (a benne lévő validációs szabályokkal együtt!), de **kihagyja** belőle az általunk megadott mezőket (jelen esetben az `id` és `createdAt` mezőket). Így a kódunk DRY (Don't Repeat Yourself) marad: nem kell kétszer leírnunk a `title` validációs szabályait.
+:::
+
+A frissítéshez használt DTO-t is frissítjük a korábban megismert `PartialType` segítségével:
+
+```typescript title="src/boards/dto/update-board.dto.ts"
+import { PartialType } from '@nestjs/mapped-types';
+import { CreateBoardDto } from './create-board.dto';
+
+export class UpdateBoardDto extends PartialType(CreateBoardDto) {}
+```
+
+---
+
+### A validáció bekapcsolása
+
+Az entitásokba írt dekorátorok (pl. `@IsString()`) önmagukban nem csinálnak semmit. Meg kell mondanunk a NestJS-nek, hogy minden beérkező HTTP kérést vizsgaljon meg. Ezt a `main.ts` fájlban tesszük meg egy globális "Pipe" beállításával.
+
+```typescript title="src/main.ts"
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+
+  // Itt kapcsoljuk be a globális validációt!
+  app.useGlobalPipes(new ValidationPipe());
+
+  const port = process.env.PORT ?? 3000;
+  console.log(`Nestjs is running on port ${port}`);
+  await app.listen(port);
+}
+
+void bootstrap();
+```
+
+**Miért kell ez?**
+Ha egy felhasználó most egy üres JSON-t `{}` küld be a `POST /boards` végpontra, a `ValidationPipe` automatikusan elfogja a kérést, és még azelőtt visszadob egy `400 Bad Request` hibát, hogy a kódunk egyáltalán lefutna a Controllerben. Védőhálót biztosít az alkalmazásunknak.
+
+---
+
+### A Controller és a Pipe-ok használata
+
+Most frissítsük a `boards.controller.ts` fájlt:
+
+```typescript title="src/boards/boards.controller.ts"
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { BoardsService } from './boards.service';
+import { CreateBoardDto } from './dto/create-board.dto';
+import { UpdateBoardDto } from './dto/update-board.dto';
+import { BoardWithTickets } from './entities/board-with-tickets.entity';
+import { Board } from './entities/board.entity';
+
+@Controller('boards')
+export class BoardsController {
+  constructor(private readonly boardsService: BoardsService) {}
+
+  @Post()
+  create(@Body() createBoardDto: CreateBoardDto): Promise<Board> {
+    return this.boardsService.create(createBoardDto);
+  }
+
+  @Get()
+  findAll(): Promise<Board[]> {
+    return this.boardsService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id', ParseIntPipe) id: number): Promise<BoardWithTickets> {
+    return this.boardsService.findOne(id);
+  }
+
+  @Patch(':id')
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateBoardDto: UpdateBoardDto): Promise<Board> {
+    return this.boardsService.update(id, updateBoardDto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id', ParseIntPipe) id: number): Promise<Board> {
+    return this.boardsService.remove(id);
+  }
+}
+```
+
+:::tip Mi az a ParseIntPipe és miért változik meg a hibaüzenet?
+Amikor az URL-ből kiolvasunk egy paramétert (pl. `GET /boards/5`), a HTTP protokoll sajátosságai miatt az `"5"` egy `string` (szöveg).
+
+- **ParseIntPipe nélkül:** A service-ünk ezt szövegként kapná meg, majd amikor átadja a Prismának (ami számot vár), a szerverünk elszállna egy csúnya, 500-as Internal Server Error hibával.
+- **ParseIntPipe használatával:** A NestJS még a kódunk futása előtt megpróbálja az értéket számmá alakítani. Ha a felhasználó a `/boards/alma` URL-t hívja meg, a Pipe azonnal visszaad egy barátságos hibaüzenetet:
+
+```json
+{
+  "statusCode": 400,
+  "message": "Validation failed (numeric string is expected)",
+  "error": "Bad Request"
+}
+```
+
+:::
+
+---
+
+### A Service összekötése a Prisma ORM-mel
+
+Végül írjuk meg az üzleti logikát a `boards.service.ts` fájlban. Itt fogjuk a Chapter 3-ban létrehozott `PrismaService`-t használni.
+
+```typescript title="src/boards/boards.service.ts"
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Boards, Prisma } from '../generated/prisma/client';
+import { PrismaService } from '../prisma/prisma.service';
+import { BoardWithTickets } from './entities/board-with-tickets.entity';
+
+@Injectable()
+export class BoardsService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async create(createBoardDto: Prisma.BoardsCreateInput) {
+    try {
+      return await this.prisma.boards.create({
+        data: createBoardDto,
+      });
+    } catch (e) {
+      console.error(e);
+      throw new BadRequestException('Could not create board');
+    }
+  }
+
+  async findAll(): Promise<Boards[]> {
+    return await this.prisma.boards.findMany();
+  }
+
+  async findOne(id: number): Promise<BoardWithTickets> {
+    const board = await this.prisma.boards.findUnique({
+      where: { id },
+      include: { tickets: true },
+    });
+
+    if (!board) {
+      throw new NotFoundException(`Board with id ${id} not found`);
+    }
+
+    return board;
+  }
+
+  async update(id: number, updateBoardDto: Prisma.BoardsUpdateInput): Promise<Boards> {
+    try {
+      return await this.prisma.boards.update({
+        where: { id },
+        data: updateBoardDto,
+      });
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2025') {
+          throw new NotFoundException(`Board with id ${id} not found`);
+        }
+      }
+      console.error(e);
+      throw new BadRequestException(`Could not update board with id ${id}`);
+    }
+  }
+
+  async remove(id: number): Promise<Boards> {
+    try {
+      return await this.prisma.boards.delete({
+        where: { id },
+      });
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2025') {
+          throw new NotFoundException(`Board with id ${id} not found`);
+        }
+      }
+      console.error(e);
+      throw new BadRequestException(`Could not delete board with id ${id}`);
+    }
+  }
+}
+```
+
+#### 1. A PrismaService Injektálása
+
+A konstruktorban (`constructor(private readonly prisma: PrismaService) {}`) a NestJS Dependency Injection (Függőség injektálás) rendszerét használjuk. Mivel a 3. fejezetben a `PrismaModule`-t globálissá tettük, a NestJS automatikusan átadja nekünk az adatbázis-kapcsolatot kezelő szolgáltatást. Ezen a `this.prisma` objektumon keresztül érjük el a generált adatbázis tábláinkat (pl. `this.prisma.boards`).
+
+#### 2. Típusbiztonság a Prisma beépített típusaival
+
+Ha megfigyeled a metódusok paramétereit (pl. `createBoardDto: Prisma.BoardsCreateInput`), láthatod, hogy nem a mi saját DTO-nkat használjuk típusként, hanem a Prisma által generált típusokat. Ez azért nagyon hasznos, mert a Prisma pontosan tudja, milyen mezőket vár az adatbázis egy új rekord létrehozásakor vagy frissítésekor. Ha a sémánk változik, ezek a típusok automatikusan frissülnek, így a TypeScript azonnal jelezni fogja, ha valahol rossz adatot akarunk az adatbázisba küldeni.
+
+#### 3. Kapcsolatok lekérdezése a `findOne` metódusban
+
+A `findOne` metódusban ezt a lekérdezést használjuk:
+`include: { tickets: true }`
+
+A relációs adatbázisokban (mint az SQLite) a táblák külön vannak. Alapértelmezés szerint a Prisma csak a `boards` tábla adatait adja vissza, hogy gyors maradjon a lekérdezés. Az `include` kulcsszóval (Eager Loading) viszont megmondjuk a Prismának, hogy menjen el a kapcsolódó `tickets` táblába is, és hozza el az összes olyan hibajegyet, ami ehhez a táblához tartozik. Ezért térünk vissza itt a kiterjesztett `BoardWithTickets` entitásunkkal, hiszen a válasz most már tartalmazni fog egy `tickets` tömböt is.
+
+#### 4. Hibakezelés és HTTP státuszkódok
+
+A HTTP kéréseknél nagyon fontos, hogy megfelelő státuszkódot adjunk vissza hiba esetén (pl. 404, ha nem található valami, vagy 400, ha rossz az adat).
+A `findOne` esetében manuálisan ellenőrizzük, hogy létezik-e az adat: `if (!board) throw new NotFoundException(...)`. Ez egy beépített NestJS hiba, ami automatikusan egy 404-es HTTP választ generál a kliensnek.
+
+#### 5. A Prisma hibakódok (P2025) elkapása az `update` és `remove` metódusokban
+
+A frissítésnél és a törlésnél a Prisma automatikusan hibát dob, ha olyan ID-jú elemet próbálunk módosítani, ami nem is létezik az adatbázisban.
+Ezt a hibát a `try-catch` blokkban kapjuk el. Az `e instanceof Prisma.PrismaClientKnownRequestError` sorral ellenőrizzük, hogy a Prisma dobott-e ismert hibát.
+A **`P2025`** a Prisma hivatalos hibakódja arra, ha _"Egy olyan rekordot próbálsz frissíteni vagy törölni, amely nem található"_. Ha ezt a kódot látjuk, pontosan tudjuk, hogy az elem nem létezik, ezért visszadobunk egy `NotFoundException`-t (404-es hiba). Minden más váratlan hiba esetén `BadRequestException`-t (400-as hiba) küldünk vissza.
+
+:::info
+Ha elakadtál, akkor a chapter-4 branch-en megtalálod az eddigi kódot, amit összehasonlíthatsz a sajátoddal, vagy checkoutolhatod, hogy onnan folytasd.
+:::
