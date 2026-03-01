@@ -278,7 +278,7 @@ A Prisma **"Unchecked"** input típusai pontosan ezt engedik meg: közvetlenül 
 
 A `update` és `remove` metódusokban ugyanazt a logikát alkalmazzuk, mint amit a `BoardsService`-ben már megismertünk. Ha olyan hibajegyet próbálunk szerkeszteni vagy törölni, ami nem létezik (például valaki már letörölte előttünk), a Prisma egy **`P2025`**-ös hibát dob. Ezt szintén elkapjuk, és `NotFoundException` (404) választ generálunk belőle, míg a többi hibát általános `BadRequestException` (400) kíséretében küldjük vissza.
 
-## A dokumentáció megtekintése
+### A dokumentáció megtekintése
 
 Indítsd el az alkalmazást (vagy ha futott, várd meg amíg az SWC újrafordítja):
 
