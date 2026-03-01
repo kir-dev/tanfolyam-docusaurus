@@ -869,7 +869,7 @@ export class AppModule implements NestModule {
 
 #### Próbáld ki!
 
-Most indítsd el a szervert (`npm run start:dev`), és küldj pár kérést mondjuk a Swagger felületről (http://localhost:3000/api). Ha megnyitod a szervered terminálját, látni fogod a gyönyörűen formázott logokat:
+Most indítsd el a szervert (`npm run start:dev`), és küldj pár kérést mondjuk a Swagger felületről (http://localhost:3000/api). Ha megnyitod a szervered terminálját, látni fogod a lekérésekhez tartozó logokat a HTTP metódussal, az útvonallal, a válaszkóddal és a feldolgozási idővel együtt:
 
 ```bash
 [GET] /api - 200 - 5ms
