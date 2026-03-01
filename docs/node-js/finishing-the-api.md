@@ -526,3 +526,358 @@ Viszont jelenleg a címkéink még nincsenek összekötve a hibajegyekkel, így 
 :::info
 Ha elakadtál, akkor a chapter-7 branch-en megtalálod az eddigi kódot, amit összehasonlíthatsz a sajátoddal, vagy checkoutolhatod, hogy onnan folytasd.
 :::
+
+---
+
+## Chapter 8: Címkék hozzárendelése a hibajegyekhez
+
+A 3. fejezetben, amikor elkészítettük a Prisma sémánkat, egy több-a-többhöz (M-N) kapcsolatot hoztunk létre a `Ticket` és a `Label` modellek között. Ez azt jelenti, hogy egy hibajegynek több címkéje is lehet, és egy címke több hibajegyen is szerepelhet. Ebben a fejezetben megírjuk azokat a végpontokat, amikkel összekapcsolhatjuk (vagy éppen szétválaszthatjuk) ezeket az entitásokat.
+
+### TicketWithLabels modell
+
+Ahhoz, hogy a Swagger dokumentációnk és a TypeScript típusaink is tudják, hogy egy hibajegy lekérdezésekor most már a címkéket is visszaadjuk, egy kiterjesztett osztályt kell létrehoznunk.
+
+Hozd létre a `src/tickets/entities/ticket-with-labels.entity.ts` fájlt:
+
+```typescript title="src/tickets/entities/ticket-with-labels.entity.ts"
+import { Label } from '../../labels/entities/label.entity';
+import { Ticket } from './ticket.entity';
+
+export class TicketWithLabels extends Ticket {
+  labels: Label[] = [];
+}
+```
+
+**Magyarázat:** Mivel ez az osztály leszármazik (öröklődik) a `Ticket` osztályból, ezért annak az összes validációs szabálya és Swagger dekorátora megmarad rajta. Egyetlen dologgal bővítjük: egy `labels` tömbbel. Ez a struktúra pontosan le fogja modellezni azt az objektumot, amit az adatbázisból fogunk visszakapni a relációk lekérése után.
+
+---
+
+### A GET végpontok frissítése
+
+Most módosítanunk kell a meglévő `findAll` és `findOne` végpontjainkat a `Tickets` modulban, hogy ne csak a nyers hibajegyet, hanem a hozzá tartozó címkéket is visszaadják.
+
+#### 1. A TicketsController módosítása
+
+Importáld be az új entitást, és frissítsd a két `GET` metódust a `src/tickets/tickets.controller.ts` fájlban:
+
+```typescript title="src/tickets/tickets.controller.ts"
+// ... korábbi importok
+import { TicketWithLabels } from './entities/ticket-with-labels.entity';
+
+// ... az osztály korábbi részei
+
+  @Get()
+  @ApiOkResponse({
+    type: TicketWithLabels, // Itt cseréltük az entitást
+    isArray: true,
+    description: 'All tickets',
+  })
+  findAll(): Promise<TicketWithLabels[]> {
+    return this.ticketsService.findAll();
+  }
+
+  @Get(':id')
+  @ApiOkResponse({ type: TicketWithLabels }) // Itt is cseréltük az entitást
+  @ApiNotFoundResponse({ description: 'Ticket with given id not found' })
+  findOne(@Param('id', ParseIntPipe) id: number): Promise<TicketWithLabels> {
+    return this.ticketsService.findOne(id);
+  }
+
+// ... az osztály további részei
+```
+
+#### 2. A TicketsService módosítása
+
+Hogy a kérés ki is szolgálja ezeket az adatokat, a Prisma lekérdezéseit is frissítenünk kell a `src/tickets/tickets.service.ts` fájlban. Ne felejtsd el beimportálni felülre a `TicketWithLabels` osztályt!
+
+```typescript title="src/tickets/tickets.service.ts"
+// ... korábbi importok
+import { TicketWithLabels } from './entities/ticket-with-labels.entity';
+
+// ... az osztály korábbi részei
+
+  async findAll(): Promise<TicketWithLabels[]> {
+    return await this.prisma.ticket.findMany({
+      include: {
+        labels: true,
+      },
+    });
+  }
+
+  async findOne(id: number): Promise<TicketWithLabels> {
+    const ticket = await this.prisma.ticket.findUnique({
+      where: { id },
+      include: {
+        labels: true,
+      },
+    });
+
+    if (!ticket) {
+      throw new NotFoundException(`Ticket with id ${id} not found`);
+    }
+    return ticket;
+  }
+
+```
+
+**Magyarázat:** A Prisma `findMany` és `findUnique` metódusainál hozzáadtuk az `include` opciót, amiben megmondjuk, hogy a `labels` relációt is szeretnénk visszakapni. Így a lekérdezés nem csak a hibajegy adatait fogja visszaadni, hanem egy `labels` tömböt is, amiben az összes hozzárendelt címke szerepelni fog.
+
+---
+
+### Új végpontok a Controllerben
+
+A hibajegyhez egy címkét hozzárendelni alapvetően a hibajegy egyfajta "módosítása", ezért `PATCH` kérést fogunk használni. A leválasztáshoz pedig a szemantikus `DELETE` metódust választjuk.
+
+Nyisd meg a `src/tickets/tickets.controller.ts` fájlt, és add hozzá az osztályhoz a következő két új metódust:
+
+```typescript title="src/tickets/tickets.controller.ts"
+  @Patch(':ticketId/assign/:labelId')
+  @ApiOkResponse({ type: TicketWithLabels })
+  @ApiNotFoundResponse({
+    description:
+      'Ticket or label with given id not found. You can deduce which one from the error message',
+  })
+  @ApiBadRequestResponse({ description: 'Could not assign label' })
+  assignLabel(
+    @Param('ticketId', ParseIntPipe) ticketId: number,
+    @Param('labelId', ParseIntPipe) labelId: number,
+  ): Promise< TicketWithLabels > {
+    return this.ticketsService.assignLabel(ticketId, labelId);
+  }
+
+  @Delete(':ticketId/assign/:labelId')
+  @ApiOkResponse({
+    description:
+      "The label was successfully removed from the ticket. Worth to note, that this returns 200 even if the label wasn't connected to the ticket.",
+    type: TicketWithLabels,
+  })
+  @ApiNotFoundResponse({ description: 'Ticket with given id not found' })
+  @ApiBadRequestResponse({ description: 'Could not remove label' })
+  removeLabel(
+    @Param('ticketId', ParseIntPipe) ticketId: number,
+    @Param('labelId', ParseIntPipe) labelId: number,
+  ): Promise< TicketWithLabels > {
+    return this.ticketsService.removeLabel(ticketId, labelId);
+  }
+```
+
+**Magyarázat:**
+
+- Az útvonal mindkét esetben két dinamikus paramétert vár: `ticketId` és `labelId`. Például a `PATCH /tickets/5/assign/2` azt jelenti, hogy az 5-ös számú hibajegyre rárakjuk a 2-es azonosítójú címkét.
+- Két darab `@Param` dekorátort is használunk, hogy mindkét azonosítót kinyerjük az URL-ből, és a `ParseIntPipe` gondoskodik róla, hogy ezek biztosan számok legyenek.
+
+---
+
+### Az üzleti logika a Service-ben
+
+Most megírjuk a Prisma lekérdezéseket a `src/tickets/tickets.service.ts` fájlban, amelyek ténylegesen elvégzik a több-a-többhöz kapcsolatok módosítását.
+
+Először is győződj meg róla, hogy beimportáltad a `Prisma` névteret a fájl tetején:
+
+```typescript
+import { Prisma } from '../generated/prisma/client';
+```
+
+Ezután add hozzá az osztályhoz az alábbi két metódust:
+
+```typescript title="src/tickets/tickets.service.ts"
+  async assignLabel(
+    ticketId: number,
+    labelId: number,
+  ): Promise< TicketWithLabels > {
+    try {
+      return await this.prisma.ticket.update({
+        where: { id: ticketId },
+        data: {
+          labels: {
+            // A 'connect' kulcsszó köti össze a két meglévő rekordot
+            connect: { id: labelId },
+          },
+        },
+        // Itt is megkérjük a Prismát, hogy adja vissza a címkéket a végeredményben
+        include: {
+          labels: true,
+        },
+      });
+    } catch (e) {
+      console.error(e);
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        // Ha a címke nem létezik
+        if (e.code === 'P2025') {
+          throw new NotFoundException('Invalid label id');
+        }
+        // Ha a hibajegy nem létezik
+        if (e.code === 'P2016') {
+          throw new NotFoundException('Invalid ticket id');
+        }
+      }
+      throw new BadRequestException(`Could not assign label to ticket`);
+    }
+  }
+
+  async removeLabel(
+    ticketId: number,
+    labelId: number,
+  ): Promise< TicketWithLabels > {
+    try {
+      return await this.prisma.ticket.update({
+        where: { id: ticketId },
+        data: {
+          labels: {
+            // A 'disconnect' megszünteti a kapcsolatot a két rekord között
+            disconnect: { id: labelId },
+          },
+        },
+        include: {
+          labels: true,
+        },
+      });
+    } catch (e) {
+      console.error(e);
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2025') {
+          throw new NotFoundException('Invalid label id');
+        }
+      }
+      throw new BadRequestException(`Could not remove label from ticket`);
+    }
+  }
+```
+
+### A kód működésének magyarázata:
+
+1. **`connect` és `disconnect` a Prismában:**
+   Amikor több-a-többhöz (M-N) kapcsolatot kezelünk, a Prisma nagyon elegáns megoldást nyújt. Ahelyett, hogy nekünk kéne manuálisan SQL beszúrásokat végezni egy rejtett kapcsolótáblába, egyszerűen a `connect` paranccsal összekötjük az azonosítókat, a `disconnect` paranccsal pedig felbontjuk a kapcsolatot.
+2. **Az `include` használata módosításkor:**
+   Bár az `update` metódus alapvetően módosítja az adatot, a Prisma azonnal vissza is tér a frissített objektummal. Az `include: { labels: true }` segítségével elérjük, hogy a sikeres összekötés (vagy leválasztás) után a válasz tartalmazza a hibajegy jelenlegi összes címkéjét is. Így a kliens (pl. a frontend alkalmazás) egyből látja a művelet sikerességét, és újra tudja rajzolni a felületet.
+3. **P2016 és P2025 hibakódok:**
+   - Ha olyan címkét próbálunk hozzákapcsolni (`connect`), ami nem létezik, a Prisma **P2025**-ös (Record not found) hibát dob.
+   - Ha a hibajegy nem létezik, amire a címkét raknánk, érdekes módon a Prisma **P2016**-os hibát ad vissza ebben a specifikus relációs kontextusban (Query interpretation error). Ezeket a specifikus Prisma hibákat elkapva rendkívül pontos és beszédes hibaüzeneteket küldhetünk vissza a felhasználónak!
+4. **Idempotens műveletek:**
+   - A `connect` művelet idempotens, ami azt jelenti, hogy ha egy címke már hozzá van rendelve egy hibajegyhez, és újra megpróbáljuk hozzákapcsolni, a Prisma nem dob hibát, hanem egyszerűen "nem csinál semmit". Ez megkönnyíti a frontend fejlesztést, mert nem kell előtte ellenőrizni, hogy a kapcsolat már létezik-e.
+   - Hasonlóan, a `disconnect` művelet is idempotens, így ha megpróbálunk leválasztani egy címkét, ami nincs is hozzárendelve a jegyhez, a Prisma szintén nem dob hibát.
+
+Ezzel a két új végponttal most már teljesen működőképes a címkék és hibajegyek közötti kapcsolat kezelése! A frontend fejlesztők mostantól könnyedén tudnak címkéket rendelni a jegyekhez, vagy éppen eltávolítani azokat, és a változások azonnal tükröződnek a lekérdezésekben is.
+
+:::info
+Ha elakadtál, akkor a chapter-8 branch-en megtalálod az eddigi kódot, amit összehasonlíthatsz a sajátoddal, vagy checkoutolhatod, hogy onnan folytasd.
+:::
+
+## Chapter 9: Logger Middleware
+
+Ez a fejezet egy opcionális, de annál hasznosabb kiegészítése az alkalmazásunknak. Létrehozunk egy saját **Logger Middleware**-t, amely minden beérkező HTTP kérésnél kiírja a konzolra, hogy pontosan mennyi ideig tartott annak feldolgozása. Ez a valós (production) környezetben életmentő lehet a lassú végpontok és adatbázis-lekérdezések felderítésében.
+
+### Mik azok a Middleware-ek?
+
+A **Middleware** (Köztesréteg) egy olyan függvény, amely a kliens kérése (Request) és a mi végpontunk (Controller) lefutása _között_ helyezkedik el. Képes:
+
+- Belenézni a kérésbe vagy módosítani azt (pl. autentikációs tokenek ellenőrzése).
+- Megszakítani a kérést, ha valami hibát észlel.
+- Továbbengedni a kérést a következő rétegnek (a `next()` függvény meghívásával).
+- Valamilyen kódot futtatni a válasz (Response) kiküldése után.
+
+Bár a NestJS elrejti előlünk, a háttérben az Express.js (vagy Fastify) motor hajtja, így a middleware-ek pontosan ugyanúgy működnek, mint egy hagyományos Express alkalmazásban.
+
+### A Common Modul és a Middleware létrehozása
+
+Hozzuk létre az alkalmazásban egy közös, általános célú modult (`common`), amiben az ilyen segédfüggvényeket tárolhatjuk. Hozz létre egy `src/common` mappát, benne pedig egy `logger.middleware.ts` fájlt:
+
+```typescript title="src/common/logger.middleware.ts"
+import { Injectable, NestMiddleware } from '@nestjs/common';
+import { Request, Response, NextFunction } from 'express';
+
+@Injectable()
+export class LoggerMiddleware implements NestMiddleware {
+  use(req: Request, res: Response, next: NextFunction): void {
+    const { method, originalUrl } = req;
+    const start = Date.now(); // Eltároljuk a kérés kezdetének időpontját
+
+    // Feliratkozunk a válasz 'finish' (befejezés) eseményére
+    res.on('finish', () => {
+      const duration = Date.now() - start;
+      console.log(`[${method}] ${originalUrl} - ${res.statusCode} - ${duration}ms`);
+    });
+
+    // Továbbadjuk a vezérlést az alkalmazás többi részének
+    next();
+  }
+}
+```
+
+#### Hogyan működik ez a kód?
+
+1. Amikor beérkezik egy kérés, kiolvassuk belőle a HTTP metódust (pl. `GET`) és az URL-t (pl. `/tickets/1`).
+2. A `Date.now()` segítségével feljegyezzük az aktuális milliszekundumot (`start`).
+3. **Nagyon fontos:** Nem itt számoljuk ki az időt, hiszen a feldolgozás még el sem kezdődött! Ehelyett a `res.on('finish', ...)` kóddal feliratkozunk egy eseményre, ami akkor fut le, amikor a NestJS már teljesen végzett a kéréssel, és kiküldte a választ a felhasználónak.
+4. A `next()` meghívása kritikus fontosságú. Ha ezt kihagyjuk, a kérés "lógva marad" (timeout), és soha nem jut el a Controllerig.
+
+### A Middleware regisztrálása a Common Modulban
+
+Hozzunk létre egy modulfájlt is a `src/common` mappában, hogy be tudjuk kötni a NestJS Dependency Injection (Függőség injektálás) rendszerébe:
+
+```typescript title="src/common/common.module.ts"
+import { Module } from '@nestjs/common';
+import { LoggerMiddleware } from './logger.middleware';
+
+@Module({
+  exports: [LoggerMiddleware],
+  providers: [LoggerMiddleware],
+})
+export class CommonModule {}
+```
+
+### A Middleware bekötése az AppModule-ba
+
+Végül meg kell mondanunk a fő modulunknak (`AppModule`), hogy használja ezt a middleware-t. Nyisd meg a `src/app.module.ts` fájlt.
+
+Először is importáld be a szükséges osztályokat és az új modulunkat:
+
+```typescript title="src/app.module.ts" (részlet)
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { CommonModule } from './common/common.module';
+import { LoggerMiddleware } from './common/logger.middleware';
+```
+
+A modult add hozzá az `imports` tömbhöz:
+
+```typescript title="src/app.module.ts" (részlet)
+  imports:[
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [configuration],
+    }),
+    PrismaModule.forRoot({
+      isGlobal: true,
+    }),
+    TicketsModule,
+    BoardsModule,
+    LabelsModule,
+    CommonModule, // Itt adjuk hozzá a CommonModule-t!
+  ],
+```
+
+Végül implementáld a `NestModule` interfészt magán az `AppModule` osztályon, és konfiguráld be a middleware-t:
+
+```typescript title="src/app.module.ts" (részlet)
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    // A LoggerMiddleware-t minden ('*') útvonalra rákötjük
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}
+```
+
+#### Próbáld ki!
+
+Most indítsd el a szervert (`npm run start:dev`), és küldj pár kérést mondjuk a Swagger felületről (http://localhost:3000/api). Ha megnyitod a szervered terminálját, látni fogod a gyönyörűen formázott logokat:
+
+```bash
+[GET] /api - 200 - 5ms
+[GET] /tickets - 200 - 12ms
+[POST] /boards - 201 - 25ms
+[GET] /tickets/999 - 404 - 8ms
+```
+
+:::info
+Ha elakadtál, akkor a chapter-8 branch-en megtalálod az eddigi kódot, amit összehasonlíthatsz a sajátoddal, vagy checkoutolhatod, hogy onnan folytasd.
+:::
