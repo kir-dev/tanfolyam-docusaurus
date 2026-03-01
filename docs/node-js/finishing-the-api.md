@@ -291,3 +291,238 @@ A [http://localhost:3000/api](http://localhost:3000/api) címre navigálva, most
 :::info
 Ha elakadtál, akkor a chapter-6 branch-en megtalálod az eddigi kódot, amit összehasonlíthatsz a sajátoddal, vagy checkoutolhatod, hogy onnan folytasd.
 :::
+
+---
+
+## Chapter 7: A címkék implementálása
+
+A hibajegy-kezelő rendszerek (mint például a Jira vagy a Trello) egyik elengedhetetlen funkciója, hogy a jegyeket különböző színű és nevű címkékkel (Labels) láthassuk el. Ebben a fejezetben elkészítjük a címkéket kezelő modult, amelyen keresztül létrehozhatjuk, módosíthatjuk és törölhetjük a projektben elérhető címkéket.
+
+### A Labels modul generálása
+
+A már jól ismert módon hívjuk segítségül a NestJS CLI-t az új erőforrás (Resource) létrehozásához:
+
+```bash
+nest g res labels
+```
+
+_(Ahogy eddig is, válaszd a **REST API**-t, és kérd a CRUD végpontok legenerálását!)_
+
+:::info Fontos megjegyzés az AppModule-ról
+Ha a NestJS CLI-t használod, az automatikusan frissíti a `src/app.module.ts` fájlt, és beleteszi a `LabelsModule`-t az `imports` tömbbe. Ha bármilyen okból kifolyólag ezeket a fájlokat manuálisan hoznád létre, sose felejtsd el kézzel beimportálni a modult a fő modulba, különben a végpontjaid nem fognak élni!
+:::
+
+---
+
+### LabelEntity
+
+A címke egy nagyon egyszerű objektum lesz: van egy azonosítója (`id`), egy neve (`name`), és egy színe (`color`), amit hexadecimális kódként (pl. `#FF0000`) fogunk tárolni.
+
+Cseréld le a `labels/entities/label.entity.ts` tartalmát:
+
+```typescript title="src/labels/entities/label.entity.ts"
+import { IsHexColor, IsNotEmpty, IsNumber, IsString, Min } from 'class-validator';
+
+export class Label {
+  @IsNumber()
+  @Min(1)
+  id: number = 0;
+
+  @IsString()
+  @IsNotEmpty()
+  name: string = '';
+
+  // Új validációs dekorátor!
+  @IsString()
+  @IsHexColor()
+  color: string = '';
+}
+```
+
+:::tip Mi az az `@IsHexColor()`?
+A `class-validator` könyvtár rengeteg beépített ellenőrzőt tartalmaz. Ahelyett, hogy nekünk kéne egy bonyolult Reguláris Kifejezést (Regex) írnunk annak ellenőrzésére, hogy a felhasználó tényleg egy érvényes színkódot küldött-e (pl. `#1a2b3c`), az `@IsHexColor()` dekorátor ezt automatikusan elvégzi helyettünk. Ha a kliens "piros"-t küld értéknek, a szerver azonnal egy `400 Bad Request` hibával fog válaszolni.
+:::
+
+---
+
+### A Label DTO-k
+
+A létrehozáshoz és frissítéshez használt DTO-k szinte azonosak lesznek a korábbi fejezetekben látottakkal. Továbbra is a `@nestjs/swagger` csomagból importáljuk a segédfüggvényeket, hogy az API dokumentációnk is tükrözze a modellt.
+
+```typescript title="src/labels/dto/create-label.dto.ts"
+import { OmitType } from '@nestjs/swagger';
+import { Label } from '../entities/label.entity';
+
+// Létrehozásnál az 'id'-t az adatbázis generálja, így azt kihagyjuk
+export class CreateLabelDto extends OmitType(Label, ['id'] as const) {}
+```
+
+```typescript title="src/labels/dto/update-label.dto.ts"
+import { PartialType } from '@nestjs/swagger';
+import { CreateLabelDto } from './create-label.dto';
+
+// Frissítésnél minden mező opcionálissá válik
+export class UpdateLabelDto extends PartialType(CreateLabelDto) {}
+```
+
+---
+
+### A LabelsController
+
+A vezérlőben beállítjuk a megfelelő végpontokat és felparaméterezzük őket a Swagger dokumentációs dekorátorokkal.
+
+```typescript title="src/labels/labels.controller.ts"
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import {
+  ApiBadRequestResponse,
+  ApiBody,
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+} from '@nestjs/swagger';
+import { CreateLabelDto } from './dto/create-label.dto';
+import { UpdateLabelDto } from './dto/update-label.dto';
+import { Label } from './entities/label.entity';
+import { LabelsService } from './labels.service';
+
+@Controller('labels')
+export class LabelsController {
+  constructor(private readonly labelsService: LabelsService) {}
+
+  @Post()
+  @ApiBody({ type: CreateLabelDto })
+  @ApiCreatedResponse({
+    description: 'Label successfully created',
+    type: Label,
+  })
+  @ApiBadRequestResponse({ description: 'Could not create label' })
+  create(@Body() createLabelDto: CreateLabelDto): Promise<Label> {
+    return this.labelsService.create(createLabelDto);
+  }
+
+  @Get()
+  findAll(): Promise<Label[]> {
+    return this.labelsService.findAll();
+  }
+
+  @Get(':id')
+  @ApiOkResponse({ type: Label })
+  @ApiNotFoundResponse({ description: 'Label not found' })
+  findOne(@Param('id', ParseIntPipe) id: number): Promise<Label> {
+    return this.labelsService.findOne(id);
+  }
+
+  @Patch(':id')
+  @ApiBody({ type: UpdateLabelDto })
+  @ApiOkResponse({ type: Label })
+  @ApiNotFoundResponse({ description: 'Label not found' })
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateLabelDto: UpdateLabelDto): Promise<Label> {
+    return this.labelsService.update(id, updateLabelDto);
+  }
+
+  @Delete(':id')
+  @ApiOkResponse({ type: Label })
+  @ApiNotFoundResponse({ description: 'Label not found' })
+  remove(@Param('id', ParseIntPipe) id: number): Promise<Label> {
+    return this.labelsService.remove(id);
+  }
+}
+```
+
+---
+
+### A LabelsService
+
+Végül megírjuk a Prisma lekérdezéseket a `labels.service.ts` fájlban. Ez a logika már ismerős lehet a `Boards` és `Tickets` modulokból.
+
+```typescript title="src/labels/labels.service.ts"
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Prisma, Ticket } from '../generated/prisma/client';
+import { PrismaService } from '../prisma/prisma.service';
+
+@Injectable()
+export class TicketsService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async create(createTicketDto: Prisma.TicketUncheckedCreateInput) {
+    try {
+      return await this.prisma.ticket.create({
+        data: createTicketDto,
+      });
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2003') {
+          throw new NotFoundException(`Board with id ${createTicketDto.boardsId} not found`);
+        }
+      }
+      console.error(e);
+      throw new BadRequestException('Could not create ticket');
+    }
+  }
+
+  async findAll(): Promise<Ticket[]> {
+    return await this.prisma.ticket.findMany();
+  }
+
+  async findOne(id: number): Promise<Ticket> {
+    const ticket = await this.prisma.ticket.findUnique({
+      where: { id },
+    });
+
+    if (!ticket) {
+      throw new NotFoundException(`Ticket with id ${id} not found`);
+    }
+
+    return ticket;
+  }
+
+  async update(id: number, updateTicketDto: Prisma.TicketUncheckedUpdateInput) {
+    try {
+      return await this.prisma.ticket.update({
+        where: { id },
+        data: updateTicketDto,
+      });
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2025') {
+          throw new NotFoundException(`Ticket with id ${id} not found`);
+        }
+      }
+      console.error(e);
+      throw new BadRequestException(`Could not update ticket with id ${id}`);
+    }
+  }
+
+  async remove(id: number) {
+    try {
+      return await this.prisma.ticket.delete({
+        where: { id },
+      });
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2025') {
+          throw new NotFoundException(`Ticket with id ${id} not found`);
+        }
+      }
+      console.error(e);
+      throw new BadRequestException(`Could not delete ticket with id ${id}`);
+    }
+  }
+}
+```
+
+#### A LabelsService működésének áttekintése
+
+Mivel a `Label` entitásunk egy nagyon egyszerű, önálló táblát reprezentál az adatbázisban (nincsenek kötelező külső kulcsai létrehozáskor), a szolgáltatás logikája szinte egy az egyben megegyezik az eddig tanultakkal:
+
+1. **Adatbázis kapcsolat (Dependency Injection):** A konstruktorban injektáljuk a `PrismaService`-t, ezen keresztül érjük el a `this.prisma.label` metódusait.
+2. **Keresés és Hibakezelés (`findOne`):** Lekérjük az adott azonosítójú címkét. Ha a Prisma `null` értékkel tér vissza (nem találta), egy manuális `NotFoundException` (404) hibát dobunk a felhasználónak.
+3. **Módosítás és Törlés (`update`, `remove`):** Ahogy a korábbi moduloknál már megszokhattuk, a frissítés és törlés műveleteket egy `try-catch` blokkba csomagoljuk. Ha a megadott ID nem létezik az adatbázisban, a Prisma egy ismert **`P2025`**-ös hibakóddal tér vissza. Ezt elkapva egy szép, érthető 404-es HTTP hibaüzenetet (`NotFoundException`) adunk vissza, minden más váratlan adatbázishiba esetén pedig egy általános 400-as hibát (`BadRequestException`).
+
+Ezzel a modullal teljessé vált az alapvető entitásaink (Boards, Tickets, Labels) CRUD műveleteinek sora!
+
+Viszont jelenleg a címkéink még nincsenek összekötve a hibajegyekkel, így hiába hozunk létre egy új címkét, azt nem tudjuk hozzárendelni egy jegyhez. Ez lesz a következő fejezet témája, ahol megvalósítjuk a sok-sok kapcsolathoz szükséges végpontokat, hogy egy jegyhez több címkét is hozzá tudjunk rendelni, és egy címkéhez is több jegy tartozhasson.
+
+:::info
+Ha elakadtál, akkor a chapter-7 branch-en megtalálod az eddigi kódot, amit összehasonlíthatsz a sajátoddal, vagy checkoutolhatod, hogy onnan folytasd.
+:::
