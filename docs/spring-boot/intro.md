@@ -57,4 +57,13 @@ sidebar_position: 1
 
 <hr>
 
+- Controller code
 - DTO
+
+
+- dependency injection
+
+
+<hr>
+
+- IntelliJ & JDK download
