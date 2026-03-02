@@ -4,66 +4,71 @@ sidebar_position: 1
 
 # Spring tanfolyam - 1. alkalom
 
-- Tartalom
+## Tartalom
 
-- Kotlin (és Java)
+---
 
-- Java futtatókörnyezet
+## Kotlin (és Java)
 
-- Gradle (és Maven)
+## Java futtatókörnyezet
 
-- Spring, SpringBoot
+## Gradle (és Maven)
 
-- Hogy szolgál ki kéréseket a Spring?
+## Spring, SpringBoot
 
-- Munkahelyen erre is láthasz példát
+## Hogy szolgál ki kéréseket a Spring?
 
-- IntelliJ
+## Munkahelyen erre is láthasz példát
 
-- Demo app
-    - springboot-starter-web dependency
-    - annotációk
-    - 8080 port
+## IntelliJ
 
-- Kérdések
+## Demo app
 
-<hr>
+- springboot-starter-web dependency
+- annotációk
+- 8080 port
 
-- OOP
+## Kérdések
 
-- Interface
+---
 
-- MVC
+## OOP
 
-- Modell, Repository, Service, Controller
+## Interface
 
-- Demo bővítése Service-szel
+## MVC
 
-- Kérdések
+## Modell, Repository, Service, Controller
 
-<hr>
+## Demo bővítése Service-szel
 
-- Kotlin alapok
+## Kérdések
 
-<hr>
+---
 
-- Adatbázis: JPA és H2
+## Kotlin alapok
 
-- Mentsük le a köszönéseket
-    - data class GreetingEntity
-    - application.properties: spring.jpa.show-sql=true & Hibernate üzenetek
+---
+
+## Adatbázis: JPA és H2
+
+## Mentsük le a köszönéseket
+
+- data class GreetingEntity
+- application.properties: spring.jpa.show-sql=true & Hibernate üzenetek
 
 ...
 
-<hr>
+---
 
-- Controller code
-- DTO
+## Controller code
 
+## DTO
 
-- dependency injection
+## dependency injection
 
+## Kérdések
 
-<hr>
+---
 
-- IntelliJ & JDK download
+## IntelliJ & JDK download
