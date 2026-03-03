@@ -53,7 +53,7 @@ A **hordozhetóságnak napjainkban egyre fontosabb szerepe van**, és az előbb 
 
 Alább látható a különböző rétegek, amik egymásra épülnek. A Java virtuális gép (viruális gép ≈ **absztrakt számítógép architektúra**) az operációs rendszer felett helyezkedik el, és **futásidőben értelmezi neki írt kódot, amit rögtön bináris kóddá alakít, amelyet a CPU már végre tud hajtani** (az adott platformon!).
 
-<img src="./referenced-images/JVM-layers.png" height="300">
+![:D](./referenced-images/JVM-layers.png)
 
 A Java fordítója nem bináris, végrehajtható kódra fordítja le az utasításainkat, hanem egy úgynevezett **bytecode-ra** (.class kiterjesztéssel rendelkezik). Ezt a bytecode-ot érdemes úgy elképzelni, mint a **Java virtuális gépre írt program elemi utasításai** (egyféle assembly kód), azaz ez **nem függ semmilyen harvertől vagy operációs rendszertől**.
 
