@@ -6,6 +6,16 @@ sidebar_position: 1
 
 ---
 
+## Miről lesz szó?
+
+Megismerkedünk a Kotlin programozási nyelvvel, a Java futtatókörnyezettel, ami a program végrehajtását lehetővé teszi, a Gradle build eszközzel és a Spring Boot keretrendszerrel. Az objektum-orientált programozási minta áttekintése után nézünk egy demo-t is.
+
+Fontos: a tananyagban **videó hivatkozásokat is elhelyeztünk**, amelyek emészthetőbbé és izgalmasabbá teszi a tanulást, így **megtekintésüket mindenkinek ajánljuk**.
+
+Ha bármilyen kérdésed felmerülne, akkor [ide kattintva](https://tanfolyam.kir-dev.hu/docs/get-started/intro) megtalálod az illetékeseket, akiket tudsz keresni.
+
+---
+
 ## Kotlin (és Java)
 
 ### Mi az a Kotlin?
@@ -120,13 +130,53 @@ A **modern, rugalmas** kedvencünk, ami 2007 óra létezik, és napjainkra **kü
 
 Konfigurációja Kotlin DSL-lel történik (**build.gradle.kts** fájl) – ez azt jelenti, hogy **maga a build fájl is Kotlin kód, amit az IDE** (pl. IntelliJ:heart:) **szépen színez, autocomplete-ol és ellenőriz**. A Gradle **gyorsabb a mindennapi fejlesztésben**, mivel okos cache-eket használ, és **csak azt építi újra, ami változott** (incremental build), így gyorsítva a fordítás folyamtát. A **konfigurációja sokkal rugalmasabb, könnyebb testreszabni és átlátni**, mint a Maven-ét.
 
-## Spring, SpringBoot
+_**[Gradle használatának előnyei (YouTube)](https://youtu.be/NTnJwQbxRss?si=qbw7DcDZnVrit2YP)**_
 
-## Hogy szolgál ki kéréseket a Spring?
+---
 
-## Munkahelyen erre is láthasz példát
+## IntelliJ IDEA
 
-## IntelliJ
+Az IntelliJ IDEA (rövdien csak IntelliJ) a **JetBrains által fejlesztett egyik legjobb IDE** (integrált fejlesztőkörnyezet), **Java és Kotlin programozáshoz**. Maga a JetBrains alkotta meg a Kotlint, így itt a legsimább az élmény.
+
+![IntelliJ logó](./referenced-images/IntelliJ-logo.png)
+
+Két verzió elérhető:
+
+- **Community:** ingyenes
+
+- **Ultimate:** előfizetős, de **@edu.bme.hu-s fiókkal regisztráció után**, tanulmányi célokra **ingyenesen használható**. Rengeteg hasznos funkcióval rendelkezik, köztük Spring Boot projekt létrehozása, így **mindenkinek ez az IDE használata ajánlott**!
+
+_**[JetBrains tanulmányi csomag!](https://www.jetbrains.com/academy/student-pack/)**_
+
+_**[IntelliJ IDEA története (YouTube)](https://youtu.be/jTZVx4TCmI4?si=plvTstOzBA9bDQmm)**_
+
+---
+
+## Spring Boot
+
+A Spring Boot **egy framework** (keretrendszer), **ami a Spring** nevű óriási Java **ökoszisztéma tetejére épül**. A Spring maga már 20+ éve az **egyik legnépszerűbb eszköz enterprise Java fejlesztéshez** – de régen nagyon sok konfigurációt, XML-t és boilerplate kódot igényelt.
+A Spring Boot 2014-ben indult azzal a céllal, hogy ezt az egészet drasztikusan leegyszerűsítse. A mottója: „Just run” – azaz írd meg a kódot, és máris futtatható egy önálló alkalmazás, minimális beállítással.
+
+![Spring logó](./referenced-images/Spring-Logo.png)
+
+### Miért olyan népszerű a Spring Boot?
+
+Képzeld el, hogy egy webes API-t, REST szolgáltatást vagy mikroszolgáltatást akarsz készíteni adatbázissal, biztonsággal, logolással. Normál Springgel ehhez órákig/hónapokig konfigurálnál dolgokat. **Spring Boot-tal:**
+
+- **Automatikus konfiguráció:** pl. ha látja, hogy van egy adatbázis driver a classpath-en, **magától beállítja a kapcsolatot**. Ha van webes dependency, **beépít egy Tomcat szervert**.
+- **Beépített szerverek** (Tomcat, Jetty, Undertow): **nem kell külön app szervert telepíteni**, csak elindítjuk és már fut is a 8080-as porton.
+- **Spring Initializr** ([start.spring.io](https://start.spring.io/)): pár kattintással **generál neked egy kész projektet** Gradle/Maven + Kotlin/Java + kívánt függőségekkel (Web, JPA, Security stb.)
+- **Production-ready feature-ök out-of-the-box:** health check endpoint (/actuator/health), metrikák (/actuator/metrics), logolás, külső konfiguráció (application.yml /properties), graceful shutdown stb.
+- **Kiváló Kotlin támogatás:** a 4.0+ verziókban **Kotlin-first feature-ök érkeznek**, pl. jobb co-routine integráció, null-safety kihasználása a Spring komponensekben.
+
+### Spring vs Spring Boot röviden és szemléletesen
+
+**Spring** = egy hatalmas doboz LEGO kocka
+**Spring Boot** = ugyan az a doboz, de **előre összerakott** házak, autók, hidak, és egy varázspálca, ami a **hiányzó darabokat magától odateszi**, ha látja, hogy mire van szükséged.
+
+_**Mi az a Spring Boot és miért jó? (YouTube): [CodeHead](https://youtu.be/-ILh8pl5lj8?si=sUWMl746mfezY7_4), [Mosh](https://youtu.be/v73-ps01c5w?si=EcJ66S3f6maaDH5P)**._
+
+---
 
 ## Demo app
 
