@@ -180,6 +180,55 @@ _**Mi az a Spring Boot és miért jó? (YouTube): [CodeHead](https://youtu.be/-I
 
 ## Demo app
 
+Nézzük meg, hogy milyen egyszerűen el lehet készíteni egy backendet Spring Bootban!
+
+Először is hozzunk létre egy új projektet IntelliJben:
+
+![Demo setup](./referenced-images/Demo-setup.png)
+
+Ezután vegyük fel a szükséges függőségeket (könyvtárakat) a `build.gradle.kts` fájlban:
+
+```gradle
+dependencies {
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+	implementation("org.jetbrains.kotlin:kotlin-reflect")
+	runtimeOnly("com.h2database:h2")
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+```
+
+TODO: ebből lehet, hogy nem minden szükséges!!!
+
+Fontos: Hogy újratöltsük a projektet, kattintsunk rá a jobb felső sarokban megjelenő elefántra:elephant: Ha ezt nem tesszük meg, akkor nem fognak frissülni az imént hozzáadott függőségek, és furcsa dolgok történhetnek az IDE-ben.
+
+![Gradle refresh](./referenced-images/gradle-elephant.png)
+
+sdfasdfdsf
+
+```kotlin
+package com.example.demo
+
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.runApplication
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RestController
+
+@SpringBootApplication
+@RestController
+class DemoApplication {
+	@GetMapping(path = ["/"])
+	fun greet() : String = "Hello World!"
+}
+
+fun main(args: Array<String>) {
+	runApplication<DemoApplication>(*args)
+}
+```
+
 - springboot-starter-web dependency
 - annotációk
 - 8080 port
@@ -190,19 +239,35 @@ _**Mi az a Spring Boot és miért jó? (YouTube): [CodeHead](https://youtu.be/-I
 
 ## OOP
 
-## Interface
+OOP tldr, mert nem biztos, hogy (megfelelően) tanulták prog 2-ből az elsőévesek.
+
+## Interfészek
+
+Interfészek és jelentősségük
 
 ## MVC
 
+MVC szeparáció
+
+_**[MVC a webfejlesztésben (YouTube)](https://youtu.be/DUg2SWWK18I?si=mnspEoQvxQOl7GqT)**_
+
 ## Modell, Repository, Service, Controller
 
+MVC a Springben
+
+_**[MVC a Springben + Annotációk (YouTube)](https://youtu.be/zGSX5AqfKvU?si=Iilg_vO2PDqb9eYd)**_
+
 ## Demo bővítése Service-szel
+
+Üzleti logika hozzáadása Service-ben.
 
 ## Kérdések 2
 
 ---
 
 ## Kotlin alapok
+
+Basic Kotlin alapok, hogy értsék a kódot a későbbiekben
 
 ---
 
@@ -221,10 +286,12 @@ _**Mi az a Spring Boot és miért jó? (YouTube): [CodeHead](https://youtu.be/-I
 
 ## DTO
 
-## dependency injection
-
 ## Kérdések 3
 
 ---
 
 ## IntelliJ & JDK download
+
+Hogyan kell letölteni és setupolni az IntelliJ IDEA-t + JetBrains student plan
+
+git clone demo repo + futtatás, hogy működik-e az IDE
