@@ -18,17 +18,9 @@ Ha bármilyen kérdésed felmerülne, akkor [ide kattintva](https://tanfolyam.ki
 
 ## Kotlin (és Java)
 
-### Mi az a Kotlin?
-
-![Kotlin logó](./referenced-images/Kotlin-logo.jpg)
-
-A Kotlin egy **modern, barátságos programozási nyelv**, amit a JetBrains fejlesztett 2011-től. Legfontosabb jellemzője, hogy **teljesen kompatibilis a Javával**, ugyanazon a platformon (**JVM**) fut, ugyanazokat a könyvtárakat használja – mégis **sokkal kényelmesebb, rövidebb és biztonságosabb kódot lehet vele írni, mint Javában**.
-
-Kezdetben főleg Android-alkalmazásokhoz vált népszerűvé (a Google 2017 óta hivatalosan is ajánlja), de mára a **backend fejlesztés egyik kedvenc eszköze** lett – különösen a **Spring Boot framework-kel párosítva**.
+Ha már a Kotlinról beszélünk, akkor nem mehetünk el figyelem nélkül a Java mellett.
 
 ### Mi az a Java?
-
-Ha már a Kotlinról beszélünk, akkor nem mehetünk el figyelem nélkül a Java mellett.
 
 ![Java logó](./referenced-images/Java-logo.jpg)
 
@@ -37,6 +29,14 @@ A Java **általános célú, objektumorientált programozási nyelv**, amelyet J
 A Java **több mint 30 éve az egyik legelterjedtebb nyelv a világon**. A **nagyvállalati rendszerek, banki szoftverek, webes backendek nagy része máig Javával készül** – és ez így is marad még hosszú évekig.
 
 Ugyanakkor a Java kódja sokszor hosszabb és ismétlődőbb, mint kellene. Bizonyos hibákat (például null-érték miatti összeomlást) csak futás közben vesz észre a program, amit bosszantó és időigényes lehet debugolni. Kezdők számára különösen nehéz lehet követni a sok boilerplate kódot (üres metódusok, getter/setter sorok, ellenőrzések).
+
+### Mi az a Kotlin?
+
+![Kotlin logó](./referenced-images/Kotlin-logo.jpg)
+
+A Kotlin egy **modern, barátságos programozási nyelv**, amit a JetBrains fejlesztett 2011-től. Legfontosabb jellemzője, hogy **teljesen kompatibilis a Javával**, ugyanazon a platformon (**JVM**) fut, ugyanazokat a könyvtárakat használja – mégis **sokkal kényelmesebb, rövidebb és biztonságosabb kódot lehet vele írni, mint Javában**.
+
+Kezdetben főleg Android-alkalmazásokhoz vált népszerűvé (a Google 2017 óta hivatalosan is ajánlja), de mára a **backend fejlesztés egyik kedvenc eszköze** lett – különösen a **Spring Boot framework-kel párosítva**.
 
 Szóval hogyan viszonyul a Kotlin a Javához?
 Kotlin – **ugyanaz a motor, de modernebb kormány és fékek.**
