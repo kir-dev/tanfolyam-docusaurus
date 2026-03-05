@@ -123,11 +123,19 @@ const config: Config = {
       style: 'dark',
       links: [
         {
-          title: 'Dokumentáció',
+          title: 'Általános tudnivalók',
           items: [
             {
-              label: 'Tudnivalók',
-              to: '/docs/get-started/intro',
+              label: 'Tanfolyamok felépítése',
+              to: '/docs/get-started/intro#tanfolyamaink-felépítése',
+            },
+            {
+              label: 'Amikre szükséged lesz',
+              to: '/docs/get-started/intro#amikre-szükséged-lesz',
+            },
+            {
+              label: 'Akiket kereshetsz',
+              to: '/docs/get-started/intro#akiket-kereshetsz',
             },
           ],
         },
