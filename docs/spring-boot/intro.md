@@ -247,13 +247,49 @@ Ha **futtatjuk a programot**, akkor elindul egy webszerver a 8080-as porton, és
 
 ## OOP
 
-OOP tldr, mert nem biztos, hogy (megfelelően) tanulták prog 2-ből az elsőévesek.
+**C-s világban a változóink és a függvényeink össze-vissza helyezkednek el**, így egy nagyobb projeknél szinte biztos, hogy **spagetti kódba** futunk (amikor annyira bonyolult a működés, hogy nem lehet kibogózni mi mit csinál, és teljesen karbantarthatatlan a forráskód).
+
+Ennek a problémának az orvosolására lett kitatlálva az **OOP** (Objektum Orientált Programozás), ami a **logikailag összetartozó változókat és függvényeket összecsomagolja egy osztályba**, továbbá megkönnyíti komplex problémák modellezését, csökkenti a kódduplikálást, és rugalmasabbá teszi a fejlesztést.
+
+Az **osztály egy sablon/tervrajz**, és az **objektum** az pedig **maga a példányosított dolog**. Egy osztály alapján (általában) több objektumot is lehet példányosítani. **Ha az osztály egy autó tervrajza, akkor a gyártósorról leguruló járművek az objektumok**.
+
+### Az OOP négy alappillére
+
+![Gradle refresh](../../static/img/spring/OOP-4-pillars.png)
+
+#### Egységbezárás (Encapsulation)
+
+A logikailag összetartozó változók és függvények összecsomagolásán kívül az **objektum belső állapotának véldemét is jelenti**, mivel **csak publikus metódusokon** (tagfüggvényeken) **keresztül érhetők el az adatok**.
+
+#### Öröklés (Inheritance)
+
+Ha egy osztályból leszármazunk, akkor a leszármazott osztály az **ősosztály tulajdonságait** (jelen esetben tagváltozóit és tagfüggvényeit) **örökli**, így **megúszhatunk nagyon sok kódduplikációt**, és **rugalmasabbá tehetjük a későbbi fejlesztést**.
+
+Tegyük fel, hogy egy forgalmi rendszert modellezünk különböző járművekkel és a **Jármű (absztrakt) ősosztályban megvalósítunk rengeteg dolgot** például a navigációt, így egy **új járművel való bővítés esetén** (pl. motor vagy busz) **nem kell** újra és újra **leírni a felesleges boilerplate kódot**.
+
+**Gondoljuk bele abba, hogy hány helyen kéne módosítani a forráskódot**, ha mostantól máshogyan kanyarodnánk jobbra (pl. más protokoll szerint) ... jó esetben csak egy helyen, a Jármű osztályban.
+
+#### Sokalakúság (Polymorphism)
+
+Egy objektum (típusától függően) **máshogyan viselkedhet**.
+
+Vegyünk egy **alakzat ősosztályt**, amiből különböző alakzatok származnak le pl. kör, négyzet és háromszög. Ha a kódunkban van egy olyan rész, ami az **alakzat kirajzolásáért** felel, akkor elég **`alakzat.rajzol();`** parancsot írni, és a **mögötte lévő osztály az lekezeli saját maga kirajzolását**, és nem kell külön, feleslegesen rajzolKör(), rajzolNégyzet(), rajzolHáromszög() függvényeket írni, majd egy switch case-ben kiválsztani a megfelelőt minden egyes alkalommal.
+
+#### Absztrakció (Abszrakció)
+
+A **külvilág felé jelentéktelen függvények és változók elrejtése**, és **csak a lényeges részek mutatása**.
 
 _**[OOP 4 alappillére (YouTube)](https://youtu.be/pTB0EiLXUC8?si=MpStxDDM_TuAi2Ov)**_
 
 ## Interfészek
 
 Interfészek és jelentősségük
+
+Példa HDMI csatlakozó MAC Linux TV
+
+Megvalósítja: TV, monitor, projektor stb.
+
+Használja: laptop, számítógép, konzol stb.
 
 ---
 
