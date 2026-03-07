@@ -269,6 +269,8 @@ Tegyük fel, hogy egy forgalmi rendszert modellezünk különböző járművekke
 
 **Gondoljuk bele abba, hogy hány helyen kéne módosítani a forráskódot**, ha mostantól máshogyan kanyarodnánk jobbra (pl. más protokoll szerint) ... jó esetben csak egy helyen, a Jármű osztályban.
 
+**Fontos: Javás világban csak egy osztályból származhatunk le, azaz nincs többszörös öröklés!**
+
 #### Sokalakúság (Polymorphism)
 
 Egy objektum (típusától függően) **máshogyan viselkedhet**.
@@ -283,13 +285,27 @@ _**[OOP 4 alappillére (YouTube)](https://youtu.be/pTB0EiLXUC8?si=MpStxDDM_TuAi2
 
 ## Interfészek
 
-Interfészek és jelentősségük
+### Mi az az interfész?
 
-Példa HDMI csatlakozó MAC Linux TV
+Az interfész **olyan, mint egy szerződés: megmondja, hogy egy osztálynak milyen metódusokat** (tagfüggvényeket) **kell mindenképpen tudnia**.
 
-Megvalósítja: TV, monitor, projektor stb.
+Ha egy osztály vállalja, hogy megvalósít egy interfészt, akkor az **interfésznek minden metódusával köteles rendelkeznie**, ami azt jelenti, hogy bármely ilyen osztálynak meghívható az interfész akármelyik metódusa.
 
-Használja: laptop, számítógép, konzol stb.
+### Mire jók az interfészek?
+
+A **jól definiált interterfészek elengedhetetlenek** nagy projektek esetén, mert **ezek mentén modulokra bonthatjuk a rendszerünket**, amiket külön-külön párhuzamosan is fejleszthetünk, ráadásul **egy komponens cseréje esetén nem kell mindent újraírni**, hanem csak az interfész vonaláig. Mondhatnám szépen nézne ki, ha egy adatbáziskezelő szoftvert újra kéne írni, ha az alatta lévő fizikai tártolót merevlemezről SSD-re cserélnénk.
+
+Nézzünk az interfészekre még egy szemléletes példát!
+
+**Vegyük a HDMI-t**, mint egy olyan interfészt, ami **videó** (és audió) **megjelenítésére alkalmas portot definiál**. Ezt az interfész pl. egy TV, monitor vagy projektor **valósítaná meg**, míg egy PC, laptop vagy konzol **tudná használni**.
+
+Rendkívül fontos itt megemlíteni, hogy itt egy projektort egyáltalán nem érdekli, hogy az interfész másik végén mi található (pl. MacBook vagy Xbox konzol), neki a feladata a kép megjelenítése, amihez az információt jól meghatározott úton kapja. Ez fordítva is elmondható: egy számítógép csak kiküldi magából a videót, és a monitor majd valahogyan megjeleníti.
+
+Technológiailag a számítógépek videókártyája eltér, és egy projektor is teljesen máshogyan jelenít meg képet, mint egy OLED TV, mégis bármilyen videót kiadó eszköz tud kommunikálni bármilyen képet lejátszani képes eszközzel, amennyiben mind a ketten támogatják a HDMI interfészt, és **nem kell az N-féle forrás eszköz és M-féle lejátszó eszköz között N\*M különböző verziót implementálni**!
+
+**Javás világban csak egyetlen osztályből lehet leszármazni, így a maradékot interfészek megvalósításával kell megoldani!!!**
+
+_**[Interfészek (YouTube)](https://www.youtube.com/watch?v=c2sTQk9opO8)**_
 
 ---
 
