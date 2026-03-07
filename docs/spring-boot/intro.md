@@ -247,13 +247,65 @@ Ha **futtatjuk a programot**, akkor elindul egy webszerver a 8080-as porton, és
 
 ## OOP
 
-OOP tldr, mert nem biztos, hogy (megfelelően) tanulták prog 2-ből az elsőévesek.
+**C-s világban a változóink és a függvényeink össze-vissza helyezkednek el**, így egy nagyobb projeknél szinte biztos, hogy **spagetti kódba** futunk (amikor annyira bonyolult a működés, hogy nem lehet kibogózni mi mit csinál, és teljesen karbantarthatatlan a forráskód).
+
+Ennek a problémának az orvosolására lett kitatlálva az **OOP** (Objektum Orientált Programozás), ami a **logikailag összetartozó változókat és függvényeket összecsomagolja egy osztályba**, továbbá megkönnyíti komplex problémák modellezését, csökkenti a kódduplikálást, és rugalmasabbá teszi a fejlesztést.
+
+Az **osztály egy sablon/tervrajz**, és az **objektum** az pedig **maga a példányosított dolog**. Egy osztály alapján (általában) több objektumot is lehet példányosítani. **Ha az osztály egy autó tervrajza, akkor a gyártósorról leguruló járművek az objektumok**.
+
+### Az OOP négy alappillére
+
+![Gradle refresh](../../static/img/spring/OOP-4-pillars.png)
+
+#### Egységbezárás (Encapsulation)
+
+A logikailag összetartozó változók és függvények összecsomagolásán kívül az **objektum belső állapotának véldemét is jelenti**, mivel **csak publikus metódusokon** (tagfüggvényeken) **keresztül érhetők el az adatok**.
+
+#### Öröklés (Inheritance)
+
+Ha egy osztályból leszármazunk, akkor a leszármazott osztály az **ősosztály tulajdonságait** (jelen esetben tagváltozóit és tagfüggvényeit) **örökli**, így **megúszhatunk nagyon sok kódduplikációt**, és **rugalmasabbá tehetjük a későbbi fejlesztést**.
+
+Tegyük fel, hogy egy forgalmi rendszert modellezünk különböző járművekkel és a **Jármű (absztrakt) ősosztályban megvalósítunk rengeteg dolgot** például a navigációt, így egy **új járművel való bővítés esetén** (pl. motor vagy busz) **nem kell** újra és újra **leírni a felesleges boilerplate kódot**.
+
+**Gondoljuk bele abba, hogy hány helyen kéne módosítani a forráskódot**, ha mostantól máshogyan kanyarodnánk jobbra (pl. más protokoll szerint) ... jó esetben csak egy helyen, a Jármű osztályban.
+
+**Fontos: Javás világban csak egy osztályból származhatunk le, azaz nincs többszörös öröklés!**
+
+#### Sokalakúság (Polymorphism)
+
+Egy objektum (típusától függően) **máshogyan viselkedhet**.
+
+Vegyünk egy **alakzat ősosztályt**, amiből különböző alakzatok származnak le pl. kör, négyzet és háromszög. Ha a kódunkban van egy olyan rész, ami az **alakzat kirajzolásáért** felel, akkor elég **`alakzat.rajzol();`** parancsot írni, és a **mögötte lévő osztály az lekezeli saját maga kirajzolását**, és nem kell külön, feleslegesen rajzolKör(), rajzolNégyzet(), rajzolHáromszög() függvényeket írni, majd egy switch case-ben kiválsztani a megfelelőt minden egyes alkalommal.
+
+#### Absztrakció (Abszrakció)
+
+A **külvilág felé jelentéktelen függvények és változók elrejtése**, és **csak a lényeges részek mutatása**.
 
 _**[OOP 4 alappillére (YouTube)](https://youtu.be/pTB0EiLXUC8?si=MpStxDDM_TuAi2Ov)**_
 
 ## Interfészek
 
-Interfészek és jelentősségük
+### Mi az az interfész?
+
+Az interfész **olyan, mint egy szerződés: megmondja, hogy egy osztálynak milyen metódusokat** (tagfüggvényeket) **kell mindenképpen tudnia**.
+
+Ha egy osztály vállalja, hogy megvalósít egy interfészt, akkor az **interfésznek minden metódusával köteles rendelkeznie**, ami azt jelenti, hogy bármely ilyen osztálynak meghívható az interfész akármelyik metódusa.
+
+### Mire jók az interfészek?
+
+A **jól definiált interterfészek elengedhetetlenek** nagy projektek esetén, mert **ezek mentén modulokra bonthatjuk a rendszerünket**, amiket külön-külön párhuzamosan is fejleszthetünk, ráadásul **egy komponens cseréje esetén nem kell mindent újraírni**, hanem csak az interfész vonaláig. Mondhatnám szépen nézne ki, ha egy adatbáziskezelő szoftvert újra kéne írni, ha az alatta lévő fizikai tártolót merevlemezről SSD-re cserélnénk.
+
+Nézzünk az interfészekre még egy szemléletes példát!
+
+**Vegyük a HDMI-t**, mint egy olyan interfészt, ami **videó** (és audió) **megjelenítésére alkalmas portot definiál**. Ezt az interfész pl. egy TV, monitor vagy projektor **valósítaná meg**, míg egy PC, laptop vagy konzol **tudná használni**.
+
+Rendkívül fontos itt megemlíteni, hogy itt egy projektort egyáltalán nem érdekli, hogy az interfész másik végén mi található (pl. MacBook vagy Xbox konzol), neki a feladata a kép megjelenítése, amihez az információt jól meghatározott úton kapja. Ez fordítva is elmondható: egy számítógép csak kiküldi magából a videót, és a monitor majd valahogyan megjeleníti.
+
+Technológiailag a számítógépek videókártyája eltér, és egy projektor is teljesen máshogyan jelenít meg képet, mint egy OLED TV, mégis bármilyen videót kiadó eszköz tud kommunikálni bármilyen képet lejátszani képes eszközzel, amennyiben mind a ketten támogatják a HDMI interfészt, és **nem kell az N-féle forrás eszköz és M-féle lejátszó eszköz között N\*M különböző verziót implementálni**!
+
+**Javás világban csak egyetlen osztályből lehet leszármazni, így a maradékot interfészek megvalósításával kell megoldani!!!**
+
+_**[Interfészek (YouTube)](https://www.youtube.com/watch?v=c2sTQk9opO8)**_
 
 ---
 
