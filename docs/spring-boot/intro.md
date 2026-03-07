@@ -207,7 +207,11 @@ Fontos: Hogy újratöltsük a projektet, kattintsunk rá a jobb felső sarokban 
 
 ![Gradle refresh](../../static/img/spring/gradle-elephant.png)
 
-sdfasdfdsf
+Fogjunk is hozzá az első Spring Boot backend megírásához! Készítsünk egy webszervert, ami a "/" endpoint (ami jelen esetben a `http://localhost:8080/` URL-en elérhető), és ezen a végponton adjon vissza egy sztringet: `Hello World!`.
+
+Vegyünk fel egy osztályt DemoApplication néven, amit felruházunk két annótációval (az @Annotációk extra információval/funkcionalitással való kitöltése). A `@SpringBootApplication` jelöli, hogy ez az osztály valósítja meg a SpringBoot alkalmazásunkat, míg a `@RestController` azt írja le, hogy az osztályunk egyben egy kontroller is lesz, ami a végpontokat kezeli.
+
+Az osztályon belül hozzunk létre egy GET típusú végpontot a `@GetMapping` annotáció `greet()` (köszöntés) függvényre való helyezésével, ami visszatér egy `"Hello World!"` sztringgel.
 
 ```kotlin
 package com.example.demo
@@ -221,12 +225,15 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class DemoApplication {
 	@GetMapping(path = ["/"])
-	fun greet() : String = "Hello World!"
+	fun greet() : String {
+		return "Hello World!"
+	}
 }
 
 fun main(args: Array<String>) {
 	runApplication<DemoApplication>(*args)
 }
+
 ```
 
 - springboot-starter-web dependency
