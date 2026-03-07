@@ -97,7 +97,7 @@ Ha azonban előállítani is szeretnénk Java alkalmazást, akkor viszont **JDK*
 
 A lenti ábrán látható, hogy hogyan **működik együtt** a Kotlin fordító (**kotlinc**) a Java fordítóval (**javac**), hogy elkészítség a végleges bytecode-ot. (A Kotlin fordító **csak .kt** (kotlin) **fájlokat fordít**, .java fájlokat nem.)
 
-![Kotlin & Java compiler](https://media.slid.es/uploads/2665434/images/11976283/pasted-from-clipboard.png)
+![Kotlin & Java compiler](../../static/img/spring/Kotlin-compiler.png)
 
 ---
 
@@ -136,7 +136,7 @@ _**[Gradle használatának előnyei (YouTube)](https://youtu.be/NTnJwQbxRss?si=q
 
 ## IntelliJ IDEA
 
-Az IntelliJ IDEA (rövdien csak IntelliJ) a **JetBrains által fejlesztett egyik legjobb IDE** (integrált fejlesztőkörnyezet), **Java és Kotlin programozáshoz**. Maga a JetBrains alkotta meg a Kotlint, így itt a legsimább az élmény.
+Az IntelliJ IDEA (rövdien csak IntelliJ) a **JetBrains által fejlesztett egyik legjobb IDE** (integrált fejlesztői környezet), **Java és Kotlin programozáshoz**. Maga a JetBrains alkotta meg a Kotlint, így itt a legsimább az élmény.
 
 ![IntelliJ logó](../../static/img/spring/IntelliJ-logo.png)
 
@@ -171,8 +171,8 @@ Képzeld el, hogy egy webes API-t, REST szolgáltatást vagy mikroszolgáltatás
 
 ### Spring vs Spring Boot röviden és szemléletesen
 
-**Spring** = egy hatalmas doboz LEGO kocka
-**Spring Boot** = ugyan az a doboz, de **előre összerakott** házak, autók, hidak, és egy varázspálca, ami a **hiányzó darabokat magától odateszi**, ha látja, hogy mire van szükséged.
+**Spring** = egy **hatalmas doboz LEGO kocka**
+**Spring Boot** = ugyan az a doboz, de **előre összerakott darabok:** házak, autók, hidak, **és egy varázspálca**, ami a **hiányzó darabokat magától odateszi**, ha látja, hogy szükséged van rá.
 
 _**Mi az a Spring Boot és miért jó? (YouTube): [CodeHead](https://youtu.be/-ILh8pl5lj8?si=sUWMl746mfezY7_4), [Mosh](https://youtu.be/v73-ps01c5w?si=EcJ66S3f6maaDH5P)**._
 
@@ -182,36 +182,36 @@ _**Mi az a Spring Boot és miért jó? (YouTube): [CodeHead](https://youtu.be/-I
 
 Nézzük meg, hogy milyen egyszerűen el lehet készíteni egy backendet Spring Bootban!
 
-Először is hozzunk létre egy új projektet IntelliJben:
+Először is **hozzunk létre egy új projektet** IntelliJben:
 
 ![Demo setup](../../static/img/spring/Demo-setup.png)
 
-Ezután vegyük fel a szükséges függőségeket (könyvtárakat) a `build.gradle.kts` fájlban:
+Ezután **vegyük fel a szükséges függőségeket** (könyvtárakat) a `build.gradle.kts` fájlban:
 
 ```gradle
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	runtimeOnly("com.h2database:h2")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    runtimeOnly("com.h2database:h2")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 ```
 
-TODO: ebből lehet, hogy nem minden szükséges!!!
+A függőségeket `GroupID`**:**`ArtifactID`**:**`Version` formátumban kell megadni Gradleben (a verziószámot lehagyhatjuk), ahol a `GroupID` az általában a fejlesztő szervezet vagy a projekt fordított domain neve, míg az `ArtifactID` magát a konkrét könyvtárat vagy modult.
 
-Fontos: Hogy újratöltsük a projektet, kattintsunk rá a jobb felső sarokban megjelenő elefántra:elephant: Ha ezt nem tesszük meg, akkor nem fognak frissülni az imént hozzáadott függőségek, és furcsa dolgok történhetnek az IDE-ben.
+**Fontos:** Hogy **újratöltsük a projektet**, kattintsunk rá a jobb felső sarokban megjelenő elefántra:elephant: Ha ezt nem tesszük meg, akkor nem fognak frissülni az imént hozzáadott függőségek, és furcsa dolgok történhetnek az IDE-ben.
 
 ![Gradle refresh](../../static/img/spring/gradle-elephant.png)
 
-Fogjunk is hozzá az első Spring Boot backend megírásához! Készítsünk egy webszervert, ami a "/" endpoint (ami jelen esetben a `http://localhost:8080/` URL-en elérhető), és ezen a végponton adjon vissza egy sztringet: `Hello World!`.
+Fogjunk is hozzá az első Spring Boot backend megírásához! **Készítsünk egy webszervert, ami a "/" endpointon** (ami jelen esetben a `http://localhost:8080/` URL-en elérhető) **visszaad egy sztringet:** `Hello World!`.
 
-Vegyünk fel egy osztályt DemoApplication néven, amit felruházunk két annótációval (az @Annotációk extra információval/funkcionalitással való kitöltése). A `@SpringBootApplication` jelöli, hogy ez az osztály valósítja meg a SpringBoot alkalmazásunkat, míg a `@RestController` azt írja le, hogy az osztályunk egyben egy kontroller is lesz, ami a végpontokat kezeli.
+**Vegyünk fel egy osztályt DemoApplication néven**, amit felruházunk két annótációval (az @Annotáció a forráskód extra információval/funkcionalitással való kibővítése). A `@SpringBootApplication` jelöli, hogy ez az osztály valósítja meg a Spring Boot alkalmazásunkat, míg a `@RestController` azt írja le, hogy az osztályunk egyben egy kontroller is lesz, ami a végpontokat kezeli.
 
-Az osztályon belül hozzunk létre egy GET típusú végpontot a `@GetMapping` annotáció `greet()` (köszöntés) függvényre való helyezésével, ami visszatér egy `"Hello World!"` sztringgel.
+Az osztályon belül **hozzunk létre egy GET típusú végpontot** a `@GetMapping` annotáció `greet()` (köszönt) függvényre való helyezésével, ami **visszatér egy** `"Hello World!"` **sztringgel**.
 
 ```kotlin
 package com.example.demo
@@ -224,23 +224,24 @@ import org.springframework.web.bind.annotation.RestController
 @SpringBootApplication
 @RestController
 class DemoApplication {
-	@GetMapping(path = ["/"])
-	fun greet() : String {
-		return "Hello World!"
-	}
+    @GetMapping(path = ["/"])
+    fun greet() : String {
+        return "Hello World!"
+    }
 }
 
 fun main(args: Array<String>) {
-	runApplication<DemoApplication>(*args)
+    runApplication<DemoApplication>(*args)
 }
-
 ```
 
-- springboot-starter-web dependency
-- annotációk
-- 8080 port
+Azt figyeljük meg, hogy **itt nem kellett példányosítani és argumentumként átadni**, hanem a `main` függvényen belül egy `runApplication` hívást végzünk, aminek csak átadjuk, hogy egy DemoApplication típusú alkalmazást szeretnénk futtatni, és **a dependency injection** (a Spring Boot-os "varázspálcával") **kitölti helyettünk**.
 
-## Kérdések 1
+![Gradle refresh](../../static/img/spring/Run-application.jpg)
+
+Ha **futtatjuk a programot**, akkor elindul egy webszerver a 8080-as porton, és a `http://localhost:8080/` URL-t meglátogatva láthatjuk a `Hello World!` szövegünket.
+
+![Gradle refresh](../../static/img/spring/Hello-world.jpg)
 
 ---
 
@@ -248,9 +249,13 @@ fun main(args: Array<String>) {
 
 OOP tldr, mert nem biztos, hogy (megfelelően) tanulták prog 2-ből az elsőévesek.
 
+_**[OOP 4 alappillére (YouTube)](https://youtu.be/pTB0EiLXUC8?si=MpStxDDM_TuAi2Ov)**_
+
 ## Interfészek
 
 Interfészek és jelentősségük
+
+---
 
 ## MVC
 
@@ -264,17 +269,23 @@ MVC a Springben
 
 _**[MVC a Springben + Annotációk (YouTube)](https://youtu.be/zGSX5AqfKvU?si=Iilg_vO2PDqb9eYd)**_
 
-## Demo bővítése Service-szel
-
-Üzleti logika hozzáadása Service-ben.
-
-## Kérdések 2
-
 ---
 
 ## Kotlin alapok
 
 Basic Kotlin alapok, hogy értsék a kódot a későbbiekben
+
+---
+
+## Demo bővítése Service-szel
+
+Üzleti logika hozzáadása Service-ben.
+
+---
+
+## Controller code
+
+## DTO
 
 ---
 
@@ -285,20 +296,28 @@ Basic Kotlin alapok, hogy értsék a kódot a későbbiekben
 - data class GreetingEntity
 - application.properties: spring.jpa.show-sql=true & Hibernate üzenetek
 
-...
-
----
-
-## Controller code
-
-## DTO
-
-## Kérdések 3
+%%%%%%%%%%%%%
 
 ---
 
 ## IntelliJ & JDK download
 
-Hogyan kell letölteni és setupolni az IntelliJ IDEA-t + JetBrains student plan
+A második és harmadik alkalomra **live coding**-ot kervezünk, így **kérünk mindenkit, hogy töltse le az IntelliJ IDEA**-t a laptopjára, lehetőleg az **Ultimate** verziót, amihez a JetBrains student pack-et _**[ezen a linket lehet igényelni](https://www.jetbrains.com/academy/student-pack/)**_.
 
-git clone demo repo + futtatás, hogy működik-e az IDE
+Hogyha valakinek nincsen letöltve a **JDK 25** (Java fejtesztői csomag), akkor azt _**[ide kattintva](https://www.oracle.com/java/technologies/downloads/#jdk25-windows)**_ megteheti.
+
+**Hogy biztosak legyünk abban, hogy jól setup-oltuk a fejlesztői környezetet, klónozzuk le** a _**[demo projektet](https://github.com/MiklosBacsi)**_, és **prójáljuk meg futtatni**! Ráadásul ez egy remek lehetőség a fejlesztői körvezettel való ismerkedésre, így nem a live coding alkalmával fogtok először találkozni
+
+Amennyiben szükséges _**[ide kattintva](https://tanfolyam.kir-dev.hu/docs/webes-alapok/git#alapvet%C5%91-parancsok-workflow-bemutat%C3%A1sa-demo-seg%C3%ADts%C3%A9g%C3%A9vel)**_ felfrissítheted a git tudásodat.
+
+Amennyiben valamilyen okból a Gradle nem lenne linkelve, akkor ezt a "Link Gradle Projekt" feliratra való kattintással tegyük meg.
+
+![Gradle refresh](../../static/img/spring/Link-gradle-project.jpg)
+
+Az alkalmazás elindítása után próbáljuk ki a %%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+---
+
+Készítette: **[Bácsi Miklós](https://github.com/MiklosBacsi)**
