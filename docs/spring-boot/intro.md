@@ -22,7 +22,7 @@ Ha már a Kotlinról beszélünk, akkor nem mehetünk el figyelem nélkül a Jav
 
 ### Mi az a Java?
 
-![Java logó](./referenced-images/Java-logo.jpg)
+![Java logó](../../static/img/spring/Java-logo.jpg)
 
 A Java **általános célú, objektumorientált programozási nyelv**, amelyet James Gosling kezdett el fejleszteni, később átvette a Sun Microsystems fejlesztett a ’90-es évek elejétől kezdve egészen 2009-ig, amikor a céget felvásárolta az Oracle.
 
@@ -32,7 +32,7 @@ Ugyanakkor a Java kódja sokszor hosszabb és ismétlődőbb, mint kellene. Bizo
 
 ### Mi az a Kotlin?
 
-![Kotlin logó](./referenced-images/Kotlin-logo.jpg)
+![Kotlin logó](../../static/img/spring/Kotlin-logo.jpg)
 
 A Kotlin egy **modern, barátságos programozási nyelv**, amit a JetBrains fejlesztett 2011-től. Legfontosabb jellemzője, hogy **teljesen kompatibilis a Javával**, ugyanazon a platformon (**JVM**) fut, ugyanazokat a könyvtárakat használja – mégis **sokkal kényelmesebb, rövidebb és biztonságosabb kódot lehet vele írni, mint Javában**.
 
@@ -67,7 +67,7 @@ A **hordozhetóságnak napjainkban egyre fontosabb szerepe van**, és az előbb 
 
 Alább látható a különböző rétegek, amik egymásra épülnek. A Java virtuális gép (viruális gép ≈ **absztrakt számítógép architektúra**) az operációs rendszer felett helyezkedik el, és **futásidőben értelmezi neki írt kódot, amit rögtön bináris kóddá alakít, amelyet a CPU már végre tud hajtani** (az adott platformon!).
 
-![Absztrakciós rétegek](./referenced-images/JVM-layers.png)
+![Absztrakciós rétegek](../../static/img/spring/JVM-layers.png)
 
 A Java fordítója nem bináris, végrehajtható kódra fordítja le az utasításainkat, hanem egy úgynevezett **bytecode-ra** (.class kiterjesztéssel rendelkezik). Ezt a bytecode-ot érdemes úgy elképzelni, mint a **Java virtuális gépre írt program elemi utasításai** (egyféle assembly kód), azaz ez **nem függ semmilyen harvertől vagy operációs rendszertől**.
 
@@ -116,7 +116,7 @@ Amikor egy Spring Boot + Kotlin projektet készítünk, nem elég megírni a kó
 
 Maven a **klasszikus, megbízható választás**, ami már 2004 óta van velünk, és sokáig ez volt a Java világ standardja. **Sok nagyvállalatnál máig ezt használják**, mert stabil és jól dokumentált.
 
-![Maven logó](./referenced-images/Maven-logo.jpg)
+![Maven logó](../../static/img/spring/Maven-logo.jpg)
 
 Akkor mégis mi vele a baj?
 
@@ -126,7 +126,7 @@ Akkor mégis mi vele a baj?
 
 A **modern, rugalmas** kedvencünk, ami 2007 óra létezik, és napjainkra **különösen népszerűvé** vált Kotlin projektekben és Spring Boot fejlesztésben.
 
-![Gradle logó](./referenced-images/Gradle-logo.jpg)
+![Gradle logó](../../static/img/spring/Gradle-logo.jpg)
 
 Konfigurációja Kotlin DSL-lel történik (**build.gradle.kts** fájl) – ez azt jelenti, hogy **maga a build fájl is Kotlin kód, amit az IDE** (pl. IntelliJ:heart:) **szépen színez, autocomplete-ol és ellenőriz**. A Gradle **gyorsabb a mindennapi fejlesztésben**, mivel okos cache-eket használ, és **csak azt építi újra, ami változott** (incremental build), így gyorsítva a fordítás folyamtát. A **konfigurációja sokkal rugalmasabb, könnyebb testreszabni és átlátni**, mint a Maven-ét.
 
@@ -138,7 +138,7 @@ _**[Gradle használatának előnyei (YouTube)](https://youtu.be/NTnJwQbxRss?si=q
 
 Az IntelliJ IDEA (rövdien csak IntelliJ) a **JetBrains által fejlesztett egyik legjobb IDE** (integrált fejlesztőkörnyezet), **Java és Kotlin programozáshoz**. Maga a JetBrains alkotta meg a Kotlint, így itt a legsimább az élmény.
 
-![IntelliJ logó](./referenced-images/IntelliJ-logo.png)
+![IntelliJ logó](../../static/img/spring/IntelliJ-logo.png)
 
 Két verzió elérhető:
 
@@ -157,7 +157,7 @@ _**[IntelliJ IDEA története (YouTube)](https://youtu.be/jTZVx4TCmI4?si=plvTstO
 A Spring Boot **egy framework** (keretrendszer), **ami a Spring** nevű óriási Java **ökoszisztéma tetejére épül**. A Spring maga már 20+ éve az **egyik legnépszerűbb eszköz enterprise Java fejlesztéshez** – de régen nagyon sok konfigurációt, XML-t és boilerplate kódot igényelt.
 A Spring Boot 2014-ben indult azzal a céllal, hogy ezt az egészet drasztikusan leegyszerűsítse. A mottója: „Just run” – azaz írd meg a kódot, és máris futtatható egy önálló alkalmazás, minimális beállítással.
 
-![Spring logó](./referenced-images/Spring-Logo.png)
+![Spring logó](../../static/img/spring/Spring-Logo.png)
 
 ### Miért olyan népszerű a Spring Boot?
 
@@ -184,7 +184,7 @@ Nézzük meg, hogy milyen egyszerűen el lehet készíteni egy backendet Spring 
 
 Először is hozzunk létre egy új projektet IntelliJben:
 
-![Demo setup](./referenced-images/Demo-setup.png)
+![Demo setup](../../static/img/spring/Demo-setup.png)
 
 Ezután vegyük fel a szükséges függőségeket (könyvtárakat) a `build.gradle.kts` fájlban:
 
@@ -205,7 +205,7 @@ TODO: ebből lehet, hogy nem minden szükséges!!!
 
 Fontos: Hogy újratöltsük a projektet, kattintsunk rá a jobb felső sarokban megjelenő elefántra:elephant: Ha ezt nem tesszük meg, akkor nem fognak frissülni az imént hozzáadott függőségek, és furcsa dolgok történhetnek az IDE-ben.
 
-![Gradle refresh](./referenced-images/gradle-elephant.png)
+![Gradle refresh](../../static/img/spring/gradle-elephant.png)
 
 sdfasdfdsf
 
