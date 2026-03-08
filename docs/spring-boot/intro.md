@@ -358,7 +358,7 @@ Basic Kotlin alapok, hogy értsék a kódot a későbbiekben
 
 Először is készítsünk egy `GreetingService` **interfészt**, ami egyetlen `greetPerson` **függvénnyel rendelkezik**. Ez a metódus **paraméterként átvesz** egy sztringet, ami a **személy nevét** tartalmazza, és egy **köszöntéssel tér vissza** (ami szintén egy sztring).
 
-Készítsünk egy ilyen szolgáltatást, ami ezt az interfészt valósítsa meg `UjoncGreetingService`.Ha az `ujonc` nevet adjuk meg, akkor `Üdvözöllek a tanfolyamon!`-nal köszönjön vissza, egyébként `Szia <név>!`-vel.
+Készítsünk egy ilyen szolgáltatást, ami ezt az interfészt valósítsa meg `UjoncGreetingService`. Ha az `ujonc` nevet adjuk meg, akkor `Üdvözöllek a tanfolyamon!`-nal köszönjön vissza, egyébként `Szia <név>!`-vel.
 
 ```kotlin
 package hu.kirdev.demo
@@ -405,9 +405,9 @@ fun main(args: Array<String>) {
 
 Hogy az újonnan létrehozott szolgáltatásunkat használni tudjuk módosítanunk kell a kontrolleren, de gyakorlás képpen egy extra dolgot ki fogunk próbálni, névlegesen: a `/` végpont helyett használjuk a `/greet`-et, amit a `@RequestMapping` annotáció osztályra való biggyesztésével tudunk elérni (ami egy végpont paramétert fogad).
 
-Ne haladjunk ennyire előre, először hozzuk létre az új fájl `MainController.kt` néven. Az osztályunk paraméterül fogad egy `GreetingService`-t, hogy kezelni tudja.
+Ne haladjunk ennyire előre, először **hozzuk létre az új fájlt** `MainController.kt` néven. Az osztályunk paraméterül fogad egy `GreetingService`-t, hogy kezelni tudja.
 
-A `greet` metóduson annyit kell változtatni, hogy a rá helyett annotációt `@GetMapping("/{name}")`-re változtatjuk és a `name` paraméterünk elé `@PathVariable`-t írunk. Ezzel azt érjuk és, hogy az URL-ben megadhatjuk a nevet, mint változót! Például a `/greet/Ujonc` esetén `name = "Ujonc"`.
+A `greet` metóduson annyit kell változtatni, hogy a rá helyett annotációt `@GetMapping("/{name}")`-re változtatjuk és a `name` paraméterünk elé `@PathVariable`-t írunk. Ezzel azt érjuk és, hogy az **URL-ben megadhatjuk a nevet, mint változót**! Például a `/greet/Ujonc` esetén `name = "Ujonc"`.
 
 ```kotlin
 package hu.kirdev.demo
@@ -428,13 +428,170 @@ class MainController(val greetingService: GreetingService) {
 }
 ```
 
-Teszteljük le, hogy tényleg jól működik-e a programunk! Miután elindítottuk az alkalmazást, nyissuk meg a böngészőben a `http://localhost:8080/greet/Ujonc` URL-t! Ha mindent jól csináltunk, akkor az alábbi üzenet fogad minket:
+Teszteljük le, hogy tényleg jól működik-e a programunk! Miután elindítottuk az alkalmazást, **nyissuk meg a böngészőben** a `http://localhost:8080/greet/Ujonc` URL-t! Ha mindent jól csináltunk, akkor az alábbi üzenet fogad minket:
 
 ![Üdvözöllek a tanfolyamon!](../../static/img/spring/Demo-greet-ujonc.jpg)
 
 **Próbáljuk ki egy másik névvel is!** Mit tapasztalunk?
 
 ![Üdvözöllek a tanfolyamon!](../../static/img/spring/Demo-greet-miki.jpg)
+
+---
+
+## Adatbázis: JPA és H2
+
+### Spring Data JPA
+
+![Spring Data JPA](../../static/img/spring/JPA.jpg)
+
+A Spring Data JPA **egy Spring Boot kiegészítő**, ami **drasztikusan leegyszerűsíti az adatbázis-műveleteket**. Nem kell kézzel SQL-t írnunk vagy bonyolult DAO (Data Access Object) osztályokat készítenünk – **elég egy interfészt definiálnunk**, ami kiterjeszti a JpaRepository-t, és a Spring **automatikusan implementálja nekünk a gyakori műveleteket!**
+
+```kotlin
+interface UserRepository : JpaRepository<User, Long> {
+    fun findByEmail(email: String): User?
+    fun findAllByActiveTrue(): List<User>
+}
+```
+
+### H2
+
+Az H2 **egy könnyű, beágyazható** (embedded) **adatbázis**, amit **fejlesztés közben** és tesztelésnél **nagyon gyakran használnak** Spring Boot projektekben. Teljes mértékben a memóriában fut, és van egy webes konzolja, ahol böngészőben nézhetjük az adatokat.
+
+## Demo bővítése adatbázissal
+
+### H2 konfiguráció
+
+Ezt **adjuk hozzá** az `application.properties` nevű fájlhoz, ami az `src/main/resources/` mappában található.
+
+```kotlin
+# H2 Database
+spring.h2.console.enabled=true
+spring.datasource.url=jdbc:h2:mem:dcbapp
+spring.datasource.driver-class-name=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=password
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+spring.jpa.show-sql=true
+```
+
+### Modell felvétele
+
+**Vegyünk fel egy adatok tárolására szolgáló osztályt** (`GreetingEntity`), aminek segítségével **azokat neveket fogjuk elmenteni, akiknek köszöntek** (illetve egy azonosítót is rendelünk a köszönésekhez).
+
+```kotlin
+package hu.kirdev.demo
+
+import jakarta.persistence.*
+
+@Entity
+@Table(name = "greetings")
+data class GreetingEntity (
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    var id: Int? = null,
+
+    var name: String = ""
+)
+```
+
+Egy `data class`-t használtunk (kerek zárójelek kellenek és nem kapcsosak!), ami adatok tárolására használatos, és nekünk azért jön most kapóra, mert automatikusan legenerálja nekünk a fordító a boilerplate getter/setter függvényeket.
+
+A `@Entity` jelöli, hogy ez egy Model lesz az MVC-ből, és ez **szükséges az alkalmazásunk megfelelő működéséhez**!
+
+A `@Table(name = "greetings")` annotációval azt tudjuk megmondani, hogy az adatbázisban a tábla neve `greetings` legyen.
+
+Az `id` azonosító változóra helyeztünk két annotációt. A `@Id` biztosítja, hogy az objektumok tényleg **égyértelműen azonosíthatók legyenek**. A `@GeneratedValue` azt jelenti, hogy egy ilyen objektum létrehozásakor **nem kell megadni az értékét**, hanem azt **automatikusan fogja kitölteni** - jelen esetben 1-től indul és mindig 1-el növekszik.
+
+### Adatbázisréteg (Repository) felvétele
+
+**Hozzunk létre egy új interfészt** `GreetingRepository` néven, ami **kibővíti a JpaRepository interfészt**! **Vegyünk fel egy metódust**, ami egy nevet kap, és **visszaadja, hogy hány köszönés történt ezzel a névvel** (kis- és nagybetűt nem megkülönböztetve).
+
+```kotlin
+package hu.kirdev.demo
+
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
+
+@Repository
+interface GreetingRepository : JpaRepository<GreetingEntity, Int> {
+    fun countByNameIgnoreCase(name: String): Long
+}
+```
+
+Vegyük észre, hogy az **SQL lekérdezést nem kellett kézzel megírnunk**, hanem **automatikusan implementálódik a metódus neve alapján**! (Persze ez csak bizonyos, gyakori lekérdezésekkel működik - ha odaírjuk, hogy `fun getMeaningOfLife() : String`, akkor nem fogja tudni megoldani azt, amit szeretnénk :cry:)
+
+### Service módosítása
+
+Először a `GreetingService`-t bővítsük egy `getGreetingCount` metódussal, majd az `UjoncGreetingService` paraméterül fogadjon egy `GreetingRepository`-t, illetve legyen egy `getGreetingCount` metódusa. Ne felejtsük el lementeni a köszönéseket a `greetPerson` metódus elején!
+
+```kotlin
+package hu.kirdev.demo
+
+import org.springframework.stereotype.Service
+
+interface GreetingService {
+    fun greetPerson(name: String): String
+    fun getGreetingCount(name: String): Long
+}
+
+@Service
+class UjoncGreetingService(val greetingRepository: GreetingRepository) : GreetingService {
+
+    override fun greetPerson(name: String): String {
+        greetingRepository.save(GreetingEntity(name = name))
+
+        if (name.lowercase() == "ujonc")
+            return "Üdvözöllek a tanfolyamon!"
+        else
+            return "Szia $name!"
+    }
+
+    override fun getGreetingCount(name: String) : Long {
+        return greetingRepository.countByNameIgnoreCase(name)
+    }
+}
+```
+
+### Controller módosítása
+
+Mivel lényegében egy API-n (Application Programming Interface) keresztül kommunikálunk, így `/api`**-ra cserélhetjük a korábbi** `/`-t - ezzel is jelezve a szándékunkat (most már **minden végpont a** `/api` **után jöhet csak**). Ennek következtében módosítanunk kell a `greet` metódusnál az utat `"/greet/{name}"`-ra.
+
+**Hozzunk létre egy új végpontot** `/greetings`-en, amit meglátogatva megmondjuk, hogy az **URL-ben megadott név hányszor szerepel az adatbázisunkban**.
+
+```kotlin
+package hu.kirdev.demo
+
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
+
+@RestController
+@RequestMapping("/api")
+class MainController(val greetingService: GreetingService) {
+
+    @GetMapping("/greet/{name}")
+    fun greet(@PathVariable name: String) : String {
+        return greetingService.greetPerson(name)
+    }
+
+    @GetMapping("/greetings")
+    fun getGreetCount(@RequestParam name: String): String {
+        return "$name ${greetingService.getGreetingCount(name)} alkalommal lett köszöntve"
+    }
+}
+```
+
+Figyeljük meg, hogy most `@RequestParam`-ot használtunk, így `/api/greeting?name=név` formában tudjuk megadni a nevet!
+
+Példák a végpontokra:
+
+- [/api/greet/Ujonc](http://localhost:8080/api/greet/Ujonc)
+- [/api/greetings?name=Ujonc](http://localhost:8080/api/greetings?name=Ujonc)
+- [/api/greet/Miki](http://localhost:8080/api/greet/Miki)
+- [/api/greetings?name=Miki](http://localhost:8080/api/greetings?name=Miki)
 
 ---
 
@@ -448,24 +605,13 @@ A DTO (Data Transfer Object) egy **egyszerű objektum**, amit arra használunk, 
 
 ---
 
-## Adatbázis: JPA és H2
-
-## Mentsük le a köszönéseket
-
-- data class GreetingEntity
-- application.properties: spring.jpa.show-sql=true & Hibernate üzenetek
-
-%%%%%%%%%%%%%
-
----
-
 ## IntelliJ & JDK download
 
 A második és harmadik alkalomra **live coding**-ot kervezünk, így **kérünk mindenkit, hogy töltse le az IntelliJ IDEA**-t a laptopjára, lehetőleg az **Ultimate** verziót, amihez a JetBrains student pack-et _**[ezen a linket lehet igényelni](https://www.jetbrains.com/academy/student-pack/)**_.
 
 Hogyha valakinek nincsen letöltve a **JDK 25** (Java fejtesztői csomag), akkor azt _**[ide kattintva](https://www.oracle.com/java/technologies/downloads/#jdk25-windows)**_ megteheti.
 
-**Hogy biztosak legyünk abban, hogy jól setup-oltuk a fejlesztői környezetet, klónozzuk le** a _**[demo projektet](https://github.com/MiklosBacsi)**_, és **prójáljuk meg futtatni**! Ráadásul ez egy remek lehetőség a fejlesztői körvezettel való ismerkedésre, így nem a live coding alkalmával fogtok először találkozni
+**Hogy biztosak legyünk abban, hogy jól setup-oltuk a fejlesztői környezetet, klónozzuk le** a _**[demo projektet](https://github.com/MiklosBacsi/demo.git)**_, és **prójáljuk meg futtatni**! Ráadásul ez egy remek lehetőség a fejlesztői körvezettel való ismerkedésre, így nem a live coding alkalmával fogtok először találkozni
 
 Amennyiben szükséges _**[ide kattintva](https://tanfolyam.kir-dev.hu/docs/webes-alapok/git#alapvet%C5%91-parancsok-workflow-bemutat%C3%A1sa-demo-seg%C3%ADts%C3%A9g%C3%A9vel)**_ felfrissítheted a git tudásodat.
 
@@ -473,11 +619,14 @@ Amennyiben valamilyen okból a Gradle nem lenne linkelve, akkor ezt a "Link Grad
 
 ![Link Gradle Project](../../static/img/spring/Link-gradle-project.jpg)
 
-Az alkalmazás elindítása után **próbáljuk ki a végpontokat**!
+Indítsuk el az alkalmazást, és **próbáljuk ki, hogy működik-e**!
 
-KÉP
+Példák a végpontokra:
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+- [/api/greet/Ujonc](http://localhost:8080/api/greet/Ujonc)
+- [/api/greetings?name=Ujonc](http://localhost:8080/api/greetings?name=Ujonc)
+- [/api/greet/Miki](http://localhost:8080/api/greet/Miki)
+- [/api/greetings?name=Miki](http://localhost:8080/api/greetings?name=Miki)
 
 ---
 
