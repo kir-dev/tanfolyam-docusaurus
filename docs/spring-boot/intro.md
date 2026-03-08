@@ -237,11 +237,11 @@ fun main(args: Array<String>) {
 
 Azt figyeljük meg, hogy **itt nem kellett példányosítani és argumentumként átadni**, hanem a `main` függvényen belül egy `runApplication` hívást végzünk, aminek csak átadjuk, hogy egy DemoApplication típusú alkalmazást szeretnénk futtatni, és **a dependency injection** (a Spring Boot-os "varázspálcával") **kitölti helyettünk**.
 
-![Gradle refresh](../../static/img/spring/Run-application.jpg)
+![Run application](../../static/img/spring/Run-application.jpg)
 
 Ha **futtatjuk a programot**, akkor elindul egy webszerver a 8080-as porton, és a `http://localhost:8080/` URL-t meglátogatva láthatjuk a `Hello World!` szövegünket.
 
-![Gradle refresh](../../static/img/spring/Hello-world.jpg)
+![Demo: Hello World!](../../static/img/spring/Hello-world.jpg)
 
 ---
 
@@ -255,7 +255,7 @@ Az **osztály egy sablon/tervrajz**, és az **objektum** az pedig **maga a péld
 
 ### Az OOP négy alappillére
 
-![Gradle refresh](../../static/img/spring/OOP-4-pillars.png)
+![4 pillars of OOP](../../static/img/spring/OOP-4-pillars.png)
 
 #### Egységbezárás (Encapsulation)
 
@@ -311,13 +311,26 @@ _**[Interfészek (YouTube)](https://www.youtube.com/watch?v=c2sTQk9opO8)**_
 
 ## MVC
 
-MVC szeparáció
+Az MVC (**Model-View-Controller**) egy **népszerű tervezési minta** (design pattern), amit főleg webes alkalmazásoknál használnak, ami három fő részre bontja a programot:
+
+- **Model:** az adatok és az üzleti logika (adatbázis, számítások, szabályok)
+- **View:** a megjelenítés (HTML, képernyő, amit a felhasználó lát)
+- **Controller:** a „közvetítő”, ami fogadja a felhasználó kérését, kezeli a Modelt, és eldönti, melyik View-t küldje vissza
+
+![MVC](../../static/img/spring/MVC.jpg)
+
+Az MVC jelentőssége abban rejlik, hogy **tisztán szétválasztja a felelősségeket**, így a kód olvashatóbb, könnyebben bővíthető, tesztelhető és karbantartható lesz. **Például ha megváltoztatod a dizájnt (View), akkor nem kell piszkálnod az adatokat** (Model), és fordítva – ez különösen nagy projekteknél spórol rengeteg időt és hibát. **Spring Boot-ban** (és sok más modern frameworkben) **ez a minta az alapja a webes alkalmazások felépítésének**.
 
 _**[MVC a webfejlesztésben (YouTube)](https://youtu.be/DUg2SWWK18I?si=mnspEoQvxQOl7GqT)**_
 
-## Modell, Repository, Service, Controller
+## MVC a Spring Bootban
 
-MVC a Springben
+A **Spring MVC** keretrendszer kezeli a webes kéréseket a klasszikus Model-View-Controller minta szerint:
+
+- **Controller:** **Vezérlésért felelős**, azaz fogadja a HTTP kérést (pl. @GetMapping, @PostMapping), feldolgozza a bemenetet, meghívja a megfelelő Service-t, majd visszaadja a választ (általában egy View nevét vagy JSON-t).
+- **Service**: Az **üzleti logika rétege**. Itt történik a számítás, szabályellenőrzés, más komponensek hívása. Nem tud az adatbázisról vagy a HTTP-ről – csak a logikáról.
+- **Repository:** Az **adatbázis réteg** (Spring Data JPA-val általában @Repository interfész). Itt történik az adat olvasása/írása (findById, save, delete stb.). Automatikusan implementálja a Spring.
+- **Model:** Az **adatok hordozója**. Lehet egy sima objektum (pl. @Entity osztály), DTO, vagy akár Map is. A Controller/Service ebből adja át az adatokat a View-nak (vagy JSON-ként a REST válaszba).
 
 _**[MVC a Springben + Annotációk (YouTube)](https://youtu.be/zGSX5AqfKvU?si=Iilg_vO2PDqb9eYd)**_
 
@@ -338,6 +351,8 @@ Basic Kotlin alapok, hogy értsék a kódot a későbbiekben
 ## Controller code
 
 ## DTO
+
+A DTO (Data Transfer Object) arra szolgál, hogy **egy objektumba gyűjtsük össze a szükséges adatokat**, amiket a **kliens és a szervez között küldhetünk** például JSON formátumban.
 
 ---
 
@@ -364,9 +379,11 @@ Amennyiben szükséges _**[ide kattintva](https://tanfolyam.kir-dev.hu/docs/webe
 
 Amennyiben valamilyen okból a Gradle nem lenne linkelve, akkor ezt a "Link Gradle Projekt" feliratra való kattintással tegyük meg.
 
-![Gradle refresh](../../static/img/spring/Link-gradle-project.jpg)
+![Link Gradle Project](../../static/img/spring/Link-gradle-project.jpg)
 
-Az alkalmazás elindítása után próbáljuk ki a %%%%%%%%%%%%%%%%%%%%%%
+Az alkalmazás elindítása után **próbáljuk ki a végpontokat**!
+
+KÉP
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
