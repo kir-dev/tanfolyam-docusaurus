@@ -330,7 +330,13 @@ A **Spring MVC** keretrendszer kezeli a webes kéréseket a klasszikus Model-Vie
 - **Controller:** **Vezérlésért felelős**, azaz fogadja a HTTP kérést (pl. @GetMapping, @PostMapping), feldolgozza a bemenetet, meghívja a megfelelő Service-t, majd visszaadja a választ (általában egy View nevét vagy JSON-t).
 - **Service**: Az **üzleti logika rétege**. Itt történik a számítás, szabályellenőrzés, más komponensek hívása. Nem tud az adatbázisról vagy a HTTP-ről – csak a logikáról.
 - **Repository:** Az **adatbázis réteg** (Spring Data JPA-val általában @Repository interfész). Itt történik az adat olvasása/írása (findById, save, delete stb.). Automatikusan implementálja a Spring.
-- **Model:** Az **adatok hordozója**. Lehet egy sima objektum (pl. @Entity osztály), DTO, vagy akár Map is. A Controller/Service ebből adja át az adatokat a View-nak (vagy JSON-ként a REST válaszba).
+- **Model:** Az **adatok hordozója**. Lehet egy sima objektum (pl. **@Entity osztály**), DTO, vagy akár Map is. A Controller/Service ebből adja át az adatokat a View-nak (vagy JSON-ként a REST válaszba).
+
+Tipikus rétegek sorrendje Spring Boot-ban:
+HTTP kérés → Controller → Service → Repository → Adatbázis
+(visszafelé: Adatbázis → Repository → Service → Controller → HTTP válasz / View)
+
+**Röviden: a Controller irányít, a Service gondolkodik, a Repository olvassa/írja az adatokat, a Model pedig az, amit ezek között mozgatunk.**
 
 _**[MVC a Springben + Annotációk (YouTube)](https://youtu.be/zGSX5AqfKvU?si=Iilg_vO2PDqb9eYd)**_
 
@@ -352,7 +358,11 @@ Basic Kotlin alapok, hogy értsék a kódot a későbbiekben
 
 ## DTO
 
-A DTO (Data Transfer Object) arra szolgál, hogy **egy objektumba gyűjtsük össze a szükséges adatokat**, amiket a **kliens és a szervez között küldhetünk** például JSON formátumban.
+A DTO (Data Transfer Object) egy **egyszerű objektum**, amit arra használunk, hogy **csak a szükséges adatokat gyűjtsük benne össze, és küldjük el a kliens** (pl. böngésző, mobil app) **és a szerver között** – általában JSON formátumban. Így nem az adatbázis-entitást (Entity-t) küldjük ki közvetlenül.
+
+![DTO assamble](../../static/img/spring/DTO-assemble.png)
+
+![DTO in layers](../../static/img/spring/DTO-layers.jpg)
 
 ---
 
