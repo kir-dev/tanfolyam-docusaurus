@@ -214,7 +214,7 @@ Fogjunk is hozzá az első Spring Boot backend megírásához! **Készítsünk e
 Az osztályon belül **hozzunk létre egy GET típusú végpontot** a `@GetMapping` annotáció `greet()` (köszönt) függvényre való helyezésével, ami **visszatér egy** `"Hello World!"` **sztringgel**.
 
 ```kotlin
-package com.example.demo
+package hu.kirdev.demo
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -237,11 +237,11 @@ fun main(args: Array<String>) {
 
 Azt figyeljük meg, hogy **itt nem kellett példányosítani és argumentumként átadni**, hanem a `main` függvényen belül egy `runApplication` hívást végzünk, aminek csak átadjuk, hogy egy DemoApplication típusú alkalmazást szeretnénk futtatni, és **a dependency injection** (a Spring Boot-os "varázspálcával") **kitölti helyettünk**.
 
-![Gradle refresh](../../static/img/spring/Run-application.jpg)
+![Run application](../../static/img/spring/Run-application.jpg)
 
 Ha **futtatjuk a programot**, akkor elindul egy webszerver a 8080-as porton, és a `http://localhost:8080/` URL-t meglátogatva láthatjuk a `Hello World!` szövegünket.
 
-![Gradle refresh](../../static/img/spring/Hello-world.jpg)
+![Demo: Hello World!](../../static/img/spring/Hello-world.jpg)
 
 ---
 
@@ -255,7 +255,7 @@ Az **osztály egy sablon/tervrajz**, és az **objektum** az pedig **maga a péld
 
 ### Az OOP négy alappillére
 
-![Gradle refresh](../../static/img/spring/OOP-4-pillars.png)
+![4 pillars of OOP](../../static/img/spring/OOP-4-pillars.png)
 
 #### Egységbezárás (Encapsulation)
 
@@ -311,13 +311,32 @@ _**[Interfészek (YouTube)](https://www.youtube.com/watch?v=c2sTQk9opO8)**_
 
 ## MVC
 
-MVC szeparáció
+Az MVC (**Model-View-Controller**) egy **népszerű tervezési minta** (design pattern), amit főleg webes alkalmazásoknál használnak, ami három fő részre bontja a programot:
+
+- **Model:** az adatok és az üzleti logika (adatbázis, számítások, szabályok)
+- **View:** a megjelenítés (HTML, képernyő, amit a felhasználó lát)
+- **Controller:** a „közvetítő”, ami fogadja a felhasználó kérését, kezeli a Modelt, és eldönti, melyik View-t küldje vissza
+
+![MVC](../../static/img/spring/MVC.jpg)
+
+Az MVC jelentőssége abban rejlik, hogy **tisztán szétválasztja a felelősségeket**, így a kód olvashatóbb, könnyebben bővíthető, tesztelhető és karbantartható lesz. **Például ha megváltoztatod a dizájnt (View), akkor nem kell piszkálnod az adatokat** (Model), és fordítva – ez különösen nagy projekteknél spórol rengeteg időt és hibát. **Spring Boot-ban** (és sok más modern frameworkben) **ez a minta az alapja a webes alkalmazások felépítésének**.
 
 _**[MVC a webfejlesztésben (YouTube)](https://youtu.be/DUg2SWWK18I?si=mnspEoQvxQOl7GqT)**_
 
-## Modell, Repository, Service, Controller
+## MVC a Spring Bootban
 
-MVC a Springben
+A **Spring MVC** keretrendszer kezeli a webes kéréseket a klasszikus Model-View-Controller minta szerint:
+
+- **Controller:** **Vezérlésért felelős**, azaz fogadja a HTTP kérést (pl. @GetMapping, @PostMapping), feldolgozza a bemenetet, meghívja a megfelelő Service-t, majd visszaadja a választ (általában egy View nevét vagy JSON-t).
+- **Service**: Az **üzleti logika rétege**. Itt történik a számítás, szabályellenőrzés, más komponensek hívása. Nem tud az adatbázisról vagy a HTTP-ről – csak a logikáról.
+- **Repository:** Az **adatbázis réteg** (Spring Data JPA-val általában @Repository interfész). Itt történik az adat olvasása/írása (findById, save, delete stb.). Automatikusan implementálja a Spring.
+- **Model:** Az **adatok hordozója**. Lehet egy sima objektum (pl. **@Entity osztály**), DTO, vagy akár Map is. A Controller/Service ebből adja át az adatokat a View-nak (vagy JSON-ként a REST válaszba).
+
+Tipikus rétegek sorrendje Spring Boot-ban:
+HTTP kérés → Controller → Service → Repository → Adatbázis
+(visszafelé: Adatbázis → Repository → Service → Controller → HTTP válasz / View)
+
+**Röviden: a Controller irányít, a Service gondolkodik, a Repository olvassa/írja az adatokat, a Model pedig az, amit ezek között mozgatunk.**
 
 _**[MVC a Springben + Annotációk (YouTube)](https://youtu.be/zGSX5AqfKvU?si=Iilg_vO2PDqb9eYd)**_
 
@@ -327,17 +346,105 @@ _**[MVC a Springben + Annotációk (YouTube)](https://youtu.be/zGSX5AqfKvU?si=Ii
 
 Basic Kotlin alapok, hogy értsék a kódot a későbbiekben
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 ---
 
 ## Demo bővítése Service-szel
 
-Üzleti logika hozzáadása Service-ben.
+### Service hozzáadása
+
+**Hozzunk létre egy új fájlt** `UjoncGreetingService.kt`, és készítsünk el benne egy **köszöntő szolgáltatás**t (GreetingService)!
+
+Először is készítsünk egy `GreetingService` **interfészt**, ami egyetlen `greetPerson` **függvénnyel rendelkezik**. Ez a metódus **paraméterként átvesz** egy sztringet, ami a **személy nevét** tartalmazza, és egy **köszöntéssel tér vissza** (ami szintén egy sztring).
+
+Készítsünk egy ilyen szolgáltatást, ami ezt az interfészt valósítsa meg `UjoncGreetingService`.Ha az `ujonc` nevet adjuk meg, akkor `Üdvözöllek a tanfolyamon!`-nal köszönjön vissza, egyébként `Szia <név>!`-vel.
+
+```kotlin
+package hu.kirdev.demo
+
+import org.springframework.stereotype.Service
+
+interface GreetingService {
+    fun greetPerson(name: String): String
+}
+
+@Service
+class UjoncGreetingService : GreetingService {
+    override fun greetPerson(name: String): String {
+        if (name.lowercase() == "ujonc")
+            return "Üdvözöllek a tanfolyamon!"
+        else
+            return "Szia $name!"
+    }
+}
+```
+
+Az interfész megvalósítását az osztály neve után írt `: GreetingService`-szel tudjuk jelölni, és a `greetPerson` metódust felül kell írnunk, amit az `override` kulcsszóval tehetünk meg.
+
+### Controller átvitele egy külön fájlba
+
+Hogy gyakoroljuk az MVC szeparációt **vigyük át a kontrollert is egy másik fájlba**! Ekkor a **`DemoApplication`-ünk üresen fog maradni**, de `@SpringBootApplication` annotáció miatt továbbra is remekül fog működni. Mégis hogy van ez, olyan furcsán néz ki? Itt is ismét a dependency injection (a Spring Boot-os "varázspálca") kitölti ki nekünk, ami hiányzik.
+
+```kotlin
+package hu.kirdev.demo
+
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.runApplication
+
+@SpringBootApplication
+class DemoApplication {
+}
+
+fun main(args: Array<String>) {
+    runApplication<DemoApplication>(*args)
+}
+```
+
+### Módosítás a kontrolleren
+
+Hogy az újonnan létrehozott szolgáltatásunkat használni tudjuk módosítanunk kell a kontrolleren, de gyakorlás képpen egy extra dolgot ki fogunk próbálni, névlegesen: a `/` végpont helyett használjuk a `/greet`-et, amit a `@RequestMapping` annotáció osztályra való biggyesztésével tudunk elérni (ami egy végpont paramétert fogad).
+
+Ne haladjunk ennyire előre, először hozzuk létre az új fájl `MainController.kt` néven. Az osztályunk paraméterül fogad egy `GreetingService`-t, hogy kezelni tudja.
+
+A `greet` metóduson annyit kell változtatni, hogy a rá helyett annotációt `@GetMapping("/{name}")`-re változtatjuk és a `name` paraméterünk elé `@PathVariable`-t írunk. Ezzel azt érjuk és, hogy az URL-ben megadhatjuk a nevet, mint változót! Például a `/greet/Ujonc` esetén `name = "Ujonc"`.
+
+```kotlin
+package hu.kirdev.demo
+
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
+
+@RestController
+@RequestMapping("/greet")
+class MainController(val greetingService: GreetingService) {
+
+    @GetMapping("/{name}")
+    fun greet(@PathVariable name: String) : String {
+        return greetingService.greetPerson(name)
+    }
+}
+```
+
+Teszteljük le, hogy tényleg jól működik-e a programunk! Miután elindítottuk az alkalmazást, nyissuk meg a böngészőben a `http://localhost:8080/greet/Ujonc` URL-t! Ha mindent jól csináltunk, akkor az alábbi üzenet fogad minket:
+
+![Üdvözöllek a tanfolyamon!](../../static/img/spring/Demo-greet-ujonc.jpg)
+
+**Próbáljuk ki egy másik névvel is!** Mit tapasztalunk?
+
+![Üdvözöllek a tanfolyamon!](../../static/img/spring/Demo-greet-miki.jpg)
 
 ---
 
-## Controller code
-
 ## DTO
+
+A DTO (Data Transfer Object) egy **egyszerű objektum**, amit arra használunk, hogy **csak a szükséges adatokat gyűjtsük benne össze, és küldjük el a kliens** (pl. böngésző, mobil app) **és a szerver között** – általában JSON formátumban. Így nem az adatbázis-entitást (Entity-t) küldjük ki közvetlenül.
+
+![DTO assamble](../../static/img/spring/DTO-assemble.png)
+
+![DTO in layers](../../static/img/spring/DTO-layers.jpg)
 
 ---
 
@@ -364,9 +471,11 @@ Amennyiben szükséges _**[ide kattintva](https://tanfolyam.kir-dev.hu/docs/webe
 
 Amennyiben valamilyen okból a Gradle nem lenne linkelve, akkor ezt a "Link Gradle Projekt" feliratra való kattintással tegyük meg.
 
-![Gradle refresh](../../static/img/spring/Link-gradle-project.jpg)
+![Link Gradle Project](../../static/img/spring/Link-gradle-project.jpg)
 
-Az alkalmazás elindítása után próbáljuk ki a %%%%%%%%%%%%%%%%%%%%%%
+Az alkalmazás elindítása után **próbáljuk ki a végpontokat**!
+
+KÉP
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
