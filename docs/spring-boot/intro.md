@@ -214,7 +214,7 @@ Fogjunk is hozzá az első Spring Boot backend megírásához! **Készítsünk e
 Az osztályon belül **hozzunk létre egy GET típusú végpontot** a `@GetMapping` annotáció `greet()` (köszönt) függvényre való helyezésével, ami **visszatér egy** `"Hello World!"` **sztringgel**.
 
 ```kotlin
-package com.example.demo
+package hu.kirdev.demo
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -346,15 +346,97 @@ _**[MVC a Springben + Annotációk (YouTube)](https://youtu.be/zGSX5AqfKvU?si=Ii
 
 Basic Kotlin alapok, hogy értsék a kódot a későbbiekben
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 ---
 
 ## Demo bővítése Service-szel
 
-Üzleti logika hozzáadása Service-ben.
+### Service hozzáadása
+
+**Hozzunk létre egy új fájlt** `UjoncGreetingService.kt`, és készítsünk el benne egy **köszöntő szolgáltatás**t (GreetingService)!
+
+Először is készítsünk egy `GreetingService` **interfészt**, ami egyetlen `greetPerson` **függvénnyel rendelkezik**. Ez a metódus **paraméterként átvesz** egy sztringet, ami a **személy nevét** tartalmazza, és egy **köszöntéssel tér vissza** (ami szintén egy sztring).
+
+Készítsünk egy ilyen szolgáltatást, ami ezt az interfészt valósítsa meg `UjoncGreetingService`.Ha az `ujonc` nevet adjuk meg, akkor `Üdvözöllek a tanfolyamon!`-nal köszönjön vissza, egyébként `Szia <név>!`-vel.
+
+```kotlin
+package hu.kirdev.demo
+
+import org.springframework.stereotype.Service
+
+interface GreetingService {
+    fun greetPerson(name: String): String
+}
+
+@Service
+class UjoncGreetingService : GreetingService {
+    override fun greetPerson(name: String): String {
+        if (name.lowercase() == "ujonc")
+            return "Üdvözöllek a tanfolyamon!"
+        else
+            return "Szia $name!"
+    }
+}
+```
+
+Az interfész megvalósítását az osztály neve után írt `: GreetingService`-szel tudjuk jelölni, és a `greetPerson` metódust felül kell írnunk, amit az `override` kulcsszóval tehetünk meg.
+
+### Controller átvitele egy külön fájlba
+
+Hogy gyakoroljuk az MVC szeparációt **vigyük át a kontrollert is egy másik fájlba**! Ekkor a **`DemoApplication`-ünk üresen fog maradni**, de `@SpringBootApplication` annotáció miatt továbbra is remekül fog működni. Mégis hogy van ez, olyan furcsán néz ki? Itt is ismét a dependency injection (a Spring Boot-os "varázspálca") kitölti ki nekünk, ami hiányzik.
+
+```kotlin
+package hu.kirdev.demo
+
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.runApplication
+
+@SpringBootApplication
+class DemoApplication {
+}
+
+fun main(args: Array<String>) {
+    runApplication<DemoApplication>(*args)
+}
+```
+
+### Módosítás a kontrolleren
+
+Hogy az újonnan létrehozott szolgáltatásunkat használni tudjuk módosítanunk kell a kontrolleren, de gyakorlás képpen egy extra dolgot ki fogunk próbálni, névlegesen: a `/` végpont helyett használjuk a `/greet`-et, amit a `@RequestMapping` annotáció osztályra való biggyesztésével tudunk elérni (ami egy végpont paramétert fogad).
+
+Ne haladjunk ennyire előre, először hozzuk létre az új fájl `MainController.kt` néven. Az osztályunk paraméterül fogad egy `GreetingService`-t, hogy kezelni tudja.
+
+A `greet` metóduson annyit kell változtatni, hogy a rá helyett annotációt `@GetMapping("/{name}")`-re változtatjuk és a `name` paraméterünk elé `@PathVariable`-t írunk. Ezzel azt érjuk és, hogy az URL-ben megadhatjuk a nevet, mint változót! Például a `/greet/Ujonc` esetén `name = "Ujonc"`.
+
+```kotlin
+package hu.kirdev.demo
+
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
+
+@RestController
+@RequestMapping("/greet")
+class MainController(val greetingService: GreetingService) {
+
+    @GetMapping("/{name}")
+    fun greet(@PathVariable name: String) : String {
+        return greetingService.greetPerson(name)
+    }
+}
+```
+
+Teszteljük le, hogy tényleg jól működik-e a programunk! Miután elindítottuk az alkalmazást, nyissuk meg a böngészőben a `http://localhost:8080/greet/Ujonc` URL-t! Ha mindent jól csináltunk, akkor az alábbi üzenet fogad minket:
+
+![Üdvözöllek a tanfolyamon!](../../static/img/spring/Demo-greet-ujonc.jpg)
+
+**Próbáljuk ki egy másik névvel is!** Mit tapasztalunk?
+
+![Üdvözöllek a tanfolyamon!](../../static/img/spring/Demo-greet-miki.jpg)
 
 ---
-
-## Controller code
 
 ## DTO
 
