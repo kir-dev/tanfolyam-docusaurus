@@ -691,7 +691,7 @@ A DTO (Data Transfer Object) egy **egyszerű objektum**, amit arra használunk, 
 
 ## IntelliJ & JDK download
 
-A második és harmadik alkalomra **live coding**-ot tervezünk, így **kérünk mindenkit, hogy töltse le az IntelliJ IDEA**-t a laptopjára, lehetőleg az **Ultimate** verziót, amihez a JetBrains student pack-et _**[ezen a linket lehet igényelni](https://www.jetbrains.com/academy/student-pack/)**_.
+A második és harmadik alkalomra **live coding**-ot tervezünk, így **kérünk mindenkit, hogy töltse le az IntelliJ IDEA**-t a laptopjára, lehetőleg az **Ultimate** verziót, amihez a JetBrains student pack-et _**[ezen a linket lehet igényelni](https://www.jetbrains.com/academy/student-pack/)**_ (`@edu.bme.hu`-s email).
 
 Hogyha valakinek nincsen letöltve a **JDK 25** (Java fejlesztői csomag), akkor azt _**[ide kattintva](https://www.oracle.com/java/technologies/downloads/#jdk25-windows)**_ megteheti.
 
