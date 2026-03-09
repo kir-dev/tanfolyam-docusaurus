@@ -642,3 +642,7 @@ A következő alkalommal:
 - Megnézzük a konkrét projektet
 - Létrehozunk egy alap NestJS alkalmazást
 - Elkezdjük építeni az API-t
+
+---
+
+Készítette: **[Tarjányi Csanád](https://github.com/EasySouls)**

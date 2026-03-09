@@ -881,3 +881,7 @@ Most indítsd el a szervert (`npm run start:dev`), és küldj pár kérést mond
 :::info
 Ha elakadtál, akkor a chapter-8 branch-en megtalálod az eddigi kódot, amit összehasonlíthatsz a sajátoddal, vagy checkoutolhatod, hogy onnan folytasd.
 :::
+
+---
+
+Készítette: **[Tarjányi Csanád](https://github.com/EasySouls)**

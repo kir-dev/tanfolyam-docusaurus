@@ -37,7 +37,7 @@ _**[HTML tag-ek listája](https://www.tutorialspoint.com/html/html_basic_tags.ht
 
 Tag-ek közti tartalom lehet tetszőleges szöveg vagy akár más tag-ek is.
 
-``` html
+```html
 <html>
   <body>
     <h1>Kir-Dev tanfolyam</h1>
@@ -50,27 +50,28 @@ Továbbá a tag-ek tartalmazhatnak **attribútumokat** is, melyek további funkc
 `<a href="https://kir-dev.hu">Kir-Dev</a>`, ahol a `href` attribútum határozza meg a hivatkozás címét. Egy tag **egyszerre több attribútumot is tartalmazhat**.
 
 Egyszerű Log In form HTML-ben:
-``` html
+
+```html
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Kir-Dev</title>
-    </head>
-    <body>
-        <div>
-            <h1>Log In</h1>
-            <p>Enter your credentials</p>
-            <form>
-                <label for="username">Username</label>
-                <input id="username" name="username" type="text"/>
-                <label for="password">Password</label>
-                <input id="password" name="password" type="password"/>
-                <a href="/forgot-password">Forgot Password?</a>
-                <input id="submit" type="submit" value="Log In">
-            </form>
-        </div>
-    </body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Kir-Dev</title>
+  </head>
+  <body>
+    <div>
+      <h1>Log In</h1>
+      <p>Enter your credentials</p>
+      <form>
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text" />
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" />
+        <a href="/forgot-password">Forgot Password?</a>
+        <input id="submit" type="submit" value="Log In" />
+      </form>
+    </div>
+  </body>
 </html>
 ```
 
@@ -82,7 +83,7 @@ A weboldalak megjelenéséért és elrendezéséért felelős stíluslapok. Seg�
 
 Minden HTML taghez hozzárendelhetünk különböző stílusokat a következő szintaxis szerint:
 
-``` css
+```css
 selector {
   property1: value;
   property2: value;
@@ -91,7 +92,7 @@ selector {
 
 Előző bekezdésben szereplő HTML kódot kiegészíthetjük CSS-sel:
 
-``` css
+```css
 html {
   background-color: white;
 }
@@ -115,7 +116,7 @@ CSS használatának 3 formáját különböztetjük meg:
 - **Inline**: Közvetlenül a HTML tag-en belül írjuk meg a stílust `style` attribútum segítségével `<h1 style="color: green">Kir-Dev tanfolyam</h1>`
 - **Style element**: A `<head>` konténer tag-en belül egy `<style>` tag-ben definiáljuk a stílusokat.
 
-``` html
+```html
 <head>
   <style>
     h1 {
@@ -169,7 +170,7 @@ Most, hogy minden tudásnak bírtokában vagyunk, egészítsük ki a Log In form
 }
 
 body {
-  background-image: url("https://images.pexels.com/photos/547114/pexels-photo-547114.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
+  background-image: url('https://images.pexels.com/photos/547114/pexels-photo-547114.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
   background-size: cover;
   background-position: center;
   margin: 0;
@@ -249,7 +250,6 @@ a:any-link {
 #togglePwBtn:hover {
   background: #0074e4;
 }
-
 ```
 
 ## JavaScript
@@ -260,7 +260,7 @@ A JavaScript elengedhetetlen ahhoz, hogy valaki egy dinamikus, interaktív webol
 
 JS kódok beágyazása HTML kódba a `<script>` tag-ek között történik, rá is igaz, hogy lehet külső fájlból betölteni kódot vagy közvetlenül a tag-ek közé írni:
 
-``` html
+```html
 <script src="app.js"></script>
 
 VAGY
@@ -283,46 +283,50 @@ Képesek vagyunk:
 Ezek ismeretében tegyük interaktívvá a Log In formunkat:
 
 Módosított HTML
-``` html
+
+```html
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Title</title>
-        <!--<link rel="stylesheet" href="style.css">-->
-    </head>
-    <body>
-        
-        <form>
-            <h1>Log In</h1>
-            <p>Enter credentials</p>
-            <label for="username">Username</label>
-            <input id="username" name="username" type="text" />
-            <label for="password">Password</label>
-            <input id="password" name="password" type="password" />
-            
-            <input type="button" value="Submit" onclick="checkLogin()"/>
-            <script src="app.js"></script>
-        </form>
-    </body>
-</html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+    <!--<link rel="stylesheet" href="style.css">-->
+  </head>
+  <body>
+    <form>
+      <h1>Log In</h1>
+      <p>Enter credentials</p>
+      <label for="username">Username</label>
+      <input id="username" name="username" type="text" />
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" />
 
+      <input type="button" value="Submit" onclick="checkLogin()" />
+      <script src="app.js"></script>
+    </form>
+  </body>
+</html>
 ```
 
 app.js
-``` js
-function checkLogin(){
-    const userNameIF = document.getElementById("username");
-    const passwordIF = document.getElementById("password");
 
-    const acceptedUsername = "kir-dev";
-    const acceptedPassword = "asdasd";
+```js
+function checkLogin() {
+  const userNameIF = document.getElementById('username');
+  const passwordIF = document.getElementById('password');
 
-    if (userNameIF.value == acceptedUsername && passwordIF.value == acceptedPassword){
-        alert("Sikeres bejelentkezes");
-    } else {
-        alert("Sikertelen bejelentkezes");
-    }
+  const acceptedUsername = 'kir-dev';
+  const acceptedPassword = 'asdasd';
+
+  if (userNameIF.value == acceptedUsername && passwordIF.value == acceptedPassword) {
+    alert('Sikeres bejelentkezes');
+  } else {
+    alert('Sikertelen bejelentkezes');
+  }
 }
-
 ```
+
+---
+
+Készítette: **[Iván Domonkos](https://github.com/IvnDmnks)**\
+Demo: **[Bujdosó Gergő](https://github.com/FearsomeRover)** és **[Mozsár Máté](https://github.com/mozsarmate)**
