@@ -4,6 +4,10 @@ sidebar_position: 2
 
 # Git és GitHub alapok
 
+:::tip
+Rövid git parancs összefoglaló cheatsheet: [Git Cheat Sheet](https://education.github.com/git-cheat-sheet-education.pdf)
+:::
+
 ## Git bevezető
 
 Miért is elengedhetetlen a Git a modern szoftverfejlesztésben? A Git nem csupán egy mentési lehetőség, hanem egy professzionális **elosztott verziókezelő rendszer**. Lehetővé teszi a **párhuzamos munkavégzést**: saját ágakon (**branch**) dolgozhatsz új funkciókon anélkül, hogy a társad munkáját megzavarod a saját változatásaiddal vagy elrontanád a már működő kódot.\
