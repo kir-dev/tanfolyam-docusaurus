@@ -1129,3 +1129,7 @@ A `/tickets` végpontjait még nem fejeztük be és nem kötöttük össze a kon
 :::info
 Ha elakadtál, akkor a chapter-5 branch-en megtalálod az eddigi kódot, amit összehasonlíthatsz a sajátoddal, vagy checkoutolhatod, hogy onnan folytasd.
 :::
+
+---
+
+Készítette: **[Tarjányi Csanád](https://github.com/EasySouls)**

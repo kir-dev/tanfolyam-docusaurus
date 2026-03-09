@@ -110,4 +110,5 @@ Tovább gyakorlás érdekében ajánljuk a [Learn Git Branching](https://learngi
 
 ---
 
-Készítette: [Iván Domonkos](https://github.com/IvnDmnks)
+Készítette: **[Iván Domonkos](https://github.com/IvnDmnks)**\
+Demo: **[Nyitrai Gergely Olivér](https://github.com/Geroli205)**
