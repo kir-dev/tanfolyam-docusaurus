@@ -24,7 +24,7 @@ Ha már a Kotlinról beszélünk, akkor nem mehetünk el figyelem nélkül a Jav
 
 ![Java logó](../../static/img/spring/Java-logo.jpg)
 
-A Java **általános célú, objektumorientált programozási nyelv**, amelyet James Gosling kezdett el fejleszteni, később átvette a Sun Microsystems fejlesztett a ’90-es évek elejétől kezdve egészen 2009-ig, amikor a céget felvásárolta az Oracle.
+A Java **általános célú, objektumorientált programozási nyelv**, amelyet James Gosling kezdett el fejleszteni, később átvette a Sun Microsystems és fejlesztett a ’90-es évek elejétől kezdve egészen 2009-ig, amikor a céget felvásárolta az Oracle.
 
 A Java **több mint 30 éve az egyik legelterjedtebb nyelv a világon**. A **nagyvállalati rendszerek, banki szoftverek, webes backendek nagy része máig Javával készül** – és ez így is marad még hosszú évekig.
 
@@ -34,7 +34,7 @@ Ugyanakkor a Java kódja sokszor hosszabb és ismétlődőbb, mint kellene. Bizo
 
 ![Kotlin logó](../../static/img/spring/Kotlin-logo.jpg)
 
-A Kotlin egy **modern, barátságos programozási nyelv**, amit a JetBrains fejlesztett 2011-től. Legfontosabb jellemzője, hogy **teljesen kompatibilis a Javával**, ugyanazon a platformon (**JVM**) fut, ugyanazokat a könyvtárakat használja – mégis **sokkal kényelmesebb, rövidebb és biztonságosabb kódot lehet vele írni, mint Javában**.
+A Kotlin egy **modern, barátságos programozási nyelv**, amit a JetBrains hozott létre és fejleszt 2011 óta. Legfontosabb jellemzője, hogy **teljesen kompatibilis a Javával**, ugyanazon a platformon (**JVM**) fut, ugyanazokat a könyvtárakat használja – mégis **sokkal kényelmesebb, rövidebb és biztonságosabb kódot lehet vele írni, mint Javában**.
 
 Kezdetben főleg Android-alkalmazásokhoz vált népszerűvé (a Google 2017 óta hivatalosan is ajánlja), de mára a **backend fejlesztés egyik kedvenc eszköze** lett – különösen a **Spring Boot framework-kel párosítva**.
 
@@ -694,7 +694,9 @@ A DTO (Data Transfer Object) egy **egyszerű objektum**, amit arra használunk, 
 
 A második és harmadik alkalomra **live coding**-ot tervezünk, így **kérünk mindenkit, hogy töltse le az IntelliJ IDEA**-t a laptopjára, lehetőleg az **Ultimate** verziót, amihez a JetBrains student pack-et _**[ezen a linket lehet igényelni](https://www.jetbrains.com/academy/student-pack/)**_ (`@edu.bme.hu`-s email).
 
-Hogyha valakinek nincsen letöltve a **JDK 25** (Java fejlesztői csomag), akkor azt _**[ide kattintva](https://www.oracle.com/java/technologies/downloads/#jdk25-windows)**_ megteheti.
+Hogyha valakinek nincsen letöltve a **JDK 25** (Java fejlesztői csomag), akkor azt _**[ide kattintva](https://www.oracle.com/java/technologies/downloads/#jdk25-windows)**_ megteheti, de az IntelliJ IDE-ből közvetlenül is lehet tetszőleges Java kiadást letölteni a **Project Structure** menüből.
+
+![JDK Letöltés](../../static/img/spring/JDK-install.png)
 
 **Hogy biztosak legyünk abban, hogy jól setup-oltuk a fejlesztői környezetet, klónozzuk le** a _**[demo projektet](https://github.com/MiklosBacsi/demo.git)**_, és **próbáljuk meg futtatni**! Ráadásul ez egy remek lehetőség a fejlesztői környezettel való ismerkedésre, így nem a live coding alkalmával fogtok először találkozni
 
