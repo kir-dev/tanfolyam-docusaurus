@@ -172,6 +172,7 @@ Képzeld el, hogy egy webes API-t, REST szolgáltatást vagy mikroszolgáltatás
 ### Spring vs Spring Boot röviden és szemléletesen
 
 **Spring** = egy **hatalmas doboz LEGO kocka**
+
 **Spring Boot** = ugyan az a doboz, de **előre összerakott darabok:** házak, autók, hidak, **és egy varázspálca**, ami a **hiányzó darabokat magától odateszi**, ha látja, hogy szükséged van rá.
 
 _**Mi az a Spring Boot és miért jó? (YouTube): [CodeHead](https://youtu.be/-ILh8pl5lj8?si=sUWMl746mfezY7_4), [Mosh](https://youtu.be/v73-ps01c5w?si=EcJ66S3f6maaDH5P)**._
