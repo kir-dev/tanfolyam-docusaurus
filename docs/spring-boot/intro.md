@@ -344,9 +344,93 @@ _**[MVC a Springben + Annotációk (YouTube)](https://youtu.be/zGSX5AqfKvU?si=Ii
 
 ## Kotlin alapok
 
-Basic Kotlin alapok, hogy értsék a kódot a későbbiekben
+Ez egy nagyon rövid bemutató lesz, ami csak a következő kódrészletek mégértéséhez szükséges.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+### Függvények és változók
+
+A hello world így néz ki Kotlinban:
+
+```kotlin
+fun main() {
+    println("Hello World!")
+}
+```
+
+Azt rögtön észrevehetjük, hogy **nem kell kirakni `;`-ket az utasítások végére**, továbbá a `fun` kulcsszó a function rövidítése. **Ha egy függvény nem tér vissza semmivel, akkor azt nem kell kiírni** viszont, ha mégis visszatér valamivel, akkor ki kell írni a függvény feje és egy `:` között, például:
+
+```kotlin
+fun add(a: Int, b: Int): Int {
+    return a + b
+}
+```
+
+Azt is megfigyelhetjük, hogy a **változók típusát is `név: Típus` alakban adjuk meg**, ami elsőre sátánidézésnek tűnhet, de nem sok idő után egész kényelmessé válik főleg, ha a változó nevét részesítjük előnyben és nem a típusát.
+
+### val vs var
+
+`val`: value, **nem módosítható**
+`var`: variable, **módosítható**
+
+```kotlin
+val pi = 3.14 // final / const / readonly — nem lehet módosítani
+var counter = 0 // normál változó, lehet módosítani
+```
+
+Most legyünk teljesen őszinték: a `const` kulcsszót lusták vagyunk kiírni, de ha `var`-t írunk, akkor annyival már írhatnánk `val`-t is, és lehet nem is akartuk módosítani az értéket, sőt regeteg bug-ot ki lehet vele szűrni.
+
+### Tagváltozók és tagfüggvények
+
+A tagváltozókat és a tagfüggvényeket (metódusokat) **`objektum.tagVáltozó`** illetve **`objektum.tagFüggvény()`** szintaxissal érjük el.
+
+### Null és null safety
+
+A `null` kotlinban azt jelzi, hogy az érték **nem rendelkezik érvényes értékkel**.
+
+Ha van egy változónk, ami Int típusú, akkor az biztosan csak valid értékkel rendelzik, de **ha a típus mögé odaírunk egy `?`-t** (például `Int?`), **akkor tartalmazhat érvénytelen értéket is!**
+
+A **fordító kikényszeríti, hogy minden esetben kezeljük le** az ilyen típussal rendelkező objektumainkat, de cserébe nem kapunk segmentation fault-ot, mint C-ben, sőt ha egyszer lekezeljük (pl. egy érték beolvasásánál), akkor nem kell tovább hurcolnunk magunkat a `null` vizsgálatot.
+
+```kotlin
+var name: String = "Peti"     // nem lehet null → biztonságos
+var nickname: String? = null  // ? jelzi, hogy null is lehet
+
+println(name.length)          // OK, compiler tudja, hogy nem null
+
+// println(nickname.length)   // ← FORDÍTÁSI HIBA!
+
+if (nickname != null) {
+    println(nickname.length)  // OK – smart cast
+}
+```
+
+Ha `?.` operátor **bal oldalán null érték szerepel**, akkor **`null`-t ad vissza**, de **érvényes érték esetén sima `.`-ként viselkedik**.
+
+Ha a `?:` operátor **bal oldalán** egy **érvényes érték szerepel**, akkor **visszaadja azt**, de **`null` esetén a jobb oldalt fogja visszaadni**.
+
+```kotin
+// vagy röviden (safe call):
+println(nickname?.length)     // null → null lesz az eredmény
+
+// vagy ha tutira nem null, de muszáj:
+println(nickname!!.length)    // NullPointerException ha mégis null
+
+fun findPerson(id: Int): Person? = ...   // lehet null
+val person = findPerson(42) ?: throw NoSuchElementException("Nincs ilyen személy")
+```
+
+### Listák
+
+```kotlin
+val numbers = listOf(1, 3, 5, 7)          // immutable
+val mutable = mutableListOf(2, 4, 6)
+
+numbers[1]                                // 3
+mutable.add(8)
+
+val doubled = numbers.map { it * 2 }      // [2,6,10,14]
+```
+
+A legutolsó sorban a `map` metódus fogja minden elemet (az egyes elemeket az `it` jelöli), és megszorozza 2-vel.
 
 ---
 
