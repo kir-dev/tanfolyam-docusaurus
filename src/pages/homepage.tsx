@@ -12,7 +12,7 @@ const CourseList = [
   },
   {
     title: 'Node.js',
-    link: '/docs/node-js/intro',
+    link: '/docs/node-js/intro/web-basics',
     logo: '/img/node-js-logo.svg',
     description:
       'NodeJS tanfolyamon megismerkedhettek a TypeScript nyelvvel, a NestJS keretrendszerrel. A tanfolyam során felépítünk egy ticket management site-ot, amelyet folytatólagosan a React tanfolyamon fogjátok gyönyörű UI-jal feldobni.',
