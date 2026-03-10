@@ -22,7 +22,7 @@ nest g res boards
 
 _A CLI megkérdezi, hogy milyen típusú API-t szeretnél építeni. Válaszd a **REST API**-t, majd válaszolj **Y**-al a CRUD végpontok generálására._
 
-Ez legenerálja nekünk a szabványos **CRUD** (Create, Read, Update, Delete) metódusokat mind a Controllerben, mind a Service-ben.
+Ez legenerálja nekünk a szabványos **CRUD** (Create, Read, Update, Delete) metódusokat mind a Controllerben, mind a Service-ben. A CLI által generált DTO fájlok (`create-board.dto.ts`, `update-board.dto.ts`) egyelőre üres osztályokat tartalmaznak — a 4. fejezetben fogjuk őket valódi tartalommal megtölteni.
 
 #### Hogyan kötődik be a rendszerbe?
 
@@ -89,7 +89,7 @@ export class BoardsController {
 
   @Get(':id') // GET kérés pl. /boards/1 címre
   findOne(@Param('id') id: string) {
-    return this.boardsService.findOne(+id);
+    return this.boardsService.findOne(+id); // A + operátor string-ből számmá alakít
   }
 
   @Patch(':id') // PATCH kérés részleges frissítéshez
@@ -169,7 +169,7 @@ Várható válaszok:
 Ezzel megértettük a NestJS modul-rendszer felépítését! A következő fejezetben bekötjük az adatbázist a Prisma ORM segítségével, és életre keltjük a `Boards` végpontjainkat.
 
 :::info
-Ha elakadtál, akkor a chapter-2 branch-en megtalálod az eddigi kódot, amit összehasonlíthatsz a sajátoddal, vagy checkoutolhatod, hogy onnan folytasd.
+Ha elakadtál, akkor a [chapter-2](https://github.com/kir-dev/ticketing-api-2026/tree/chapter-2) branch-en megtalálod az eddigi kódot, amit összehasonlíthatsz a sajátoddal, vagy checkoutolhatod, hogy onnan folytasd.
 :::
 
 ---

@@ -159,7 +159,7 @@ npm run start:dev
 A [http://localhost:3000/api](http://localhost:3000/api) címre navigálva mostmár a `/tickets` végpontok dokumentációját is láthatod, ugyanúgy mint a `/boards`-ét, a mezők típusával, az Enum legördülő menüvel és a validációs szabályokkal együtt.
 
 :::info
-Ha elakadtál, akkor a chapter-6 branch-en megtalálod az eddigi kódot, amit összehasonlíthatsz a sajátoddal, vagy checkoutolhatod, hogy onnan folytasd.
+Ha elakadtál, akkor a [chapter-6](https://github.com/kir-dev/ticketing-api-2026/tree/chapter-6) branch-en megtalálod az eddigi kódot, amit összehasonlíthatsz a sajátoddal, vagy checkoutolhatod, hogy onnan folytasd.
 :::
 
 ---

@@ -63,10 +63,24 @@ model Label {
   color   String
   tickets Ticket[]
 }
+```
 
+A `Ticket` modellhez add hozzá a `labels Label[]` sort az utolsó mező után (de a záró `}` elé):
+
+```prisma
 model Ticket {
-  // ... meglévő mezők
-  labels Label[]
+  id          Int         @id @default(autoincrement())
+  name        String
+  description String?
+  ticketPhase TicketPhase @default(CREATED)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  board    Boards @relation(fields: [boardsId], references: [id])
+  boardsId Int
+
+  // highlight-next-line
+  labels   Label[]
 }
 ```
 
@@ -505,7 +519,7 @@ Ezután add hozzá az osztályhoz az alábbi két metódust:
    - A `disconnect` szintén idempotens: ha a kapcsolat nem is létezik, a Prisma nem dob hibát.
 
 :::info
-Ha elakadtál, akkor a chapter-8 branch-en megtalálod az eddigi kódot, amit összehasonlíthatsz a sajátoddal, vagy checkoutolhatod, hogy onnan folytasd.
+Ha elakadtál, akkor a [chapter-7](https://github.com/kir-dev/ticketing-api-2026/tree/chapter-7) branch-en megtalálod az eddigi kódot, amit összehasonlíthatsz a sajátoddal, vagy checkoutolhatod, hogy onnan folytasd.
 :::
 
 ---

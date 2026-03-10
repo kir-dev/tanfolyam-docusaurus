@@ -66,6 +66,18 @@ Ha egy TypeScript fájlt szeretnénk futtatni Node.js-ben, vagy a böngészőben
 3. JavaScript fájl (`.js`)
 4. Node.js futtatja
 
+### Hasznos TypeScript szintaxis
+
+Az alábbi példákban több olyan TypeScript-specifikus szintaxist is fogsz látni, amelyeket érdemes ismerni:
+
+- **`age?: number`** — A `?` az opcionális mezőt jelzi: a tulajdonság megadása nem kötelező, értéke `undefined` is lehet.
+- **`Kitty[] | string[]`** — A `|` (union type) azt jelenti, hogy az érték többféle típusú is lehet — ebben az esetben `Kitty` tömb vagy `string` tömb.
+- **`?? 'Újszülött'`** — A `??` (nullish coalescing) operátor: ha a bal oldali érték `null` vagy `undefined`, a jobb oldali értéket használja helyette.
+- **`age ? 'Nem újszülött' : 'Újszülött'`** — A feltételes (ternary) operátor: `feltétel ? haIgaz : haHamis`.
+- **`void`** — Visszatérési típus, ami azt jelzi, hogy a függvény nem ad vissza értéket.
+- **`export`** — Más fájlokból importálhatóvá teszi a függvényt, osztályt vagy változót.
+- **`as Promise<User>`** — Típus-kikényszerítés (type assertion): megmondjuk a TypeScriptnek, hogy az adott értéket a megadott típusként kezelje.
+
 ### Typescript példák
 
 #### Arrow function

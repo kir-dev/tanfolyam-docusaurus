@@ -13,6 +13,12 @@ A projektünk egy **Hibajegy-kezelő (Ticketing) Rendszer** lesz. Adatbáziskén
 Egy olyan REST API létrehozása, amely képes kezelni a hibajegyek létrehozását, lekérdezését, frissítését és törlését (CRUD műveletek). Ez az API később könnyen bővíthető lesz további funkciókkal, például felhasználókezeléssel, jogosultságokkal, stb. (habár erre a tanfolyamon nem fogunk kitérni).
 :::
 
+:::tip Mintaprojekt
+A tanfolyam során készülő projekt forráskódja elérhető a GitHub-on: [ticketing-api-2026](https://github.com/kir-dev/ticketing-api-2026)
+
+Minden fejezet végén egy-egy branch-en megtalálod az aktuális állapotot (`chapter-1`, `chapter-2`, stb.).
+:::
+
 Vágjunk is bele!
 
 ---
@@ -106,6 +112,10 @@ _A `PORT` a szerver portja. A `DATABASE_URL` az SQLite adatbázis fájl elérés
 Ha a projektben van `.env.example` fájl, elegendő annak tartalmát átmásolni a `.env` fájlba — az összes szükséges kulcs már ott van.
 :::
 
+### Dekorátorok (Decorators)
+
+A NestJS-ben gyakran fogsz látni `@` jellel kezdődő kifejezéseket a függvények és osztályok felett, ilyeneket mint `@Controller()`, `@Get()`, `@Injectable()` vagy `@Module()`. Ezek a **dekorátorok** (decorators) — speciális TypeScript funkciók, amelyek extra viselkedést vagy metaadatot adnak az alattuk lévő elemhez. Például a `@Get()` megmondja a NestJS-nek, hogy ez a metódus egy GET kérésre fog válaszolni, a `@Controller('boards')` pedig az útvonalat definiálja. A dekorátorok nem változtatják meg magát a kódot, csak "felcímkézik", hogy a keretrendszer tudja, hogyan kezelje.
+
 ### Az alkalmazás architektúrája
 
 A NestJS egy erősen strukturált keretrendszer. Három fő építőköve van:
@@ -126,7 +136,7 @@ subgraph NestJS ["NestJS Alkalmazás"]
 end
 DB[("SQLite\nAdatbázis")]
 Client -->|"HTTP kérés\npl. POST /tickets"| Controller
-Controller -->|"Adatok továbbítása\nDTO-val"| Service
+Controller -->|"Adatok továbbítása"| Service
 Service -->|"Lekérdezés / Mentés"| Prisma
 Prisma -->|"SQL"| DB
 DB -->|"Eredmény"| Prisma
@@ -211,6 +221,9 @@ import { AppService } from './app.service';
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
+  // ↑ Ez a TypeScript konstruktor-rövidítés: a 'private readonly appService: AppService'
+  // egyszerre deklarálja az osztály mezőjét és hozzárendeli a konstruktor paraméterét.
+  // Tehát nem kell kézzel írnunk: this.appService = appService.
 
   // A ':name' egy dinamikus URL paramétert definiál
   @Get('hello/:name')
@@ -224,7 +237,7 @@ export class AppController {
 Próbáld ki a böngésződben a `http://localhost:3000/hello/Gyula` címet, és látni fogod az eredményt!
 
 :::info
-Ha elakadtál, akkor a chapter-1 branch-en megtalálod az eddigi kódot, amit összehasonlíthatsz a sajátoddal, vagy checkoutolhatod, hogy onnan folytasd.
+Ha elakadtál, akkor a [chapter-1](https://github.com/kir-dev/ticketing-api-2026/tree/chapter-1) branch-en megtalálod az eddigi kódot, amit összehasonlíthatsz a sajátoddal, vagy checkoutolhatod, hogy onnan folytasd.
 :::
 
 ---

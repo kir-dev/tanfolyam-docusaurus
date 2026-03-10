@@ -78,6 +78,8 @@ Nyisd meg a projekt gyökerében lévő `nest-cli.json` fájlt, és cseréld ki 
 - **`plugins` tömb**: Itt mondjuk meg a NestJS-nek, hogy fordítás közben futtassa le a Swagger bővítményt.
   - `classValidatorShim`: Engedélyezi, hogy a plugin kiolvassa a `class-validator` dekorátorokat (pl. `@IsString()`), és ezek alapján állítsa be a Swaggerben, hogy egy mező kötelező-e vagy milyen típusú.
   - `introspectComments`: Ha JSDoc kommenteket írsz a kódodba (pl. `/** Ez egy azonosító */`), a Swagger ezt automatikusan kiolvassa, és megjeleníti a dokumentációban mint mező leírás.
+  - `skipAutoHttpCode`: Ha `false`, a plugin automatikusan hozzáadja a megfelelő HTTP státuszkódokat (pl. 201 a POST-hoz, 200 a GET-hez) a dokumentációhoz.
+  - `esmCompatible`: ESM (ES Module) kompatibilitást biztosít a generált metaadatokhoz.
 
 ### A Swagger bekötése
 
@@ -90,6 +92,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 // A Nest CLI plugin (SWC használata esetén) automatikusan generálja ezt a fájlt fordításkor
+// ⚠️ Ez a fájl nem létezik a forráskódban — az első 'npm run start:dev' futtatáskor generálódik!
 import metadata from './metadata';
 
 async function bootstrap() {
@@ -121,6 +124,10 @@ async function bootstrap() {
 void bootstrap();
 ```
 
+:::warning A `./metadata` import piros hibát jelez?
+A `./metadata` fájl nem létezik a forráskódban — a NestJS CLI a Swagger plugin segítségével automatikusan generálja az első fordításkor. Ha az IDE piros hibát jelez ennél a sornál, futtasd egyszer a `npm run start:dev` parancsot, és a hiba eltűnik.
+:::
+
 #### A Swagger inicializálásának magyarázata:
 
 1.  **`DocumentBuilder`**: Ez egy Builder minta, amivel összeállíthatjuk a dokumentációnk alapvető adatait (Cím, Leírás, Verzió). Itt adhatnánk meg akár a JWT autentikáció beállításait is később.
@@ -137,8 +144,12 @@ npm run start:dev
 
 Nyisd meg a böngésződben a [http://localhost:3000/api](http://localhost:3000/api) címet! Ha mindent jól csináltál, akkor a `/tickets` és a `/boards` végpontok dokumentációját fogod látni, a mezők típusával és a validációs szabályokkal együtt. Ráadásul az egyes végpontokra kattintva interaktívan ki is próbálhatod őket közvetlenül a böngészőből!
 
+:::tip Házi feladat
+A következő fejezetben a Tickets controller-t fogjuk Swagger dekorátorokkal (`@ApiOkResponse`, `@ApiCreatedResponse`, `@ApiNotFoundResponse`, stb.) ellátni. Próbáld meg önállóan is kiegészíteni a Boards controller metódusait hasonló dekorátorokkal!
+:::
+
 :::info
-Ha elakadtál, akkor a chapter-5 branch-en megtalálod az eddigi kódot, amit összehasonlíthatsz a sajátoddal, vagy checkoutolhatod, hogy onnan folytasd.
+Ha elakadtál, akkor a [chapter-5](https://github.com/kir-dev/ticketing-api-2026/tree/chapter-5) branch-en megtalálod az eddigi kódot, amit összehasonlíthatsz a sajátoddal, vagy checkoutolhatod, hogy onnan folytasd.
 :::
 
 ---

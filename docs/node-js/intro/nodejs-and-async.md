@@ -8,7 +8,7 @@ title: 'Node.js és aszinkronitás'
 
 A Node.js lehetővé teszi, hogy JavaScriptet futtassunk szerveren.
 
-- **Aszinkron és eseményvezérelt**: képes egyszerre több kapcsolatot fogadni, és az _evet loop_ segítségével képes aszinkron műveleteket végrehajtani.
+- **Aszinkron és eseményvezérelt**: képes egyszerre több kapcsolatot fogadni, és az _event loop_ segítségével képes aszinkron műveleteket végrehajtani.
 - **Egyszálú**: egyetlen szálon fut, de képes több műveletet párhuzamosan kezelni az aszinkronitás segítségével.
 
 ### Hogyan működik?
@@ -41,13 +41,20 @@ Azonnali
 Késleltetett
 ```
 
-A `setTimeout` egy aszinkron művelet, amely a callback függvényt egy későbbi időpontban hajtja végre, miközben a fő szál tovább fut, azaz nem blokkolja a `console.log('Azonnali')` végrehajtását.
+A `setTimeout` egy aszinkron művelet, amely a callback függvényt (callback = egy olyan függvény, amit egy másik függvénynek adunk át paraméterként, és az hívja meg később) egy későbbi időpontban hajtja végre, miközben a fő szál tovább fut, azaz nem blokkolja a `console.log('Azonnali')` végrehajtását.
 
 ---
 
 ## Aszinkronitás
 
 ### Promise
+
+A **Promise** (ígéret) egy objektum, amely egy aszinkron művelet jövőbeli eredményét reprezentálja. Három állapota lehet:
+- **Pending** (függőben): A művelet még folyamatban van.
+- **Fulfilled** (teljesült): A művelet sikeresen befejeződött, és van eredménye.
+- **Rejected** (elutasított): A művelet hibával zárult.
+
+A `.then()` metódussal kezeljük a sikeres eredményt, a `.catch()` metódussal pedig az esetleges hibákat.
 
 ```ts
 fetch('https://api.com/data')

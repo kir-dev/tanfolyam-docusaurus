@@ -107,6 +107,10 @@ export class Ticket {
 }
 ```
 
+:::info Miért van minden mezőnek alapértelmezett értéke?
+Észrevehetted, hogy minden mezőnek van alapértelmezett értéke (pl. `id: number = 0`, `name: string = ''`). Erre azért van szükség, mert a `class-transformer` a bejövő JSON-t egy `new Ticket()` példánnyá alakítja, és a `class-validator` ezen a példányon futtatja a validációt. Az alapértelmezett értékek biztosítják, hogy az osztály példányosítása mindig működjön — az adatbázisba természetesen nem a `0`-s ID kerül, hanem az automatikusan generált érték.
+:::
+
 **Magyarázat a dekorátorokhoz:**
 
 - **`@IsNumber()` / `@IsString()`**: Az adott mező csak szám / szöveg lehet.
@@ -139,7 +143,7 @@ createdAt     ✗  ←         (adatbázis adja)
 updatedAt     ✗  ←         (adatbázis adja)
 ```
 
-:::tip Miért validálunk a DTO-n és nem az entitáson?
+:::tip Hogyan kerülnek a validációs szabályok a DTO-ra?
 A TypeScript típusok csak fordítási időben léteznek — futásidőben eltűnnek. Ha a felhasználó HTTP kérésen keresztül küld adatot, a TypeScript már nem képes ellenőrizni azt. Ezért van szükség a `class-validator` dekorátorokra az entitáson, és ezért futtatja a `ValidationPipe` ezeket az ellenőrzéseket a beérkező adatokon.
 :::
 
@@ -446,7 +450,7 @@ export class BoardsController {
 ```
 
 :::info
-Ha elakadtál, akkor a chapter-4 branch-en megtalálod az eddigi kódot, amit összehasonlíthatsz a sajátoddal, vagy checkoutolhatod, hogy onnan folytasd.
+Ha elakadtál, akkor a [chapter-4](https://github.com/kir-dev/ticketing-api-2026/tree/chapter-4) branch-en megtalálod az eddigi kódot, amit összehasonlíthatsz a sajátoddal, vagy checkoutolhatod, hogy onnan folytasd.
 :::
 
 ---

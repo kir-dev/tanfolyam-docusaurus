@@ -143,7 +143,7 @@ Lásd még:
 ### Single Page Application (SPA)
 
 - A szerver nem foglalkozik a megjelenítéssel, csak nyers adatot küld a kliensnek
-- A frontend felelős a megjelenítésért és az adatok alaján jeleníti meg a tartalmat
+- A frontend felelős a megjelenítésért és az adatok alapján jeleníti meg a tartalmat
 - Backend API-n keresztül kommunikál
 - JavaScript (pl. React) kezeli a routingot
 - Példa: Nagyon sok modern webalkalmazás, mint a Google Maps vagy a Netflix
@@ -154,7 +154,7 @@ A mi frontendünk egy **React SPA** lesz.
 
 ## REST API
 
-A Represantational State Transfer (REST) egy tervezési stílus web API-khoz.
+A Representational State Transfer (REST) egy tervezési stílus web API-khoz.
 A REST API-k a HTTP protokollt használják, és erőforrás-alapúak.
 Egy architektúra, amely meghatározza, hogyan kell a szervernek és a kliensnek kommunikálnia egymással.
 
