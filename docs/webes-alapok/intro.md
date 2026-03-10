@@ -24,7 +24,7 @@ _**Rövid videók (YouTube: Fireship): [HTML](https://www.youtube.com/watch?v=ok
 
 ### Absztrakt technológiák
 
-- **Node.js**: Szerveroldali JavaScript futtatókörnyezet, segítségével JS kódot is futtathatunk a szerveren. _Bővebben **[NodeJS tanfolyam](/docs/node-js/intro.md)**._
+- **Node.js**: Szerveroldali JavaScript futtatókörnyezet, segítségével JS kódot is futtathatunk a szerveren. _Bővebben **[NodeJS tanfolyam](/docs/node-js/intro/web-basics)**._
 - **React**: Komponens-alapú JavaScript könyvtár, interaktív felhasználói felületek építésére. _Bővebben **[React tanfolyam](/docs/react/intro.md)**._
 - **Spring Boot**: Java-alapú keretrendszer, amely megkönnyíti a webalkalmazások fejlesztését. _Bővebben **[Spring Boot tanfolyam](/docs/spring-boot/intro.md)**._
 
