@@ -14,6 +14,8 @@ Fontos: a tananyagban **videó hivatkozásokat is elhelyeztünk**, amelyek emés
 
 Ha bármilyen kérdésed felmerülne, akkor [ide kattintva](https://tanfolyam.kir-dev.hu/docs/get-started/intro) megtalálod az illetékeseket, akiket tudsz keresni.
 
+Előadás felvételeinket [visszanézheted YouTube-on:wink:](https://www.youtube.com/watch?v=LJTRZUtuP1Y&list=PLJWjD3oW-Be6ECQyG-8rmuhvmHQ54E4YB)
+
 ---
 
 ## Kotlin (és Java)
