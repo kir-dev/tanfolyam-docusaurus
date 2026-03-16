@@ -581,7 +581,7 @@ data class DetailedTicketDto(
 
 ### Eddigi végpontok kipróbálása - 2. fejezet végén
 
-Futtassuk az alkalmazást! Ha van már legalább egy tábla, akkor hozzunk létre a táblához egy új ticketet! Próbáljuk ki a GET `/board/{id}` végpontot is, hogy lássuk a táblában létrehozott jegyet!
+Futtassuk az alkalmazást! Hozzunk létre egy új táblát a POST `/board` végpont segítségével, majd próbáljuk ki a többi végpontot is!
 
 ---
 
@@ -693,7 +693,7 @@ class TicketController(
 
 ### Eddigi végpontok kipróbálása - 3. fejezet végén
 
-Futtassuk az alkalmazást! Hozzunk létre egy új táblát a POST `/board` végpont segítségével, majd próbáljuk ki a többi végpontot is!
+Futtassuk az alkalmazást! Ha van már legalább egy tábla, akkor hozzunk létre a táblához egy új ticketet! Próbáljuk ki a GET `/board/{id}` végpontot is, hogy lássuk a táblában létrehozott jegyet!
 
 ---
 
