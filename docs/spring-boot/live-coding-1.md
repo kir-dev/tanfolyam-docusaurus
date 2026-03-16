@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # Spring tanfolyam - 2. alkalom
 
-Rövid leírás %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+A mostani és a következő alkalmon egy ticketing alkalmazást fogunk készíteni táblákkal, címkékkel, jegyekkel és kommentekkel.
 
 ---
 
@@ -95,7 +95,7 @@ class AppService{
 
 ### AppController létrehozása
 
-Ezen kívül van egy Controller is, ami két végpontot definiál:
+Hozzunk létre egy kontrollert `AppController` néven, ami két végpontot definiál:
 
 - A `/` végponton a szolgáltatásunk `getHello` köszönő metódusát, míg
 - a `/hello/{name}` végponton a személyre szabott `getPersonalizedHello` köszönést használja.
@@ -144,35 +144,158 @@ class AppController(private val appService: AppService) {
 }
 ```
 
+### Eddigi működés bemutatása - 0. fejezet végén
+
 MŰKÖDÉS BEMUTATÁSA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 ---
 
-## 1. Fejezet - xd
+## 1. Fejezet - Board váza
+
+Létre szeretnénk hozni táblákat (`Board`), amikre jegyeket tudunk rakni, de ehhez először tervezzük meg a szolgáltatás és kontroller vázát.
+
+### DTOk felvétele
+
+Vegyünk fel egy `board` mappát, és abba dolgozzunk. Itt hozzunk létre egy `BoardDtos` nevű fájlt, amiben elhelyezünk két adatosztályt (`CreateBoardDto` és `UpdateBoardDto`), amiknek egyelőre csak címet adunk.
+
+```kotlin
+data class CreateBoardDto(
+    val title: String
+)
+
+data class UpdateBoardDto(
+    val title: String
+)
+```
+
+### BoardService hozzáadása
+
+Hozzunk létre egy `BoardService` nevű szolgáltatást (szintén a `board` mappában), aminek legyen `createBoard`, `getBoard`, `getAllBoards`, `updateBoard` és `deleteBoard` metódusa. Ezeket a tagfüggvényeket egyelőre placeholderekekkel töltsük fel, majd később fogjuk ténylegesen implementálni.
+
+```kotlin
+@Service
+class BoardService() {
+
+    fun createBoard(board: CreateBoardDto): String {
+        return "This action adds a new board"
+    }
+
+    fun getBoard(id: Int): String {
+        return "This action returns a #${id} board"
+    }
+
+    fun getAllBoards(): String {
+        return "This action returns all boards"
+    }
+
+    fun updateBoard(id: Int, board: UpdateBoardDto): String {
+        return "This action updates a #${id} board"
+    }
+
+    fun deleteBoard(id: Int): String {
+        return "This action removes a #${id} board"
+    }
+
+}
+```
+
+### BoardController hozzáadása
+
+Hozzunk létre egy `BoardController` nevű REST kontrollert (szintén a `board` mappában), ami a `/board` kezdető végpontokért fog felelni. Legyen neki `createBoard`, `getAllBoards`, `getBoard`, `updateBoard` és `deleteBoard` metódusa, ami a BoardService szolgáltatást fogja használni. A szolgáltatáshoz hasonlóan, itt is csak a vázat fogjuk felépíteni, és később írjuk meg a függvényeket.
+
+```kotlin
+@RestController
+@RequestMapping("/board")
+class BoardController(private val boardService: BoardService) {
+
+    @PostMapping
+    fun createBoard(@RequestBody board: CreateBoardDto): String {
+        val created = boardService.createBoard(board)
+        return created
+    }
+
+    @GetMapping
+    fun getAllBoards(): String {
+        val boards = boardService.getAllBoards()
+        return boards
+    }
+
+    @GetMapping("/{id}")
+    fun getBoard(@PathVariable id: Int): String {
+        val board = boardService.getBoard(id)
+        return board
+    }
+
+    @PatchMapping("/{id}")
+    fun updateBoard(@PathVariable id: Int, @RequestBody board: UpdateBoardDto): String {
+        val updated = boardService.updateBoard(id, board)
+        return updated
+    }
+
+    @DeleteMapping("/{id}")
+    fun deleteBoard(@PathVariable id: Int): String {
+        val res = boardService.deleteBoard(id)
+        return res
+    }
+
+}
+```
+
+### Eddigi működés bemutatása - 1. fejezet végén
+
+MŰKÖDÉS BEMUTATÁSA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 ---
 
-## 2. Fejezet - xd
+## 2. Fejezet - Board és Ticket entitás, Board kidolgozása
+
+### Entitások felvétele
+
+xd
+
+### Eddigi működés bemutatása - 2. fejezet végén
+
+MŰKÖDÉS BEMUTATÁSA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 ---
 
 ## 3. Fejezet - xd
 
+### Eddigi működés bemutatása - 3. fejezet végén
+
+MŰKÖDÉS BEMUTATÁSA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 ---
 
 ## 4. Fejezet - xd
+
+### Eddigi működés bemutatása - 4. fejezet végén
+
+MŰKÖDÉS BEMUTATÁSA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 ---
 
 ## 5. Fejezet - xd
 
+### Eddigi működés bemutatása - 5. fejezet végén
+
+MŰKÖDÉS BEMUTATÁSA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 ---
 
 ## 6. Fejezet - xd
 
+### Eddigi működés bemutatása - 6. fejezet végén
+
+MŰKÖDÉS BEMUTATÁSA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 ---
 
 ## 7. Fejezet - xd
+
+### Eddigi működés bemutatása - 7. fejezet végén
+
+MŰKÖDÉS BEMUTATÁSA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 ---
 
