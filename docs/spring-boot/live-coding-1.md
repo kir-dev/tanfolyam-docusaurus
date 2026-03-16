@@ -144,9 +144,14 @@ class AppController(private val appService: AppService) {
 }
 ```
 
-### Eddigi működés bemutatása - 0. fejezet végén
+### Használható végpontok
 
-MŰKÖDÉS BEMUTATÁSA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Futtassuk az alkalmazást, és látogassunk el a következő URL-ekre:
+
+```
+http://localhost:8080/
+http://localhost:8080/hello/Miki
+```
 
 ---
 
@@ -241,9 +246,11 @@ class BoardController(private val boardService: BoardService) {
 }
 ```
 
-### Eddigi működés bemutatása - 1. fejezet végén
+### Új végpontok kipróbálása
 
-MŰKÖDÉS BEMUTATÁSA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Futtassuk az alkalmazást! Az IntelliJ IDE-ben van egy beépített eszköz a REST végpontok kipróbálására, de használhatunk külső eszközt is, például a Postman-t.
+
+![IntelliJ REST Client](../../static/img/spring/endpoints.png)
 
 ---
 
@@ -572,9 +579,9 @@ data class DetailedTicketDto(
 
 ```
 
-### Eddigi működés bemutatása - 2. fejezet végén
+### Eddigi végpontok kipróbálása - 2. fejezet végén
 
-MŰKÖDÉS BEMUTATÁSA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Futtassuk az alkalmazást! Ha van már legalább egy tábla, akkor hozzunk létre a táblához egy új ticketet! Próbáljuk ki a GET `/board/{id}` végpontot is, hogy lássuk a táblában létrehozott jegyet!
 
 ---
 
@@ -684,9 +691,9 @@ class TicketController(
 }
 ```
 
-### Eddigi működés bemutatása - 3. fejezet végén
+### Eddigi végpontok kipróbálása - 3. fejezet végén
 
-MŰKÖDÉS BEMUTATÁSA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Futtassuk az alkalmazást! Hozzunk létre egy új táblát a POST `/board` végpont segítségével, majd próbáljuk ki a többi végpontot is!
 
 ---
 
