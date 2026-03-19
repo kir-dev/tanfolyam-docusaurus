@@ -3,3 +3,373 @@ sidebar_position: 1
 ---
 
 # Spring tanfolyam - 1. alkalom
+
+---
+
+## Miről lesz szó?
+
+Megismerkedünk a Kotlin programozási nyelvvel, a Java futtatókörnyezettel, ami a program végrehajtását lehetővé teszi, a Gradle build eszközzel és a Spring Boot keretrendszerrel. Az objektum-orientált programozási minta áttekintése után nézünk egy demo-t is.
+
+Fontos: a tananyagban **videó hivatkozásokat is elhelyeztünk**, amelyek emészthetőbbé és izgalmasabbá teszi a tanulást, így **megtekintésüket mindenkinek ajánljuk**.
+
+Ha bármilyen kérdésed felmerülne, akkor [ide kattintva](https://tanfolyam.kir-dev.hu/docs/get-started/intro) megtalálod az illetékeseket, akiket tudsz keresni.
+
+---
+
+## Kotlin (és Java)
+
+Ha már a Kotlinról beszélünk, akkor nem mehetünk el figyelem nélkül a Java mellett.
+
+### Mi az a Java?
+
+![Java logó](../../static/img/spring/Java-logo.jpg)
+
+A Java **általános célú, objektumorientált programozási nyelv**, amelyet James Gosling kezdett el fejleszteni, később átvette a Sun Microsystems fejlesztett a ’90-es évek elejétől kezdve egészen 2009-ig, amikor a céget felvásárolta az Oracle.
+
+A Java **több mint 30 éve az egyik legelterjedtebb nyelv a világon**. A **nagyvállalati rendszerek, banki szoftverek, webes backendek nagy része máig Javával készül** – és ez így is marad még hosszú évekig.
+
+Ugyanakkor a Java kódja sokszor hosszabb és ismétlődőbb, mint kellene. Bizonyos hibákat (például null-érték miatti összeomlást) csak futás közben vesz észre a program, amit bosszantó és időigényes lehet debugolni. Kezdők számára különösen nehéz lehet követni a sok boilerplate kódot (üres metódusok, getter/setter sorok, ellenőrzések).
+
+### Mi az a Kotlin?
+
+![Kotlin logó](../../static/img/spring/Kotlin-logo.jpg)
+
+A Kotlin egy **modern, barátságos programozási nyelv**, amit a JetBrains fejlesztett 2011-től. Legfontosabb jellemzője, hogy **teljesen kompatibilis a Javával**, ugyanazon a platformon (**JVM**) fut, ugyanazokat a könyvtárakat használja – mégis **sokkal kényelmesebb, rövidebb és biztonságosabb kódot lehet vele írni, mint Javában**.
+
+Kezdetben főleg Android-alkalmazásokhoz vált népszerűvé (a Google 2017 óta hivatalosan is ajánlja), de mára a **backend fejlesztés egyik kedvenc eszköze** lett – különösen a **Spring Boot framework-kel párosítva**.
+
+Szóval hogyan viszonyul a Kotlin a Javához?
+Kotlin – **ugyanaz a motor, de modernebb kormány és fékek.**
+
+_**Rövid videók (YouTube: Fireship): [Kotlin](https://youtu.be/xT8oP0wy-A0?si=2D4FoSEOWCF8R4aD), [Java](https://youtu.be/m4-HM_sCvtQ?si=2TDr-9M1n6xISOjV)**._
+
+_**[Kotlin története (YouTube)](https://youtu.be/uE-1oF9PyiY?si=_wEj-exdNQRAekq5)**_
+
+---
+
+## Java futtatókörnyezet
+
+### Natív kóddal járó kellemetlenség
+
+Eddig a tanterv szerint csak C/C++ nyelvet tanultatok, amivel natív alkalmazásokat lehet készíteni. Megírtuk a kódot .c és .cpp fájlokban, majd abból a compiler segítségével egy kitüntetett architektúrájú platformra fordítottuk le a bináris, végrehajtható programot, ami CPU már gond nélkül futtatott.
+
+Mi történik, ha azt a végrehajtható fájlt egy másik architektúrájú számítógépen próbáljuk futtatni? A programunk sajnos nem fog futni, mert a másik architektúrára tervezett processzor nem érti az utasításokat, így minden egyen architekrúrára külön-külön le kell fordítanunk a programunkat, hogy ott futtatni tudjuk.
+
+Vajon mi a helyzet, ha azonos architektúrára (pl. x86), de másik operációs rendszerre (pl. Windows &rarr; Linux) próbáljuk átvinni a végrehajtó programunkat. Azt gondolnánk, hogy ebben az esetben végre szerencsével járunk, de mivel az operációs rendszerek rendszerhívási mechanikája eltér, így most is szomorkodnunk kell:cry:.
+
+Tehát nem csak eltérő architektúrák, hanem **eltérő operációs rendszerek esetén is mindig úra kell fordítanunk a kódot az adott célplatformra**, ami mind fejlesztőként, mind felhasználóként súlyosan érint minket.
+
+### JVM (Java Virtual Machine)
+
+A **hordozhetóságnak napjainkban egyre fontosabb szerepe van**, és az előbb felsorolt kellementlenségeknek a megszüntetésére egy **remek megoldást nyújt nekünk a Java virtuális gép**.
+
+![Java szlogen: write once, run anywhere](https://www.itvedant.com/blog/wp-content/uploads/2024/09/what-gives-java-its-write-once-run-anywhere-nature-1.jpg)
+
+Alább látható a különböző rétegek, amik egymásra épülnek. A Java virtuális gép (viruális gép ≈ **absztrakt számítógép architektúra**) az operációs rendszer felett helyezkedik el, és **futásidőben értelmezi neki írt kódot, amit rögtön bináris kóddá alakít, amelyet a CPU már végre tud hajtani** (az adott platformon!).
+
+![Absztrakciós rétegek](../../static/img/spring/JVM-layers.png)
+
+A Java fordítója nem bináris, végrehajtható kódra fordítja le az utasításainkat, hanem egy úgynevezett **bytecode-ra** (.class kiterjesztéssel rendelkezik). Ezt a bytecode-ot érdemes úgy elképzelni, mint a **Java virtuális gépre írt program elemi utasításai** (egyféle assembly kód), azaz ez **nem függ semmilyen harvertől vagy operációs rendszertől**.
+
+A JVM előnye, hogy ez teljes mértékben egy szoftver, így az összes platformon ugyan az a specifikáció alapján megvalósíthatjuk meg, így **bevezethetve egy új réteget, amire építve elértük a platformfüggetlenséget**.
+
+Itt azért fontos megjegyezni, hogy **sok esetben mégsem lesz teljesen platformfüggetlen az alkalmazásunk vagy csak korlátozottan**, mivel vannak olyan könyvtárak, amiket nem implementálnak az összes platformon, és a hiányzó függőséget miatt nem leszünk képesek futtatni a programunkat.
+
+![Java fordítási folyamat](https://vertex-academy.com/tutorials/wp-content/uploads/2016/08/JVM-Vertex-Academy-2.png)
+
+A valós időben értelmezett kód lehetővé teszi a platformfüggetlenséget, de végrehajtása nyilván lassabb, mint a bináris kódoké, így **teljesítmény-kritikus rendszerekben a használata nem ajánlott**.
+
+Ezen kívül a **Garbage Collector** (szemétgyűjtő) is **időszakosan teljesítmény-visszaeséseket okoz**. Javában **nem kell foglalkoznunk a memória-kezeléssel**, pontosabban a memória felszabadításával, mert mi mindig csak új objektumokat hozunk létre (memóriafoglalás), viszont időszakosan jön a garbage collector, aki mint egy jó kukásautó és "elviszi a szemetet", azaz **felszabadítja a** nem használt (pontosabban: **nem hivatkozott**) **objektumokat**.
+
+_**[Hogyan működik a JVM? (YouTube)](https://youtu.be/cAoymPToQdg?si=ex5XfPWgfJg-eGoc)**_
+
+_**[Hogyan működik a Gargabe Collector? (YouTube)](https://youtu.be/Mlbyft_MFYM?si=_oA1Bs40cX2AEubd)**_
+
+### JRE (Java Runtime Environment) és JDK (Java Development Kit)
+
+A JRE, azaz a **Java futtatókörnyezet** tartalmazza a Java virtuális gépet és az egyéb könyvtárakat, ami **lehetővé teszi számunkra a programok futtatását**. Ha például Minecraft-ot szeretnénk játszani, akkor elégséges, ha JRE telepítve van a számítógépünkön.
+
+Ha azonban előállítani is szeretnénk Java alkalmazást, akkor viszont **JDK**-ra van szükségünk, ami a JRE-n kívül a **fejlesztői eszközöket is magába foglalja**.
+
+![JMV vs JRE vs JDK](https://media.geeksforgeeks.org/wp-content/uploads/20251003165228816476/jvm.webp)
+
+## Kotlin fordító
+
+A lenti ábrán látható, hogy hogyan **működik együtt** a Kotlin fordító (**kotlinc**) a Java fordítóval (**javac**), hogy elkészítség a végleges bytecode-ot. (A Kotlin fordító **csak .kt** (kotlin) **fájlokat fordít**, .java fájlokat nem.)
+
+![Kotlin & Java compiler](../../static/img/spring/Kotlin-compiler.png)
+
+---
+
+## Build eszközök: Gradle (és Maven)
+
+Amikor egy Spring Boot + Kotlin projektet készítünk, nem elég megírni a kódot, azt is meg kell mondani a gépnek, hogy
+
+- milyen könyvtárakat (függőségeket) használjunk
+- hogyan fordítsa le a kódot
+- hogyan futtassa a teszteket
+- hogyan készítsen futtatható fájlt
+
+**Erre szolgálnak a build eszközök** (build tool-ok). A két legnépszerűbb a Maven és a **Gradle**, és mi a tanfolyamon az utóbbit fogjuk használni.
+
+### Maven
+
+Maven a **klasszikus, megbízható választás**, ami már 2004 óta van velünk, és sokáig ez volt a Java világ standardja. **Sok nagyvállalatnál máig ezt használják**, mert stabil és jól dokumentált.
+
+![Maven logó](../../static/img/spring/Maven-logo.jpg)
+
+Akkor mégis mi vele a baj?
+
+**Konfigurációja egy** pom.xml (Project Object Model) nevű **XML fájlban történik**, és éppen ez a hátránya. Az XML fájlokat szerkeszteni és áttekinteni egy kegyetlen, embert próbáló feladat. Hátránya, hogy a fájl **gyorsan hosszúra tud nőni és ismétlődésekkel tud megtelni**, főleg bonyolultabb projekteknél.
+
+### Gradle
+
+A **modern, rugalmas** kedvencünk, ami 2007 óra létezik, és napjainkra **különösen népszerűvé** vált Kotlin projektekben és Spring Boot fejlesztésben.
+
+![Gradle logó](../../static/img/spring/Gradle-logo.jpg)
+
+Konfigurációja Kotlin DSL-lel történik (**build.gradle.kts** fájl) – ez azt jelenti, hogy **maga a build fájl is Kotlin kód, amit az IDE** (pl. IntelliJ:heart:) **szépen színez, autocomplete-ol és ellenőriz**. A Gradle **gyorsabb a mindennapi fejlesztésben**, mivel okos cache-eket használ, és **csak azt építi újra, ami változott** (incremental build), így gyorsítva a fordítás folyamtát. A **konfigurációja sokkal rugalmasabb, könnyebb testreszabni és átlátni**, mint a Maven-ét.
+
+_**[Gradle használatának előnyei (YouTube)](https://youtu.be/NTnJwQbxRss?si=qbw7DcDZnVrit2YP)**_
+
+---
+
+## IntelliJ IDEA
+
+Az IntelliJ IDEA (rövdien csak IntelliJ) a **JetBrains által fejlesztett egyik legjobb IDE** (integrált fejlesztői környezet), **Java és Kotlin programozáshoz**. Maga a JetBrains alkotta meg a Kotlint, így itt a legsimább az élmény.
+
+![IntelliJ logó](../../static/img/spring/IntelliJ-logo.png)
+
+Két verzió elérhető:
+
+- **Community:** ingyenes
+
+- **Ultimate:** előfizetős, de **@edu.bme.hu-s fiókkal regisztráció után**, tanulmányi célokra **ingyenesen használható**. Rengeteg hasznos funkcióval rendelkezik, köztük Spring Boot projekt létrehozása, így **mindenkinek ez az IDE használata ajánlott**!
+
+_**[JetBrains tanulmányi csomag!](https://www.jetbrains.com/academy/student-pack/)**_
+
+_**[IntelliJ IDEA története (YouTube)](https://youtu.be/jTZVx4TCmI4?si=plvTstOzBA9bDQmm)**_
+
+---
+
+## Spring Boot
+
+A Spring Boot **egy framework** (keretrendszer), **ami a Spring** nevű óriási Java **ökoszisztéma tetejére épül**. A Spring maga már 20+ éve az **egyik legnépszerűbb eszköz enterprise Java fejlesztéshez** – de régen nagyon sok konfigurációt, XML-t és boilerplate kódot igényelt.
+A Spring Boot 2014-ben indult azzal a céllal, hogy ezt az egészet drasztikusan leegyszerűsítse. A mottója: „Just run” – azaz írd meg a kódot, és máris futtatható egy önálló alkalmazás, minimális beállítással.
+
+![Spring logó](../../static/img/spring/Spring-Logo.png)
+
+### Miért olyan népszerű a Spring Boot?
+
+Képzeld el, hogy egy webes API-t, REST szolgáltatást vagy mikroszolgáltatást akarsz készíteni adatbázissal, biztonsággal, logolással. Normál Springgel ehhez órákig/hónapokig konfigurálnál dolgokat. **Spring Boot-tal:**
+
+- **Automatikus konfiguráció:** pl. ha látja, hogy van egy adatbázis driver a classpath-en, **magától beállítja a kapcsolatot**. Ha van webes dependency, **beépít egy Tomcat szervert**.
+- **Beépített szerverek** (Tomcat, Jetty, Undertow): **nem kell külön app szervert telepíteni**, csak elindítjuk és már fut is a 8080-as porton.
+- **Spring Initializr** ([start.spring.io](https://start.spring.io/)): pár kattintással **generál neked egy kész projektet** Gradle/Maven + Kotlin/Java + kívánt függőségekkel (Web, JPA, Security stb.)
+- **Production-ready feature-ök out-of-the-box:** health check endpoint (/actuator/health), metrikák (/actuator/metrics), logolás, külső konfiguráció (application.yml /properties), graceful shutdown stb.
+- **Kiváló Kotlin támogatás:** a 4.0+ verziókban **Kotlin-first feature-ök érkeznek**, pl. jobb co-routine integráció, null-safety kihasználása a Spring komponensekben.
+
+### Spring vs Spring Boot röviden és szemléletesen
+
+**Spring** = egy **hatalmas doboz LEGO kocka**
+**Spring Boot** = ugyan az a doboz, de **előre összerakott darabok:** házak, autók, hidak, **és egy varázspálca**, ami a **hiányzó darabokat magától odateszi**, ha látja, hogy szükséged van rá.
+
+_**Mi az a Spring Boot és miért jó? (YouTube): [CodeHead](https://youtu.be/-ILh8pl5lj8?si=sUWMl746mfezY7_4), [Mosh](https://youtu.be/v73-ps01c5w?si=EcJ66S3f6maaDH5P)**._
+
+---
+
+## Demo app
+
+Nézzük meg, hogy milyen egyszerűen el lehet készíteni egy backendet Spring Bootban!
+
+Először is **hozzunk létre egy új projektet** IntelliJben:
+
+![Demo setup](../../static/img/spring/Demo-setup.png)
+
+Ezután **vegyük fel a szükséges függőségeket** (könyvtárakat) a `build.gradle.kts` fájlban:
+
+```gradle
+dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    runtimeOnly("com.h2database:h2")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+```
+
+A függőségeket `GroupID`**:**`ArtifactID`**:**`Version` formátumban kell megadni Gradleben (a verziószámot lehagyhatjuk), ahol a `GroupID` az általában a fejlesztő szervezet vagy a projekt fordított domain neve, míg az `ArtifactID` magát a konkrét könyvtárat vagy modult.
+
+**Fontos:** Hogy **újratöltsük a projektet**, kattintsunk rá a jobb felső sarokban megjelenő elefántra:elephant: Ha ezt nem tesszük meg, akkor nem fognak frissülni az imént hozzáadott függőségek, és furcsa dolgok történhetnek az IDE-ben.
+
+![Gradle refresh](../../static/img/spring/gradle-elephant.png)
+
+Fogjunk is hozzá az első Spring Boot backend megírásához! **Készítsünk egy webszervert, ami a "/" endpointon** (ami jelen esetben a `http://localhost:8080/` URL-en elérhető) **visszaad egy sztringet:** `Hello World!`.
+
+**Vegyünk fel egy osztályt DemoApplication néven**, amit felruházunk két annótációval (az @Annotáció a forráskód extra információval/funkcionalitással való kibővítése). A `@SpringBootApplication` jelöli, hogy ez az osztály valósítja meg a Spring Boot alkalmazásunkat, míg a `@RestController` azt írja le, hogy az osztályunk egyben egy kontroller is lesz, ami a végpontokat kezeli.
+
+Az osztályon belül **hozzunk létre egy GET típusú végpontot** a `@GetMapping` annotáció `greet()` (köszönt) függvényre való helyezésével, ami **visszatér egy** `"Hello World!"` **sztringgel**.
+
+```kotlin
+package com.example.demo
+
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.runApplication
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RestController
+
+@SpringBootApplication
+@RestController
+class DemoApplication {
+    @GetMapping(path = ["/"])
+    fun greet() : String {
+        return "Hello World!"
+    }
+}
+
+fun main(args: Array<String>) {
+    runApplication<DemoApplication>(*args)
+}
+```
+
+Azt figyeljük meg, hogy **itt nem kellett példányosítani és argumentumként átadni**, hanem a `main` függvényen belül egy `runApplication` hívást végzünk, aminek csak átadjuk, hogy egy DemoApplication típusú alkalmazást szeretnénk futtatni, és **a dependency injection** (a Spring Boot-os "varázspálcával") **kitölti helyettünk**.
+
+![Gradle refresh](../../static/img/spring/Run-application.jpg)
+
+Ha **futtatjuk a programot**, akkor elindul egy webszerver a 8080-as porton, és a `http://localhost:8080/` URL-t meglátogatva láthatjuk a `Hello World!` szövegünket.
+
+![Gradle refresh](../../static/img/spring/Hello-world.jpg)
+
+---
+
+## OOP
+
+**C-s világban a változóink és a függvényeink össze-vissza helyezkednek el**, így egy nagyobb projeknél szinte biztos, hogy **spagetti kódba** futunk (amikor annyira bonyolult a működés, hogy nem lehet kibogózni mi mit csinál, és teljesen karbantarthatatlan a forráskód).
+
+Ennek a problémának az orvosolására lett kitatlálva az **OOP** (Objektum Orientált Programozás), ami a **logikailag összetartozó változókat és függvényeket összecsomagolja egy osztályba**, továbbá megkönnyíti komplex problémák modellezését, csökkenti a kódduplikálást, és rugalmasabbá teszi a fejlesztést.
+
+Az **osztály egy sablon/tervrajz**, és az **objektum** az pedig **maga a példányosított dolog**. Egy osztály alapján (általában) több objektumot is lehet példányosítani. **Ha az osztály egy autó tervrajza, akkor a gyártósorról leguruló járművek az objektumok**.
+
+### Az OOP négy alappillére
+
+![Gradle refresh](../../static/img/spring/OOP-4-pillars.png)
+
+#### Egységbezárás (Encapsulation)
+
+A logikailag összetartozó változók és függvények összecsomagolásán kívül az **objektum belső állapotának véldemét is jelenti**, mivel **csak publikus metódusokon** (tagfüggvényeken) **keresztül érhetők el az adatok**.
+
+#### Öröklés (Inheritance)
+
+Ha egy osztályból leszármazunk, akkor a leszármazott osztály az **ősosztály tulajdonságait** (jelen esetben tagváltozóit és tagfüggvényeit) **örökli**, így **megúszhatunk nagyon sok kódduplikációt**, és **rugalmasabbá tehetjük a későbbi fejlesztést**.
+
+Tegyük fel, hogy egy forgalmi rendszert modellezünk különböző járművekkel és a **Jármű (absztrakt) ősosztályban megvalósítunk rengeteg dolgot** például a navigációt, így egy **új járművel való bővítés esetén** (pl. motor vagy busz) **nem kell** újra és újra **leírni a felesleges boilerplate kódot**.
+
+**Gondoljuk bele abba, hogy hány helyen kéne módosítani a forráskódot**, ha mostantól máshogyan kanyarodnánk jobbra (pl. más protokoll szerint) ... jó esetben csak egy helyen, a Jármű osztályban.
+
+**Fontos: Javás világban csak egy osztályból származhatunk le, azaz nincs többszörös öröklés!**
+
+#### Sokalakúság (Polymorphism)
+
+Egy objektum (típusától függően) **máshogyan viselkedhet**.
+
+Vegyünk egy **alakzat ősosztályt**, amiből különböző alakzatok származnak le pl. kör, négyzet és háromszög. Ha a kódunkban van egy olyan rész, ami az **alakzat kirajzolásáért** felel, akkor elég **`alakzat.rajzol();`** parancsot írni, és a **mögötte lévő osztály az lekezeli saját maga kirajzolását**, és nem kell külön, feleslegesen rajzolKör(), rajzolNégyzet(), rajzolHáromszög() függvényeket írni, majd egy switch case-ben kiválsztani a megfelelőt minden egyes alkalommal.
+
+#### Absztrakció (Abszrakció)
+
+A **külvilág felé jelentéktelen függvények és változók elrejtése**, és **csak a lényeges részek mutatása**.
+
+_**[OOP 4 alappillére (YouTube)](https://youtu.be/pTB0EiLXUC8?si=MpStxDDM_TuAi2Ov)**_
+
+## Interfészek
+
+### Mi az az interfész?
+
+Az interfész **olyan, mint egy szerződés: megmondja, hogy egy osztálynak milyen metódusokat** (tagfüggvényeket) **kell mindenképpen tudnia**.
+
+Ha egy osztály vállalja, hogy megvalósít egy interfészt, akkor az **interfésznek minden metódusával köteles rendelkeznie**, ami azt jelenti, hogy bármely ilyen osztálynak meghívható az interfész akármelyik metódusa.
+
+### Mire jók az interfészek?
+
+A **jól definiált interterfészek elengedhetetlenek** nagy projektek esetén, mert **ezek mentén modulokra bonthatjuk a rendszerünket**, amiket külön-külön párhuzamosan is fejleszthetünk, ráadásul **egy komponens cseréje esetén nem kell mindent újraírni**, hanem csak az interfész vonaláig. Mondhatnám szépen nézne ki, ha egy adatbáziskezelő szoftvert újra kéne írni, ha az alatta lévő fizikai tártolót merevlemezről SSD-re cserélnénk.
+
+Nézzünk az interfészekre még egy szemléletes példát!
+
+**Vegyük a HDMI-t**, mint egy olyan interfészt, ami **videó** (és audió) **megjelenítésére alkalmas portot definiál**. Ezt az interfész pl. egy TV, monitor vagy projektor **valósítaná meg**, míg egy PC, laptop vagy konzol **tudná használni**.
+
+Rendkívül fontos itt megemlíteni, hogy itt egy projektort egyáltalán nem érdekli, hogy az interfész másik végén mi található (pl. MacBook vagy Xbox konzol), neki a feladata a kép megjelenítése, amihez az információt jól meghatározott úton kapja. Ez fordítva is elmondható: egy számítógép csak kiküldi magából a videót, és a monitor majd valahogyan megjeleníti.
+
+Technológiailag a számítógépek videókártyája eltér, és egy projektor is teljesen máshogyan jelenít meg képet, mint egy OLED TV, mégis bármilyen videót kiadó eszköz tud kommunikálni bármilyen képet lejátszani képes eszközzel, amennyiben mind a ketten támogatják a HDMI interfészt, és **nem kell az N-féle forrás eszköz és M-féle lejátszó eszköz között N\*M különböző verziót implementálni**!
+
+**Javás világban csak egyetlen osztályből lehet leszármazni, így a maradékot interfészek megvalósításával kell megoldani!!!**
+
+_**[Interfészek (YouTube)](https://www.youtube.com/watch?v=c2sTQk9opO8)**_
+
+---
+
+## MVC
+
+MVC szeparáció
+
+_**[MVC a webfejlesztésben (YouTube)](https://youtu.be/DUg2SWWK18I?si=mnspEoQvxQOl7GqT)**_
+
+## Modell, Repository, Service, Controller
+
+MVC a Springben
+
+_**[MVC a Springben + Annotációk (YouTube)](https://youtu.be/zGSX5AqfKvU?si=Iilg_vO2PDqb9eYd)**_
+
+---
+
+## Kotlin alapok
+
+Basic Kotlin alapok, hogy értsék a kódot a későbbiekben
+
+---
+
+## Demo bővítése Service-szel
+
+Üzleti logika hozzáadása Service-ben.
+
+---
+
+## Controller code
+
+## DTO
+
+---
+
+## Adatbázis: JPA és H2
+
+## Mentsük le a köszönéseket
+
+- data class GreetingEntity
+- application.properties: spring.jpa.show-sql=true & Hibernate üzenetek
+
+%%%%%%%%%%%%%
+
+---
+
+## IntelliJ & JDK download
+
+A második és harmadik alkalomra **live coding**-ot kervezünk, így **kérünk mindenkit, hogy töltse le az IntelliJ IDEA**-t a laptopjára, lehetőleg az **Ultimate** verziót, amihez a JetBrains student pack-et _**[ezen a linket lehet igényelni](https://www.jetbrains.com/academy/student-pack/)**_.
+
+Hogyha valakinek nincsen letöltve a **JDK 25** (Java fejtesztői csomag), akkor azt _**[ide kattintva](https://www.oracle.com/java/technologies/downloads/#jdk25-windows)**_ megteheti.
+
+**Hogy biztosak legyünk abban, hogy jól setup-oltuk a fejlesztői környezetet, klónozzuk le** a _**[demo projektet](https://github.com/MiklosBacsi)**_, és **prójáljuk meg futtatni**! Ráadásul ez egy remek lehetőség a fejlesztői körvezettel való ismerkedésre, így nem a live coding alkalmával fogtok először találkozni
+
+Amennyiben szükséges _**[ide kattintva](https://tanfolyam.kir-dev.hu/docs/webes-alapok/git#alapvet%C5%91-parancsok-workflow-bemutat%C3%A1sa-demo-seg%C3%ADts%C3%A9g%C3%A9vel)**_ felfrissítheted a git tudásodat.
+
+Amennyiben valamilyen okból a Gradle nem lenne linkelve, akkor ezt a "Link Gradle Projekt" feliratra való kattintással tegyük meg.
+
+![Gradle refresh](../../static/img/spring/Link-gradle-project.jpg)
+
+Az alkalmazás elindítása után próbáljuk ki a %%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+---
+
+Készítette: **[Bácsi Miklós](https://github.com/MiklosBacsi)**
