@@ -9,6 +9,10 @@ const config: Config = {
   tagline: 'Böngéssz a tanfolyamok anyagaiban.',
   favicon: 'img/favicon.png',
 
+  markdown: {
+    mermaid: true,
+  },
+
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
     v4: true, // Improve compatibility with the upcoming Docusaurus v4
@@ -65,6 +69,8 @@ const config: Config = {
       } satisfies Preset.Options,
     ],
   ],
+
+  themes: ['@docusaurus/theme-mermaid'],
 
   themeConfig: {
     // Replace with your project's social card

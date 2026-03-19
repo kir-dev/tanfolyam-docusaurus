@@ -14,6 +14,8 @@ Fontos: a tananyagban **videó hivatkozásokat is elhelyeztünk**, amelyek emés
 
 Ha bármilyen kérdésed felmerülne, akkor [ide kattintva](https://tanfolyam.kir-dev.hu/docs/get-started/intro) megtalálod az illetékeseket, akiket tudsz keresni.
 
+Előadás felvételeinket [visszanézheted YouTube-on:wink:](https://www.youtube.com/watch?v=LJTRZUtuP1Y&list=PLJWjD3oW-Be6ECQyG-8rmuhvmHQ54E4YB)
+
 ---
 
 ## Kotlin (és Java)
@@ -24,7 +26,7 @@ Ha már a Kotlinról beszélünk, akkor nem mehetünk el figyelem nélkül a Jav
 
 ![Java logó](../../static/img/spring/Java-logo.jpg)
 
-A Java **általános célú, objektumorientált programozási nyelv**, amelyet James Gosling kezdett el fejleszteni, később átvette a Sun Microsystems fejlesztett a ’90-es évek elejétől kezdve egészen 2009-ig, amikor a céget felvásárolta az Oracle.
+A Java **általános célú, objektumorientált programozási nyelv**, amelyet James Gosling kezdett el fejleszteni, később átvette a Sun Microsystems, aki fejlesztette a ’90-es évek elejétől kezdve egészen 2009-ig, amikor a céget felvásárolta az Oracle.
 
 A Java **több mint 30 éve az egyik legelterjedtebb nyelv a világon**. A **nagyvállalati rendszerek, banki szoftverek, webes backendek nagy része máig Javával készül** – és ez így is marad még hosszú évekig.
 
@@ -34,7 +36,7 @@ Ugyanakkor a Java kódja sokszor hosszabb és ismétlődőbb, mint kellene. Bizo
 
 ![Kotlin logó](../../static/img/spring/Kotlin-logo.jpg)
 
-A Kotlin egy **modern, barátságos programozási nyelv**, amit a JetBrains fejlesztett 2011-től. Legfontosabb jellemzője, hogy **teljesen kompatibilis a Javával**, ugyanazon a platformon (**JVM**) fut, ugyanazokat a könyvtárakat használja – mégis **sokkal kényelmesebb, rövidebb és biztonságosabb kódot lehet vele írni, mint Javában**.
+A Kotlin egy **modern, barátságos programozási nyelv**, amit a JetBrains hozott létre és fejleszt 2011 óta. Legfontosabb jellemzője, hogy **teljesen kompatibilis a Javával**, ugyanazon a platformon (**JVM**) fut, ugyanazokat a könyvtárakat használja – mégis **sokkal kényelmesebb, rövidebb és biztonságosabb kódot lehet vele írni, mint Javában**.
 
 Kezdetben főleg Android-alkalmazásokhoz vált népszerűvé (a Google 2017 óta hivatalosan is ajánlja), de mára a **backend fejlesztés egyik kedvenc eszköze** lett – különösen a **Spring Boot framework-kel párosítva**.
 
@@ -53,7 +55,7 @@ _**[Kotlin története (YouTube)](https://youtu.be/uE-1oF9PyiY?si=_wEj-exdNQRAek
 
 Eddig a tanterv szerint csak C/C++ nyelvet tanultatok, amivel natív alkalmazásokat lehet készíteni. Megírtuk a kódot .c és .cpp fájlokban, majd abból a compiler segítségével egy kitüntetett architektúrájú platformra fordítottuk le a bináris, végrehajtható programot, ami CPU már gond nélkül futtatott.
 
-Mi történik, ha azt a végrehajtható fájlt egy másik architektúrájú számítógépen próbáljuk futtatni? A programunk sajnos nem fog futni, mert a másik architektúrára tervezett processzor nem érti az utasításokat, így minden egyen architekrúrára külön-külön le kell fordítanunk a programunkat, hogy ott futtatni tudjuk.
+Mi történik, ha azt a végrehajtható fájlt egy másik architektúrájú számítógépen próbáljuk futtatni? A programunk sajnos nem fog futni, mert a másik architektúrára tervezett processzor nem érti az utasításokat, így minden egyen architektrúrára külön-külön le kell fordítanunk a programunkat, hogy ott futtatni tudjuk.
 
 Vajon mi a helyzet, ha azonos architektúrára (pl. x86), de másik operációs rendszerre (pl. Windows &rarr; Linux) próbáljuk átvinni a végrehajtó programunkat. Azt gondolnánk, hogy ebben az esetben végre szerencsével járunk, de mivel az operációs rendszerek rendszerhívási mechanikája eltér, így most is szomorkodnunk kell:cry:.
 
@@ -61,15 +63,15 @@ Tehát nem csak eltérő architektúrák, hanem **eltérő operációs rendszere
 
 ### JVM (Java Virtual Machine)
 
-A **hordozhetóságnak napjainkban egyre fontosabb szerepe van**, és az előbb felsorolt kellementlenségeknek a megszüntetésére egy **remek megoldást nyújt nekünk a Java virtuális gép**.
+A **hordozhatóságnak napjainkban egyre fontosabb szerepe van**, és az előbb felsorolt kellementlenségeknek a megszüntetésére egy **remek megoldást nyújt nekünk a Java virtuális gép**.
 
 ![Java szlogen: write once, run anywhere](https://www.itvedant.com/blog/wp-content/uploads/2024/09/what-gives-java-its-write-once-run-anywhere-nature-1.jpg)
 
-Alább látható a különböző rétegek, amik egymásra épülnek. A Java virtuális gép (viruális gép ≈ **absztrakt számítógép architektúra**) az operációs rendszer felett helyezkedik el, és **futásidőben értelmezi neki írt kódot, amit rögtön bináris kóddá alakít, amelyet a CPU már végre tud hajtani** (az adott platformon!).
+Alább látható a különböző rétegek, amik egymásra épülnek. A Java virtuális gép (virtuális gép ≈ **absztrakt számítógép architektúra**) az operációs rendszer felett helyezkedik el, és **futásidőben értelmezi neki írt kódot, amit rögtön bináris kóddá alakít, amelyet a CPU már végre tud hajtani** (az adott platformon!).
 
 ![Absztrakciós rétegek](../../static/img/spring/JVM-layers.png)
 
-A Java fordítója nem bináris, végrehajtható kódra fordítja le az utasításainkat, hanem egy úgynevezett **bytecode-ra** (.class kiterjesztéssel rendelkezik). Ezt a bytecode-ot érdemes úgy elképzelni, mint a **Java virtuális gépre írt program elemi utasításai** (egyféle assembly kód), azaz ez **nem függ semmilyen harvertől vagy operációs rendszertől**.
+A Java fordítója nem bináris, végrehajtható kódra fordítja le az utasításainkat, hanem egy úgynevezett **bytecode-ra** (.class kiterjesztéssel rendelkezik). Ezt a bytecode-ot érdemes úgy elképzelni, mint a **Java virtuális gépre írt program elemi utasításai** (egyféle assembly kód), azaz ez **nem függ semmilyen hardvertől vagy operációs rendszertől**.
 
 A JVM előnye, hogy ez teljes mértékben egy szoftver, így az összes platformon ugyan az a specifikáció alapján megvalósíthatjuk meg, így **bevezethetve egy új réteget, amire építve elértük a platformfüggetlenséget**.
 
@@ -95,7 +97,7 @@ Ha azonban előállítani is szeretnénk Java alkalmazást, akkor viszont **JDK*
 
 ## Kotlin fordító
 
-A lenti ábrán látható, hogy hogyan **működik együtt** a Kotlin fordító (**kotlinc**) a Java fordítóval (**javac**), hogy elkészítség a végleges bytecode-ot. (A Kotlin fordító **csak .kt** (kotlin) **fájlokat fordít**, .java fájlokat nem.)
+A lenti ábrán látható, hogy hogyan **működik együtt** a Kotlin fordító (**kotlinc**) a Java fordítóval (**javac**), hogy elkészítsék a végleges bytecode-ot. (A Kotlin fordító **csak .kt** (kotlin) **fájlokat fordít**, .java fájlokat nem.)
 
 ![Kotlin & Java compiler](../../static/img/spring/Kotlin-compiler.png)
 
@@ -128,7 +130,7 @@ A **modern, rugalmas** kedvencünk, ami 2007 óra létezik, és napjainkra **kü
 
 ![Gradle logó](../../static/img/spring/Gradle-logo.jpg)
 
-Konfigurációja Kotlin DSL-lel történik (**build.gradle.kts** fájl) – ez azt jelenti, hogy **maga a build fájl is Kotlin kód, amit az IDE** (pl. IntelliJ:heart:) **szépen színez, autocomplete-ol és ellenőriz**. A Gradle **gyorsabb a mindennapi fejlesztésben**, mivel okos cache-eket használ, és **csak azt építi újra, ami változott** (incremental build), így gyorsítva a fordítás folyamtát. A **konfigurációja sokkal rugalmasabb, könnyebb testreszabni és átlátni**, mint a Maven-ét.
+Konfigurációja Kotlin DSL-lel történik (**build.gradle.kts** fájl) – ez azt jelenti, hogy **maga a build fájl is Kotlin kód, amit az IDE** (pl. IntelliJ:heart:) **szépen színez, autocomplete-ol és ellenőriz**. A Gradle **gyorsabb a mindennapi fejlesztésben**, mivel okos cache-eket használ, és **csak azt építi újra, ami változott** (incremental build), így gyorsítva a fordítás folyamtát. A **konfigurációja sokkal rugalmasabb, könnyebb testre szabni és átlátni**, mint a Maven-ét.
 
 _**[Gradle használatának előnyei (YouTube)](https://youtu.be/NTnJwQbxRss?si=qbw7DcDZnVrit2YP)**_
 
@@ -172,6 +174,7 @@ Képzeld el, hogy egy webes API-t, REST szolgáltatást vagy mikroszolgáltatás
 ### Spring vs Spring Boot röviden és szemléletesen
 
 **Spring** = egy **hatalmas doboz LEGO kocka**
+
 **Spring Boot** = ugyan az a doboz, de **előre összerakott darabok:** házak, autók, hidak, **és egy varázspálca**, ami a **hiányzó darabokat magától odateszi**, ha látja, hogy szükséged van rá.
 
 _**Mi az a Spring Boot és miért jó? (YouTube): [CodeHead](https://youtu.be/-ILh8pl5lj8?si=sUWMl746mfezY7_4), [Mosh](https://youtu.be/v73-ps01c5w?si=EcJ66S3f6maaDH5P)**._
@@ -209,12 +212,12 @@ A függőségeket `GroupID`**:**`ArtifactID`**:**`Version` formátumban kell meg
 
 Fogjunk is hozzá az első Spring Boot backend megírásához! **Készítsünk egy webszervert, ami a "/" endpointon** (ami jelen esetben a `http://localhost:8080/` URL-en elérhető) **visszaad egy sztringet:** `Hello World!`.
 
-**Vegyünk fel egy osztályt DemoApplication néven**, amit felruházunk két annótációval (az @Annotáció a forráskód extra információval/funkcionalitással való kibővítése). A `@SpringBootApplication` jelöli, hogy ez az osztály valósítja meg a Spring Boot alkalmazásunkat, míg a `@RestController` azt írja le, hogy az osztályunk egyben egy kontroller is lesz, ami a végpontokat kezeli.
+**Vegyünk fel egy osztályt DemoApplication néven**, amit felruházunk két annotációval (az @Annotáció a forráskód extra információval/funkcionalitással való kibővítése). A `@SpringBootApplication` jelöli, hogy ez az osztály valósítja meg a Spring Boot alkalmazásunkat, míg a `@RestController` azt írja le, hogy az osztályunk egyben egy kontroller is lesz, ami a végpontokat kezeli.
 
 Az osztályon belül **hozzunk létre egy GET típusú végpontot** a `@GetMapping` annotáció `greet()` (köszönt) függvényre való helyezésével, ami **visszatér egy** `"Hello World!"` **sztringgel**.
 
 ```kotlin
-package com.example.demo
+package hu.kirdev.demo
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -237,11 +240,11 @@ fun main(args: Array<String>) {
 
 Azt figyeljük meg, hogy **itt nem kellett példányosítani és argumentumként átadni**, hanem a `main` függvényen belül egy `runApplication` hívást végzünk, aminek csak átadjuk, hogy egy DemoApplication típusú alkalmazást szeretnénk futtatni, és **a dependency injection** (a Spring Boot-os "varázspálcával") **kitölti helyettünk**.
 
-![Gradle refresh](../../static/img/spring/Run-application.jpg)
+![Run application](../../static/img/spring/Run-application.jpg)
 
 Ha **futtatjuk a programot**, akkor elindul egy webszerver a 8080-as porton, és a `http://localhost:8080/` URL-t meglátogatva láthatjuk a `Hello World!` szövegünket.
 
-![Gradle refresh](../../static/img/spring/Hello-world.jpg)
+![Demo: Hello World!](../../static/img/spring/Hello-world.jpg)
 
 ---
 
@@ -249,17 +252,17 @@ Ha **futtatjuk a programot**, akkor elindul egy webszerver a 8080-as porton, és
 
 **C-s világban a változóink és a függvényeink össze-vissza helyezkednek el**, így egy nagyobb projeknél szinte biztos, hogy **spagetti kódba** futunk (amikor annyira bonyolult a működés, hogy nem lehet kibogózni mi mit csinál, és teljesen karbantarthatatlan a forráskód).
 
-Ennek a problémának az orvosolására lett kitatlálva az **OOP** (Objektum Orientált Programozás), ami a **logikailag összetartozó változókat és függvényeket összecsomagolja egy osztályba**, továbbá megkönnyíti komplex problémák modellezését, csökkenti a kódduplikálást, és rugalmasabbá teszi a fejlesztést.
+Ennek a problémának az orvosolására lett kitalálva az **OOP** (Objektum Orientált Programozás), ami a **logikailag összetartozó változókat és függvényeket összecsomagolja egy osztályba**, továbbá megkönnyíti komplex problémák modellezését, csökkenti a kódduplikálást, és rugalmasabbá teszi a fejlesztést.
 
 Az **osztály egy sablon/tervrajz**, és az **objektum** az pedig **maga a példányosított dolog**. Egy osztály alapján (általában) több objektumot is lehet példányosítani. **Ha az osztály egy autó tervrajza, akkor a gyártósorról leguruló járművek az objektumok**.
 
 ### Az OOP négy alappillére
 
-![Gradle refresh](../../static/img/spring/OOP-4-pillars.png)
+![4 pillars of OOP](../../static/img/spring/OOP-4-pillars.png)
 
 #### Egységbezárás (Encapsulation)
 
-A logikailag összetartozó változók és függvények összecsomagolásán kívül az **objektum belső állapotának véldemét is jelenti**, mivel **csak publikus metódusokon** (tagfüggvényeken) **keresztül érhetők el az adatok**.
+A logikailag összetartozó változók és függvények összecsomagolásán kívül az **objektum belső állapotának védelmét is jelenti**, mivel **csak publikus metódusokon** (tagfüggvényeken) **keresztül érhetők el az adatok**.
 
 #### Öröklés (Inheritance)
 
@@ -277,7 +280,7 @@ Egy objektum (típusától függően) **máshogyan viselkedhet**.
 
 Vegyünk egy **alakzat ősosztályt**, amiből különböző alakzatok származnak le pl. kör, négyzet és háromszög. Ha a kódunkban van egy olyan rész, ami az **alakzat kirajzolásáért** felel, akkor elég **`alakzat.rajzol();`** parancsot írni, és a **mögötte lévő osztály az lekezeli saját maga kirajzolását**, és nem kell külön, feleslegesen rajzolKör(), rajzolNégyzet(), rajzolHáromszög() függvényeket írni, majd egy switch case-ben kiválsztani a megfelelőt minden egyes alkalommal.
 
-#### Absztrakció (Abszrakció)
+#### Absztrakció (Abstraction)
 
 A **külvilág felé jelentéktelen függvények és változók elrejtése**, és **csak a lényeges részek mutatása**.
 
@@ -293,7 +296,7 @@ Ha egy osztály vállalja, hogy megvalósít egy interfészt, akkor az **interf�
 
 ### Mire jók az interfészek?
 
-A **jól definiált interterfészek elengedhetetlenek** nagy projektek esetén, mert **ezek mentén modulokra bonthatjuk a rendszerünket**, amiket külön-külön párhuzamosan is fejleszthetünk, ráadásul **egy komponens cseréje esetén nem kell mindent újraírni**, hanem csak az interfész vonaláig. Mondhatnám szépen nézne ki, ha egy adatbáziskezelő szoftvert újra kéne írni, ha az alatta lévő fizikai tártolót merevlemezről SSD-re cserélnénk.
+A **jól definiált interfészek elengedhetetlenek** nagy projektek esetén, mert **ezek mentén modulokra bonthatjuk a rendszerünket**, amiket külön-külön párhuzamosan is fejleszthetünk, ráadásul **egy komponens cseréje esetén nem kell mindent újraírni**, hanem csak az interfész vonaláig. Mondhatnám szépen nézne ki, ha egy adatbáziskezelő szoftvert újra kéne írni, ha az alatta lévő fizikai tártolót merevlemezről SSD-re cserélnénk.
 
 Nézzünk az interfészekre még egy szemléletes példát!
 
@@ -303,7 +306,7 @@ Rendkívül fontos itt megemlíteni, hogy itt egy projektort egyáltalán nem é
 
 Technológiailag a számítógépek videókártyája eltér, és egy projektor is teljesen máshogyan jelenít meg képet, mint egy OLED TV, mégis bármilyen videót kiadó eszköz tud kommunikálni bármilyen képet lejátszani képes eszközzel, amennyiben mind a ketten támogatják a HDMI interfészt, és **nem kell az N-féle forrás eszköz és M-féle lejátszó eszköz között N\*M különböző verziót implementálni**!
 
-**Javás világban csak egyetlen osztályből lehet leszármazni, így a maradékot interfészek megvalósításával kell megoldani!!!**
+**Javás világban csak egyetlen osztályból lehet leszármazni, így a maradékot interfészek megvalósításával kell megoldani!!!**
 
 _**[Interfészek (YouTube)](https://www.youtube.com/watch?v=c2sTQk9opO8)**_
 
@@ -311,13 +314,32 @@ _**[Interfészek (YouTube)](https://www.youtube.com/watch?v=c2sTQk9opO8)**_
 
 ## MVC
 
-MVC szeparáció
+Az MVC (**Model-View-Controller**) egy **népszerű tervezési minta** (design pattern), amit főleg webes alkalmazásoknál használnak, ami három fő részre bontja a programot:
+
+- **Model:** az adatok és az üzleti logika (adatbázis, számítások, szabályok)
+- **View:** a megjelenítés (HTML, képernyő, amit a felhasználó lát)
+- **Controller:** a „közvetítő”, ami fogadja a felhasználó kérését, kezeli a Model-t, és eldönti, melyik View-t küldje vissza
+
+![MVC](../../static/img/spring/MVC.jpg)
+
+Az MVC jelentősége abban rejlik, hogy **tisztán szétválasztja a felelősségeket**, így a kód olvashatóbb, könnyebben bővíthető, tesztelhető és karbantartható lesz. **Például ha megváltoztatod a dizájnt (View), akkor nem kell piszkálnod az adatokat** (Model), és fordítva – ez különösen nagy projekteknél spórol rengeteg időt és hibát. **Spring Boot-ban** (és sok más modern frameworkben) **ez a minta az alapja a webes alkalmazások felépítésének**.
 
 _**[MVC a webfejlesztésben (YouTube)](https://youtu.be/DUg2SWWK18I?si=mnspEoQvxQOl7GqT)**_
 
-## Modell, Repository, Service, Controller
+## MVC a Spring Bootban
 
-MVC a Springben
+A **Spring MVC** keretrendszer kezeli a webes kéréseket a klasszikus Model-View-Controller minta szerint:
+
+- **Controller:** **Vezérlésért felelős**, azaz fogadja a HTTP kérést (pl. @GetMapping, @PostMapping), feldolgozza a bemenetet, meghívja a megfelelő Service-t, majd visszaadja a választ (általában egy View nevét vagy JSON-t).
+- **Service**: Az **üzleti logika rétege**. Itt történik a számítás, szabályellenőrzés, más komponensek hívása. Nem tud az adatbázisról vagy a HTTP-ről – csak a logikáról.
+- **Repository:** Az **adatbázis réteg** (Spring Data JPA-val általában @Repository interfész). Itt történik az adat olvasása/írása (findById, save, delete stb.). Automatikusan implementálja a Spring.
+- **Model:** Az **adatok hordozója**. Lehet egy sima objektum (pl. **@Entity osztály**), DTO, vagy akár Map is. A Controller/Service ebből adja át az adatokat a View-nak (vagy JSON-ként a REST válaszba).
+
+Tipikus rétegek sorrendje Spring Boot-ban:
+HTTP kérés → Controller → Service → Repository → Adatbázis
+(visszafelé: Adatbázis → Repository → Service → Controller → HTTP válasz / View)
+
+**Röviden: a Controller irányít, a Service gondolkodik, a Repository olvassa/írja az adatokat, a Model pedig az, amit ezek között mozgatunk.**
 
 _**[MVC a Springben + Annotációk (YouTube)](https://youtu.be/zGSX5AqfKvU?si=Iilg_vO2PDqb9eYd)**_
 
@@ -325,50 +347,375 @@ _**[MVC a Springben + Annotációk (YouTube)](https://youtu.be/zGSX5AqfKvU?si=Ii
 
 ## Kotlin alapok
 
-Basic Kotlin alapok, hogy értsék a kódot a későbbiekben
+Ez egy nagyon rövid bemutató lesz, ami csak a következő kódrészletek megértéséhez szükséges.
+
+### Függvények és változók
+
+A hello world így néz ki Kotlinban:
+
+```kotlin
+fun main() {
+    println("Hello World!")
+}
+```
+
+Azt rögtön észrevehetjük, hogy **nem kell kirakni `;`-ket az utasítások végére**, továbbá a `fun` kulcsszó a function rövidítése. **Ha egy függvény nem tér vissza semmivel, akkor azt nem kell kiírni** viszont, ha mégis visszatér valamivel, akkor ki kell írni a függvény feje és egy `:` között, például:
+
+```kotlin
+fun add(a: Int, b: Int): Int {
+    return a + b
+}
+```
+
+Azt is megfigyelhetjük, hogy a **változók típusát is `név: Típus` alakban adjuk meg**, ami elsőre sátánidézésnek tűnhet, de nem sok idő után egész kényelmessé válik főleg, ha a változó nevét részesítjük előnyben és nem a típusát.
+
+### val vs var
+
+`val`: value, **nem módosítható**
+`var`: variable, **módosítható**
+
+```kotlin
+val pi = 3.14 // final / const / readonly — nem lehet módosítani
+var counter = 0 // normál változó, lehet módosítani
+```
+
+Most legyünk teljesen őszinték: a `const` kulcsszót lusták vagyunk kiírni, de ha `var`-t írunk, akkor annyival már írhatnánk `val`-t is, és lehet nem is akartuk módosítani az értéket, sőt rengeteg bug-ot ki lehet vele szűrni.
+
+### Tagváltozók és tagfüggvények
+
+A tagváltozókat és a tagfüggvényeket (metódusokat) **`objektum.tagVáltozó`** illetve **`objektum.tagFüggvény()`** szintaxissal érjük el.
+
+### Null és null safety
+
+A `null` kotlinban azt jelzi, hogy az érték **nem rendelkezik érvényes értékkel**.
+
+Ha van egy változónk, ami Int típusú, akkor az biztosan csak valid értékkel rendelkezik, de **ha a típus mögé odaírunk egy `?`-t** (például `Int?`), **akkor tartalmazhat érvénytelen értéket is!**
+
+A **fordító kikényszeríti, hogy minden esetben kezeljük le** az ilyen típussal rendelkező objektumainkat, de cserébe nem kapunk segmentation fault-ot, mint C-ben, sőt ha egyszer lekezeljük (pl. egy érték beolvasásánál), akkor nem kell tovább hurcolnunk magunkat a `null` vizsgálatot.
+
+```kotlin
+var name: String = "Peti"     // nem lehet null → biztonságos
+var nickname: String? = null  // ? jelzi, hogy null is lehet
+
+println(name.length)          // OK, compiler tudja, hogy nem null
+
+// println(nickname.length)   // ← FORDÍTÁSI HIBA!
+
+if (nickname != null) {
+    println(nickname.length)  // OK – smart cast
+}
+```
+
+Ha `?.` operátor **bal oldalán null érték szerepel**, akkor **`null`-t ad vissza**, de **érvényes érték esetén sima `.`-ként viselkedik**.
+
+Ha a `?:` operátor **bal oldalán** egy **érvényes érték szerepel**, akkor **visszaadja azt**, de **`null` esetén a jobb oldalt fogja visszaadni**.
+
+```kotin
+// vagy röviden (safe call):
+println(nickname?.length)     // null → null lesz az eredmény
+
+// vagy ha tutira nem null, de muszáj:
+println(nickname!!.length)    // NullPointerException ha mégis null
+
+fun findPerson(id: Int): Person? = ...   // lehet null
+val person = findPerson(42) ?: throw NoSuchElementException("Nincs ilyen személy")
+```
+
+### Listák
+
+```kotlin
+val numbers = listOf(1, 3, 5, 7)          // immutable
+val mutable = mutableListOf(2, 4, 6)
+
+numbers[1]                                // 3
+mutable.add(8)
+
+val doubled = numbers.map { it * 2 }      // [2,6,10,14]
+```
+
+A legutolsó sorban a `map` metódus fogja minden elemet (az egyes elemeket az `it` jelöli), és megszorozza 2-vel.
 
 ---
 
 ## Demo bővítése Service-szel
 
-Üzleti logika hozzáadása Service-ben.
+### Service hozzáadása
 
----
+**Hozzunk létre egy új fájlt** `UjoncGreetingService.kt`, és készítsünk el benne egy **köszöntő szolgáltatás**t (GreetingService)!
 
-## Controller code
+Először is készítsünk egy `GreetingService` **interfészt**, ami egyetlen `greetPerson` **függvénnyel rendelkezik**. Ez a metódus **paraméterként átvesz** egy sztringet, ami a **személy nevét** tartalmazza, és egy **köszöntéssel tér vissza** (ami szintén egy sztring).
 
-## DTO
+Készítsünk egy ilyen szolgáltatást, ami ezt az interfészt valósítsa meg `UjoncGreetingService`. Ha az `ujonc` nevet adjuk meg, akkor `Üdvözöllek a tanfolyamon!`-nal köszönjön vissza, egyébként `Szia <név>!`-vel.
+
+```kotlin
+package hu.kirdev.demo
+
+import org.springframework.stereotype.Service
+
+interface GreetingService {
+    fun greetPerson(name: String): String
+}
+
+@Service
+class UjoncGreetingService : GreetingService {
+    override fun greetPerson(name: String): String {
+        if (name.lowercase() == "ujonc")
+            return "Üdvözöllek a tanfolyamon!"
+        else
+            return "Szia $name!"
+    }
+}
+```
+
+Az interfész megvalósítását az osztály neve után írt `: GreetingService`-szel tudjuk jelölni, és a `greetPerson` metódust felül kell írnunk, amit az `override` kulcsszóval tehetünk meg.
+
+### Controller átvitele egy külön fájlba
+
+Hogy gyakoroljuk az MVC szeparációt **vigyük át a kontrollert is egy másik fájlba**! Ekkor a **`DemoApplication`-ünk üresen fog maradni**, de `@SpringBootApplication` annotáció miatt továbbra is remekül fog működni. Mégis hogy van ez, olyan furcsán néz ki? Itt is ismét a dependency injection (a Spring Boot-os "varázspálca") kitölti ki nekünk, ami hiányzik.
+
+```kotlin
+package hu.kirdev.demo
+
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.runApplication
+
+@SpringBootApplication
+class DemoApplication {
+}
+
+fun main(args: Array<String>) {
+    runApplication<DemoApplication>(*args)
+}
+```
+
+### Módosítás a kontrolleren
+
+Hogy az újonnan létrehozott szolgáltatásunkat használni tudjuk módosítanunk kell a kontrolleren, de gyakorlás képpen egy extra dolgot ki fogunk próbálni, névlegesen: a `/` végpont helyett használjuk a `/greet`-et, amit a `@RequestMapping` annotáció osztályra való biggyesztésével tudunk elérni (ami egy végpont paramétert fogad).
+
+Ne haladjunk ennyire előre, először **hozzuk létre az új fájlt** `MainController.kt` néven. Az osztályunk paraméterül fogad egy `GreetingService`-t, hogy kezelni tudja.
+
+A `greet` metóduson annyit kell változtatni, hogy a rá helyett annotációt `@GetMapping("/{name}")`-re változtatjuk és a `name` paraméterünk elé `@PathVariable`-t írunk. Ezzel azt érjük és, hogy az **URL-ben megadhatjuk a nevet, mint változót**! Például a `/greet/Ujonc` esetén `name = "Ujonc"`.
+
+```kotlin
+package hu.kirdev.demo
+
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
+
+@RestController
+@RequestMapping("/greet")
+class MainController(val greetingService: GreetingService) {
+
+    @GetMapping("/{name}")
+    fun greet(@PathVariable name: String) : String {
+        return greetingService.greetPerson(name)
+    }
+}
+```
+
+Teszteljük le, hogy tényleg jól működik-e a programunk! Miután elindítottuk az alkalmazást, **nyissuk meg a böngészőben** a `http://localhost:8080/greet/Ujonc` URL-t! Ha mindent jól csináltunk, akkor az alábbi üzenet fogad minket:
+
+![Üdvözöllek a tanfolyamon!](../../static/img/spring/Demo-greet-ujonc.jpg)
+
+**Próbáljuk ki egy másik névvel is!** Mit tapasztalunk?
+
+![Üdvözöllek a tanfolyamon!](../../static/img/spring/Demo-greet-miki.jpg)
 
 ---
 
 ## Adatbázis: JPA és H2
 
-## Mentsük le a köszönéseket
+### Spring Data JPA
 
-- data class GreetingEntity
-- application.properties: spring.jpa.show-sql=true & Hibernate üzenetek
+![Spring Data JPA](../../static/img/spring/JPA.jpg)
 
-%%%%%%%%%%%%%
+A Spring Data JPA **egy Spring Boot kiegészítő**, ami **drasztikusan leegyszerűsíti az adatbázis-műveleteket**. Nem kell kézzel SQL-t írnunk vagy bonyolult DAO (Data Access Object) osztályokat készítenünk – **elég egy interfészt definiálnunk**, ami kiterjeszti a JpaRepository-t, és a Spring **automatikusan implementálja nekünk a gyakori műveleteket!**
+
+```kotlin
+interface UserRepository : JpaRepository<User, Long> {
+    fun findByEmail(email: String): User?
+    fun findAllByActiveTrue(): List<User>
+}
+```
+
+### H2
+
+Az H2 **egy könnyű, beágyazható** (embedded) **adatbázis**, amit **fejlesztés közben** és tesztelésnél **nagyon gyakran használnak** Spring Boot projektekben. Teljes mértékben a memóriában fut, és van egy webes konzolja, ahol böngészőben nézhetjük az adatokat.
+
+## Demo bővítése adatbázissal
+
+### H2 konfiguráció
+
+Ezt **adjuk hozzá** az `application.properties` nevű fájlhoz, ami az `src/main/resources/` mappában található.
+
+```kotlin
+# H2 Database
+spring.h2.console.enabled=true
+spring.datasource.url=jdbc:h2:mem:dcbapp
+spring.datasource.driver-class-name=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=password
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+spring.jpa.show-sql=true
+```
+
+### Modell felvétele
+
+**Vegyünk fel egy adatok tárolására szolgáló osztályt** (`GreetingEntity`), aminek segítségével **azokat neveket fogjuk elmenteni, akiknek köszöntek** (illetve egy azonosítót is rendelünk a köszönésekhez).
+
+```kotlin
+package hu.kirdev.demo
+
+import jakarta.persistence.*
+
+@Entity
+@Table(name = "greetings")
+data class GreetingEntity (
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    var id: Int? = null,
+
+    var name: String = ""
+)
+```
+
+Egy `data class`-t használtunk (kerek zárójelek kellenek és nem kapcsosak!), ami adatok tárolására használatos, és nekünk azért jön most kapóra, mert automatikusan legenerálja nekünk a fordító a boilerplate getter/setter függvényeket.
+
+A `@Entity` jelöli, hogy ez egy Model lesz az MVC-ből, és ez **szükséges az alkalmazásunk megfelelő működéséhez**!
+
+A `@Table(name = "greetings")` annotációval azt tudjuk megmondani, hogy az adatbázisban a tábla neve `greetings` legyen.
+
+Az `id` azonosító változóra helyeztünk két annotációt. A `@Id` biztosítja, hogy az objektumok tényleg **egyértelműen azonosíthatók legyenek**. A `@GeneratedValue` azt jelenti, hogy egy ilyen objektum létrehozásakor **nem kell megadni az értékét**, hanem azt **automatikusan fogja kitölteni** - jelen esetben 1-től indul és mindig 1-el növekszik.
+
+### Adatbázisréteg (Repository) felvétele
+
+**Hozzunk létre egy új interfészt** `GreetingRepository` néven, ami **kibővíti a JpaRepository interfészt**! **Vegyünk fel egy metódust**, ami egy nevet kap, és **visszaadja, hogy hány köszönés történt ezzel a névvel** (kis- és nagybetűt nem megkülönböztetve).
+
+```kotlin
+package hu.kirdev.demo
+
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
+
+@Repository
+interface GreetingRepository : JpaRepository<GreetingEntity, Int> {
+    fun countByNameIgnoreCase(name: String): Long
+}
+```
+
+Vegyük észre, hogy az **SQL lekérdezést nem kellett kézzel megírnunk**, hanem **automatikusan implementálódik a metódus neve alapján**! (Persze ez csak bizonyos, gyakori lekérdezésekkel működik - ha odaírjuk, hogy `fun getMeaningOfLife() : String`, akkor nem fogja tudni megoldani azt, amit szeretnénk :cry:)
+
+### Service módosítása
+
+Először a `GreetingService`-t bővítsük egy `getGreetingCount` metódussal, majd az `UjoncGreetingService` paraméterül fogadjon egy `GreetingRepository`-t, illetve legyen egy `getGreetingCount` metódusa. Ne felejtsük el lementeni a köszönéseket a `greetPerson` metódus elején!
+
+```kotlin
+package hu.kirdev.demo
+
+import org.springframework.stereotype.Service
+
+interface GreetingService {
+    fun greetPerson(name: String): String
+    fun getGreetingCount(name: String): Long
+}
+
+@Service
+class UjoncGreetingService(val greetingRepository: GreetingRepository) : GreetingService {
+
+    override fun greetPerson(name: String): String {
+        greetingRepository.save(GreetingEntity(name = name))
+
+        if (name.lowercase() == "ujonc")
+            return "Üdvözöllek a tanfolyamon!"
+        else
+            return "Szia $name!"
+    }
+
+    override fun getGreetingCount(name: String) : Long {
+        return greetingRepository.countByNameIgnoreCase(name)
+    }
+}
+```
+
+### Controller módosítása
+
+Mivel lényegében egy API-n (Application Programming Interface) keresztül kommunikálunk, így `/api`**-ra cserélhetjük a korábbi** `/`-t - ezzel is jelezve a szándékunkat (most már **minden végpont a** `/api` **után jöhet csak**). Ennek következtében módosítanunk kell a `greet` metódusnál az utat `"/greet/{name}"`-ra.
+
+**Hozzunk létre egy új végpontot** `/greetings`-en, amit meglátogatva megmondjuk, hogy az **URL-ben megadott név hányszor szerepel az adatbázisunkban**.
+
+```kotlin
+package hu.kirdev.demo
+
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
+
+@RestController
+@RequestMapping("/api")
+class MainController(val greetingService: GreetingService) {
+
+    @GetMapping("/greet/{name}")
+    fun greet(@PathVariable name: String) : String {
+        return greetingService.greetPerson(name)
+    }
+
+    @GetMapping("/greetings")
+    fun getGreetCount(@RequestParam name: String): String {
+        return "$name ${greetingService.getGreetingCount(name)} alkalommal lett köszöntve"
+    }
+}
+```
+
+Figyeljük meg, hogy most `@RequestParam`-ot használtunk, így `/api/greeting?name=név` formában tudjuk megadni a nevet!
+
+Példák a végpontokra:
+
+- [/api/greet/Ujonc](http://localhost:8080/api/greet/Ujonc)
+- [/api/greetings?name=Ujonc](http://localhost:8080/api/greetings?name=Ujonc)
+- [/api/greet/Miki](http://localhost:8080/api/greet/Miki)
+- [/api/greetings?name=Miki](http://localhost:8080/api/greetings?name=Miki)
+
+---
+
+## DTO
+
+A DTO (Data Transfer Object) egy **egyszerű objektum**, amit arra használunk, hogy **csak a szükséges adatokat gyűjtsük benne össze, és küldjük el a kliens** (pl. böngésző, mobil app) **és a szerver között** – általában JSON formátumban. Így nem az adatbázis-entitást (Entity-t) küldjük ki közvetlenül.
+
+![DTO assamble](../../static/img/spring/DTO-assemble.png)
+
+![DTO in layers](../../static/img/spring/DTO-layers.jpg)
 
 ---
 
 ## IntelliJ & JDK download
 
-A második és harmadik alkalomra **live coding**-ot kervezünk, így **kérünk mindenkit, hogy töltse le az IntelliJ IDEA**-t a laptopjára, lehetőleg az **Ultimate** verziót, amihez a JetBrains student pack-et _**[ezen a linket lehet igényelni](https://www.jetbrains.com/academy/student-pack/)**_.
+A második és harmadik alkalomra **live coding**-ot tervezünk, így **kérünk mindenkit, hogy töltse le az IntelliJ IDEA**-t a laptopjára, lehetőleg az **Ultimate** verziót, amihez a JetBrains student pack-et _**[ezen a linket lehet igényelni](https://www.jetbrains.com/academy/student-pack/)**_ (`@edu.bme.hu`-s email).
 
-Hogyha valakinek nincsen letöltve a **JDK 25** (Java fejtesztői csomag), akkor azt _**[ide kattintva](https://www.oracle.com/java/technologies/downloads/#jdk25-windows)**_ megteheti.
+Hogyha valakinek nincsen letöltve a **JDK 25** (Java fejlesztői csomag), akkor azt _**[ide kattintva](https://www.oracle.com/java/technologies/downloads/#jdk25-windows)**_ megteheti, de az IntelliJ IDE-ből közvetlenül is lehet tetszőleges Java kiadást letölteni a **Project Structure** menüből.
 
-**Hogy biztosak legyünk abban, hogy jól setup-oltuk a fejlesztői környezetet, klónozzuk le** a _**[demo projektet](https://github.com/MiklosBacsi)**_, és **prójáljuk meg futtatni**! Ráadásul ez egy remek lehetőség a fejlesztői körvezettel való ismerkedésre, így nem a live coding alkalmával fogtok először találkozni
+![JDK Letöltés](../../static/img/spring/JDK-install.png)
+
+**Hogy biztosak legyünk abban, hogy jól setup-oltuk a fejlesztői környezetet, klónozzuk le** a _**[demo projektet](https://github.com/MiklosBacsi/demo.git)**_, és **próbáljuk meg futtatni**! Ráadásul ez egy remek lehetőség a fejlesztői környezettel való ismerkedésre, így nem a live coding alkalmával fogtok először találkozni
 
 Amennyiben szükséges _**[ide kattintva](https://tanfolyam.kir-dev.hu/docs/webes-alapok/git#alapvet%C5%91-parancsok-workflow-bemutat%C3%A1sa-demo-seg%C3%ADts%C3%A9g%C3%A9vel)**_ felfrissítheted a git tudásodat.
 
 Amennyiben valamilyen okból a Gradle nem lenne linkelve, akkor ezt a "Link Gradle Projekt" feliratra való kattintással tegyük meg.
 
-![Gradle refresh](../../static/img/spring/Link-gradle-project.jpg)
+![Link Gradle Project](../../static/img/spring/Link-gradle-project.jpg)
 
-Az alkalmazás elindítása után próbáljuk ki a %%%%%%%%%%%%%%%%%%%%%%
+Indítsuk el az alkalmazást, és **próbáljuk ki, hogy működik-e**!
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Példák a végpontokra:
+
+- [/api/greet/Ujonc](http://localhost:8080/api/greet/Ujonc)
+- [/api/greetings?name=Ujonc](http://localhost:8080/api/greetings?name=Ujonc)
+- [/api/greet/Miki](http://localhost:8080/api/greet/Miki)
+- [/api/greetings?name=Miki](http://localhost:8080/api/greetings?name=Miki)
 
 ---
 
