@@ -1,7 +1,7 @@
 ---
-sidebar_label: 'Chapter 2: Board és Ticket entitás'
+sidebar_label: '2. Fejezet - Board és Ticket entitás, Board kidolgozása'
 sidebar_position: 3
-label: 'Chapter 2: Board és Ticket entitás'
+label: '2. Fejezet - Board és Ticket entitás, Board kidolgozása'
 ---
 
 ## 2. Fejezet - Board és Ticket entitás, Board kidolgozása

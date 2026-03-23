@@ -1,7 +1,7 @@
 ---
-sidebar_label: 'Chapter 3: Ticket kidolgozása'
+sidebar_label: '3. Fejezet - Ticket kidolgozása'
 sidebar_position: 4
-label: 'Chapter 3: Ticket kidolgozása'
+label: '3. Fejezet - Ticket kidolgozása'
 ---
 
 ## 3. Fejezet - Ticket kidolgozása

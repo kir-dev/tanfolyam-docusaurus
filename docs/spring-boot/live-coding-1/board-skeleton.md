@@ -1,10 +1,10 @@
 ---
-sidebar_label: 'Chapter 1: Board váz'
+sidebar_label: '1. Fejezet - Board váz'
 sidebar_position: 2
-label: 'Chapter 1: Board váz'
+label: '1. Fejezet - Board váz'
 ---
 
-## 1. Fejezet - Board váza
+## 1. Fejezet - Board váz
 
 Létre szeretnénk hozni táblákat (`Board`), amikre jegyeket tudunk rakni, de ehhez először tervezzük meg a szolgáltatás és kontroller vázát.
 

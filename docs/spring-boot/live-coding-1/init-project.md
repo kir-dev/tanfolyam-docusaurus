@@ -1,7 +1,7 @@
 ---
-sidebar_label: 'Chapter 0: Kiinduló projekt'
+sidebar_label: '0. Fejezet - Kiinduló projekt'
 sidebar_position: 1
-label: 'Chapter 0: Kiinduló projekt'
+label: '0. Fejezet - Kiinduló projekt'
 ---
 
 # Spring tanfolyam - 2. alkalom
