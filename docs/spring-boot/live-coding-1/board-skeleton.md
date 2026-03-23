@@ -104,4 +104,5 @@ Futtassuk az alkalmazást! Az IntelliJ IDE-ben van egy beépített eszköz a RES
 ---
 
 Feladatot készítette: **[Szabó Benedek](https://github.com/SzBeni2003)**
+
 Leírást készítette: **[Bácsi Miklós](https://github.com/MiklosBacsi)**

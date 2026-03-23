@@ -117,4 +117,5 @@ Futtassuk az alkalmazást! Ha van már legalább egy tábla, akkor hozzunk létr
 ---
 
 Feladatot készítette: **[Szabó Benedek](https://github.com/SzBeni2003)**
+
 Leírást készítette: **[Bácsi Miklós](https://github.com/MiklosBacsi)**

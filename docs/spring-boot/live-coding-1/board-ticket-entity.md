@@ -336,4 +336,5 @@ Futtassuk az alkalmazást! Hozzunk létre egy új táblát a POST `/board` végp
 ---
 
 Feladatot készítette: **[Szabó Benedek](https://github.com/SzBeni2003)**
+
 Leírást készítette: **[Bácsi Miklós](https://github.com/MiklosBacsi)**
