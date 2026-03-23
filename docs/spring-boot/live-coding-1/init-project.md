@@ -157,6 +157,4 @@ http://localhost:8080/hello/Miki
 
 ---
 
-Feladatot készítette: **[Szabó Benedek](https://github.com/SzBeni2003)**
-
-Leírást készítette: **[Bácsi Miklós](https://github.com/MiklosBacsi)**
+Feladatot készítette: **[Szabó Benedek](https://github.com/SzBeni2003)**, Leírást készítette: **[Bácsi Miklós](https://github.com/MiklosBacsi)**
