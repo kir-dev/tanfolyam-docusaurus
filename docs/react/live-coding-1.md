@@ -123,7 +123,7 @@ ilyen fájlokra ki kell mondanunk:
 
 ## Adatok küldése a backendnek az API és hook-ok használatával
 
-Ebben a lépésben a “játék-számláló” után áttérünk a valódi célra: **adatot menteni a backendbe**. A korábbi kódrészleteket törölhetjük, kivéve a 'use client'-et.
+Ebben a lépésben a “játék-számláló” után áttérünk a valódi célra: **adatot menteni a backendbe**. A korábbi kódrészleteket törölhetjük, kivéve a `'use client'`-et.
 
 Az elkészítendő funkció egy egyszerű input mező és egy gomb lesz, amely lehetővé teszi a felhasználó számára, hogy új "board"-ot adjon hozzá a backendhez. Az input értékét egy `useState` hook-kal fogjuk kezelni.
 
@@ -147,9 +147,9 @@ const backendURL = "/api/ticketing/boards"
 - Később könnyebb átírni (pl. ha változik a végpont).
 
 **Hogyan kéne ezt valóban helyesen és biztonságosan kezelni?**
-- Környezeti változóban tárolni (`process.env.NEXT_PUBLIC_BACKEND_URL`), hogy ne legyen hard-code-olva a kódban.
+- Környezeti változóban tárolni a *valódi backend hostot* (`process.env.NEXT_PUBLIC_BACKEND_URL` vagy server oldalon `process.env.BACKEND_URL`).
 - Így könnyen átállítható fejlesztői, staging és éles környezet között.
-- Nem fedjük fel a backend URL-jét a verziókezelőben, ha az érzékeny információkat tartalmaz (pl. API kulcs).
+- Megjegyzés: a `NEXT_PUBLIC_` prefixű env változók **kikerülnek a böngészőbe is**, ezért oda csak nem-érzékeny értéket tegyünk (API kulcsot soha).
 
 Az HTTP kliens:
 
@@ -180,7 +180,7 @@ const onAdd = () => {
 1. `POST` kérést küldünk a backendnek a board címével.
 2. Siker esetén:
    - kiürítjük az inputot (`setInputValue("")`), hogy a user lássa: elküldtük.
-    - kiírjuk a választ a konzolra (ez lehet egy új board objektum).
+   - kiírjuk a választ a konzolra (ez lehet egy új board objektum).
 3. Hiba esetén kiírjuk a hibát a konzolra.
 
 UI rész:
@@ -246,8 +246,9 @@ const getBoards = () => {
 ```
 
 **Itt is érdemes figyelni a típusozásra:**
-- Semmi sem garantálja, hogy a backend egy `Board[]` struktúrájú dolgot fog visszaadni.
-- Fontos a `try/catch` vagy `.catch` és típus validáció `<Board[]>`.
+- Semmi sem garantálja, hogy a backend valóban egy `Board[]` struktúrájú dolgot fog visszaadni.
+- Fontos a `try/catch` vagy `.catch`.
+- A `.get<Board[]>()` **csak TypeScript típus-információ** (fordítási idejű segítség), nem futásidejű validáció. Ha ezt runtime ellenőrizni akarnánk, akkor séma validációt használnánk (pl. `zod`).
 
 A getBoards függvényünket érdemes meghívni az onAdd sikeres lefutása után, hogy a lista frissüljön az új boarddal:
 
@@ -272,8 +273,8 @@ return (
     <div className="min-h-screen bg-white text-black flex flex-col items-center">
       <div className="mt-10">
         <input
-          value={inputValue} 
-          onChange={(e) => setInputValue(e.target.value)} 
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
           className="border-black border-2"
         />
         <button onClick={onAdd}>
@@ -305,6 +306,7 @@ useEffect(() => {
 - A `[]` dependency array azt jelenti: csak egyszer, "mount"-kor fusson le.
 
 > TIPP: React 18 Strict Mode-ban fejlesztés közben előfordulhat, hogy az effect kétszer fut le. Ez fejlesztői ellenőrzés, élesben nem így lesz.
+> Emiatt dev módban a `getBoards()` kétszer is lefuthat – ezért élesben fontos, hogy a backend műveletek idempotensek legyenek, vagy legyen "dupla-hívás" védelem (pl. abort controller / cache / deduplikáció).
 
 ---
 
@@ -345,7 +347,7 @@ interface BoardItemProps {
   board: Board
 }
 
-export default function BoardItem (props: BoardItemProps) {
+export default function BoardItem(props: BoardItemProps) {
     return(
       <div className="rounded-lg p-4 bg-slate-500 mt-5">{props.board.title}</div>
     )
@@ -354,6 +356,8 @@ export default function BoardItem (props: BoardItemProps) {
 
 **Miért kell interface a props-hoz?**
 A props a komponens “szerződése”: pontosan leírja, mit vár. Így a hívó oldal (szülő komponens) sem tud véletlen rossz adatot adni.
+
+> Megjegyzés: a `@/` import útvonal egy TypeScript path alias, ami jellemzően a `src/` mappára mutat. Ha egy projektben nincs beállítva, akkor relatív importokat kell használni (`../../types/board`).
 
 ### BoardInput.tsx komponens:
 
@@ -407,6 +411,13 @@ A props használatának egy másik módja a destrukturálás, ami egy kicsit tis
 ```tsx
 const { getBoards } = props
 ```
+
+### Fontos: Client Component határ refaktor után
+A `BoardInput` és a `BoardItem` is használ `useState`-et / eseménykezelőt / axios-t, tehát **kliens oldali** komponensek.
+- Ha a szülő (`page.tsx`) **Client Component** (`'use client'`), akkor ezek a komponensek **gond nélkül használhatók** alatta.
+- Ha viszont egy komponensfát Server Componentként hagyunk, akkor a hook-os gyerekekhez explicit `use client` boundary kell.
+
+Ez azért fontos, mert Next.js-ben a “server vs client” nem csak egy fájl döntése: a komponensfa határozza meg, hol lehet interaktivitás.
 
 ---
 
